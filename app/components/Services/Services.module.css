@@ -1,0 +1,219 @@
+.section {
+  background: #08090f;
+  padding: 64px 0;
+}
+
+.container {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.headerRow {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.eyebrow {
+  display: inline-block;
+  color: #ff9d6b;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.heading {
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* ---------- Bento Grid ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 96px;
+  gap: 14px;
+}
+
+.card {
+  grid-column: var(--col);
+  grid-row: var(--row);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  border-radius: 16px;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.035);
+  padding: 20px 22px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.25s ease, background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.card:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.card:focus-visible {
+  outline: 2px solid #ff7a45;
+  outline-offset: 2px;
+}
+
+/* Featured (big) card */
+.featured {
+  background: linear-gradient(
+    160deg,
+    rgba(255, 122, 69, 0.16),
+    rgba(255, 122, 69, 0.02)
+  );
+  border-color: rgba(255, 122, 69, 0.28);
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 28px 28px 26px;
+}
+
+.featured:hover {
+  border-color: rgba(255, 122, 69, 0.5);
+}
+
+/* ---------- Icon ---------- */
+.iconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.normal .iconWrap {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  margin-bottom: 8px;
+}
+
+.featured .iconWrap {
+  margin-bottom: 16px;
+}
+
+.orange {
+  background: rgba(255, 122, 69, 0.18);
+  color: #ff9d6b;
+}
+.blue {
+  background: rgba(66, 148, 255, 0.18);
+  color: #7fb4ff;
+}
+.teal {
+  background: rgba(29, 158, 117, 0.22);
+  color: #5dcaa5;
+}
+.pink {
+  background: rgba(212, 83, 126, 0.2);
+  color: #ed93b1;
+}
+.amber {
+  background: rgba(239, 159, 39, 0.2);
+  color: #f6bb5c;
+}
+.purple {
+  background: rgba(127, 119, 221, 0.2);
+  color: #afa9ec;
+}
+.green {
+  background: rgba(99, 153, 34, 0.22);
+  color: #97c459;
+}
+
+/* ---------- Text ---------- */
+.title {
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 600;
+  margin: 0 0 6px;
+  text-transform: capitalize;
+}
+
+.featured .title {
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+
+.description {
+  color: #9a9fac;
+  font-size: 11.5px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.featured .description {
+  font-size: 13.5px;
+  line-height: 1.8;
+  max-width: 96%;
+}
+
+.normal .description {
+  font-size: 11px;
+}
+
+/* =========================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 24px;
+  }
+  .heading {
+    font-size: 25px;
+  }
+}
+
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: auto;
+  }
+  .card {
+    grid-column: span 1;
+    grid-row: auto;
+  }
+  .featured {
+    grid-column: 1 / -1;
+    min-height: 210px;
+  }
+}
+
+@media (max-width: 560px) {
+  .section {
+    padding: 48px 0;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .card {
+    grid-column: 1 / -1;
+  }
+  .featured {
+    min-height: auto;
+  }
+  .headerRow {
+    margin-bottom: 24px;
+  }
+  .heading {
+    font-size: 21px;
+  }
+}

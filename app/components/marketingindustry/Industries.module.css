@@ -1,0 +1,185 @@
+.section {
+  background: #0b0f19;
+  padding: 72px 0;
+}
+
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.headerRow {
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+.eyebrow {
+  display: inline-block;
+  color: #ff9d6b;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.heading {
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+
+/* ---------- Grid ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.card {
+  background: #12172a;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  border-color: rgba(255, 122, 69, 0.35);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Image ---------- */
+.imageWrap {
+  position: relative;
+  width: 100%;
+}
+
+.imageInner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  overflow: hidden;
+  border-radius: 18px 18px 0 0;
+}
+
+.image {
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.card:hover .image {
+  transform: scale(1.08);
+}
+
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(11, 15, 25, 0) 55%,
+    rgba(11, 15, 25, 0.95) 100%
+  );
+}
+
+.iconBadge {
+  position: absolute;
+  left: 18px;
+  bottom: -20px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffdd66, #ffc633);
+  color: #14171f;
+  box-shadow: 0 8px 20px rgba(255, 198, 51, 0.35);
+  z-index: 2;
+}
+
+/* ---------- Body ---------- */
+.body {
+  padding: 32px 22px 24px;
+}
+
+.title {
+  color: #ffdd66;
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+.description {
+  color: #a7abb8;
+  font-size: 12.5px;
+  line-height: 1.7;
+  margin: 0 0 16px;
+}
+
+
+
+/* =========================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================= */
+
+@media (max-width: 1180px) {
+  .container {
+    padding: 0 24px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  .heading {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 56px 0;
+  }
+  .headerRow {
+    margin-bottom: 32px;
+  }
+  .heading {
+    font-size: 22px;
+  }
+  .body {
+    padding: 30px 18px 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .imageWrap {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 400px) {
+  .heading {
+    font-size: 19px;
+  }
+  .title {
+    font-size: 15.5px;
+  }
+  .description {
+    font-size: 12px;
+  }
+  .iconBadge {
+    width: 38px;
+    height: 38px;
+    left: 14px;
+    bottom: -18px;
+  }
+}

@@ -1,0 +1,171 @@
+.faq {
+  background: #0b0f19;
+  padding: 72px 0 96px;
+}
+
+.container {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.heading {
+  text-align: center;
+  color: #ffffff;
+  font-size: 44px;
+  font-weight: 800;
+  margin: 0 0 56px;
+}
+
+/* ---------- List ---------- */
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  padding: 26px 0;
+}
+
+.questionRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+}
+
+.question {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  transition: color 0.25s ease;
+}
+
+.questionOpen {
+  color: #ff7a45;
+}
+
+.iconWrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  color: #ffffff;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.iconWrapOpen {
+  color: #ff7a45;
+  transform: rotate(180deg);
+}
+
+/* ---------- Answer ---------- */
+.answerWrap {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, margin-top 0.35s ease;
+}
+
+.answerWrapOpen {
+  max-height: 240px;
+  margin-top: 16px;
+}
+
+.answer {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: #9ba0ad;
+}
+
+/* ---------- Divider ---------- */
+.divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin-top: 26px;
+}
+
+/* =========================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 24px;
+  }
+  .heading {
+    font-size: 38px;
+    margin-bottom: 44px;
+  }
+  .question {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 768px) {
+  .faq {
+    padding: 56px 0 72px;
+  }
+  .heading {
+    font-size: 32px;
+    margin-bottom: 36px;
+  }
+  .item {
+    padding: 22px 0;
+  }
+  .question {
+    font-size: 16px;
+  }
+  .answer {
+    font-size: 14.5px;
+  }
+  .answerWrapOpen {
+    max-height: 320px;
+  }
+}
+
+@media (max-width: 560px) {
+  .container {
+    padding: 0 18px;
+  }
+  .heading {
+    font-size: 26px;
+    margin-bottom: 30px;
+  }
+  .questionRow {
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .question {
+    font-size: 15px;
+    line-height: 1.4;
+  }
+  .iconWrap {
+    width: 26px;
+    height: 26px;
+    margin-top: 2px;
+  }
+  .answerWrapOpen {
+    max-height: 420px;
+  }
+}
+
+@media (max-width: 360px) {
+  .heading {
+    font-size: 22px;
+  }
+  .question {
+    font-size: 14px;
+  }
+  .answer {
+    font-size: 13.5px;
+  }
+}

@@ -1,0 +1,291 @@
+.footer {
+  background: #0b0f19;
+  background-image: radial-gradient(
+    circle at 100% 0%,
+    rgba(255, 122, 45, 0.06),
+    transparent 40%
+  );
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: #cfd3dc;
+  padding: 64px 0 0;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ---------- Grid ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 48px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.colTitle {
+  color: #ff7a45;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0 0 22px;
+}
+
+/* ---------- Brand column ---------- */
+.brandCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.logo {
+  object-fit: contain;
+  margin-bottom: 18px;
+}
+
+.tagline {
+  font-size: 15px;
+  font-style: italic;
+  color: #9ba0ad;
+  margin: 0 0 14px;
+}
+
+.ctaHeading {
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.3;
+  margin: 0 0 26px;
+  max-width: 320px;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ffdd66, #ffc633);
+  color: #14171f;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  padding: 15px 38px;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(255, 198, 51, 0.25);
+}
+
+/* ---------- Contact ---------- */
+.contactList {
+  list-style: none;
+  margin: 0 0 22px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.contactItem a {
+  color: #d5d8e0;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.contactItem a:hover {
+  color: #ff7a45;
+}
+
+.iconCircle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #ff7a45;
+  color: #ff7a45;
+}
+
+.socials {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.socialIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #14171f;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.socialIcon:hover {
+  transform: translateY(-3px);
+  background: #ff7a45;
+  color: #ffffff;
+}
+
+/* ---------- Link lists ---------- */
+.linkList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.linkList a {
+  color: #d5d8e0;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+.linkList a:hover {
+  color: #ff7a45;
+  padding-left: 4px;
+}
+
+/* ---------- Location ---------- */
+.locationItem {
+  display: flex;
+  gap: 12px;
+}
+
+.locationItem p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #d5d8e0;
+}
+
+/* ---------- Bottom bar ---------- */
+.bottomBar {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 22px 0;
+  text-align: center;
+}
+
+.bottomBar p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #9ba0ad;
+}
+
+.brandName {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* =========================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================= */
+
+/* Large desktop / laptop */
+@media (max-width: 1280px) {
+  .grid {
+    grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+    gap: 28px;
+  }
+  .ctaHeading {
+    font-size: 23px;
+  }
+}
+
+/* Tablet landscape */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr 1fr 1fr;
+    row-gap: 44px;
+  }
+  .brandCol {
+    grid-column: 1 / -1;
+    max-width: 480px;
+  }
+}
+
+/* Tablet portrait */
+@media (max-width: 768px) {
+  .footer {
+    padding: 48px 0 0;
+  }
+  .container {
+    padding: 0 24px;
+  }
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+  }
+  .brandCol {
+    grid-column: 1 / -1;
+  }
+  .ctaHeading {
+    max-width: 100%;
+  }
+}
+
+/* Mobile */
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    text-align: left;
+  }
+  .brandCol {
+    align-items: flex-start;
+  }
+  .ctaHeading {
+    font-size: 22px;
+  }
+  .ctaButton {
+    width: 100%;
+    padding: 15px 0;
+  }
+  .colTitle {
+    margin-bottom: 16px;
+  }
+  .bottomBar p {
+    font-size: 12.5px;
+    padding: 0 12px;
+  }
+}
+
+/* Very small mobile */
+@media (max-width: 360px) {
+  .container {
+    padding: 0 16px;
+  }
+  .ctaHeading {
+    font-size: 20px;
+  }
+  .tagline {
+    font-size: 14px;
+  }
+}

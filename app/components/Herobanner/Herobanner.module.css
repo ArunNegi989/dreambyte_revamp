@@ -1,0 +1,579 @@
+/* =========================================================
+   HERO BANNER — ported 1:1 from the real Dream Byte Solutions
+   production markup (section-main / container2 / media-main /
+   section-main-right-contain), converted to CSS Modules.
+========================================================= */
+
+.sectionMain {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  width: 100%;
+  /* Drop your real banner2.jpg here for the diagonal-stripe backdrop */
+ background-image: url("../../../public/assets/images/banner2.webp");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: #fff;
+}
+
+.sectionMainSub {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 100vh;
+  width: 100%;
+  padding: 0 48px;
+}
+
+/* =========================================================
+   Left media rail (instagram / facebook / linkedin / whatsapp)
+========================================================= */
+.mediaMain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+.mediaLine {
+  width: 1px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.socialCircle {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.socialIcon {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  z-index: 2;
+  transition: transform 0.5s;
+}
+
+.socialCircle:hover .socialIcon {
+  transform: rotateY(360deg);
+}
+
+/* Gradient fill rises from the bottom on hover — ported from .media-main div a:before */
+.socialCircle::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transition: top 0.5s;
+  background: linear-gradient(90deg, #ff7d61 0%, #ffdb59 100%);
+}
+
+.socialCircle:hover::before {
+  top: 0;
+}
+
+/* =========================================================
+   Center content
+========================================================= */
+.container2 {
+  position: relative;
+  flex: 1;
+  max-width: 1606px;
+  min-width: 0;
+  text-align: center;
+  padding: 0 12px;
+  border-right: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.mainText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #fff;
+  font-size: clamp(1.1rem, 1.6vw, 2.1rem);
+  font-weight: 500;
+  padding-top: 24px;
+}
+
+.wave {
+  display: inline-block;
+  transform-origin: 70% 70%;
+  animation: wave 2.5s infinite;
+}
+
+.heroHeading {
+  text-align: center;
+  font-size: clamp(2.2rem, 6vw, 96px);
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin: 4px 0 6px;
+  color: #fff;
+}
+
+.gradientText {
+  display: inline-block;
+  background: linear-gradient(90deg, #ff7d61 0%, #ffdb59 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: hue 10s infinite linear;
+}
+
+.heroPara {
+  text-align: center;
+  font-size: clamp(1.05rem, 2vw, 2rem);
+  margin: 0;
+  color: #fff;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* =========================================================
+   Floating neon shapes — mouse-parallax (see useEffect in TSX)
+========================================================= */
+.floatingNeon {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.neonWrap {
+  position: absolute;
+  pointer-events: none;
+}
+
+.neon {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  will-change: transform;
+  transition: transform 0.2s ease-out;
+}
+
+/* SEO magnifier (shape1.webp) — top-left */
+.neonWrap1 {
+  top: 10%;
+  left: 2%;
+  width: clamp(90px, 7vw, 122px);
+  animation: floatY 4.2s ease-in-out infinite;
+}
+
+/* LinkedIn badge (shape2.webp) — top-right, near the speech bubble */
+.neonWrap2 {
+  top: 9%;
+  left: 90%;
+  width: clamp(98px, 8vw, 106px);
+  animation: floatY 4.8s ease-in-out infinite;
+  animation-delay: -1.4s;
+}
+
+/* Palette (shape3.webp) — bottom-left */
+.neonWrap3 {
+  top: 70%;
+  left: 15%;
+  width: clamp(108px, 8vw, 196px);
+  animation: floatY 5.4s ease-in-out infinite;
+  animation-delay: -2.6s;
+}
+
+/* Growth chart (shape4.webp) — mid-right */
+.neonWrap4 {
+  top: 46%;
+  left: 70%;
+  width: clamp(80px, 7vw, 122px);
+  animation: floatY 5s ease-in-out infinite;
+  animation-delay: -3.4s;
+}
+
+/* =========================================================
+   Person + speech bubble + worked-with card
+========================================================= */
+.homeGirlImgMain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.positionRelative {
+  position: relative;
+  z-index: 1;
+}
+
+.homeGirlWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.homeGirlImg {
+  max-width: 100%;
+  height: auto;
+  width: clamp(240px, 30vw, 600px);
+  display: block;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
+}
+
+.jessicaBiogiMain {
+  position: absolute;
+  top: 6%;
+  right: -36%;
+  z-index: 5;
+  will-change: transform;
+  transition: transform 0.2s ease-out;
+}
+
+.jessicaBiogiInner {
+  position: relative;
+}
+
+.jessicaBiogiSvg {
+  position: absolute;
+  left: -18px;
+  top: -18px;
+  width: 26px;
+  height: auto;
+}
+
+.jessicaBiogi {
+  color: #0f141c;
+  text-align: center;
+  font-size: clamp(0.78rem, 1.3vw, 1.5rem);
+  font-weight: 500;
+  line-height: normal;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #ff7d61 0%, #ffdb59 100%);
+  padding: 9px 20px;
+  white-space: nowrap;
+}
+
+.arrowMain {
+  position: absolute;
+  top: -40px;
+  left: -26%;
+  width: clamp(60px, 7vw, 100px);
+  height: auto;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.workedBox {
+  position: absolute;
+  bottom: -4%;
+  left: 90%;
+  width: 100%;
+  max-width: 330px;
+  border-radius: 15px;
+  background: #171b22;
+  box-shadow: 0 40px 40px -25px rgba(19, 31, 47, 0.6);
+  padding: 20px;
+  text-align: left;
+  z-index: 2;
+  will-change: transform;
+  transition: transform 0.2s ease-out;
+}
+
+.workedMore {
+  color: #fff;
+  font-size: clamp(0.78rem, 1.2vw, 1.25rem);
+  line-height: normal;
+  padding-bottom: 15px;
+}
+
+.clientImgMain {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.clientImg {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #171b22;
+  background: #fff;
+  cursor: pointer;
+}
+
+.clientImg1 { position: relative; z-index: 4; }
+.clientImg2 { position: absolute; left: 22px; z-index: 3; }
+.clientImg3 { position: absolute; left: 44px; z-index: 2; }
+.clientImg4 { position: absolute; left: 66px; z-index: 1; }
+.clientImg:hover { z-index: 10; }
+
+.workedMore2 {
+  position: relative;
+  font-size: 1.1rem;
+  padding: 0;
+  margin-left: 106px;
+  max-width: 70px;
+}
+
+.workedMore2::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -38px;
+  width: 28px;
+  height: 2px;
+  background-color: #fff;
+  transform: translateY(-50%);
+}
+
+/* =========================================================
+   Right stats rail
+========================================================= */
+.sectionMainRightContain {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 314px;
+}
+
+.statsSub {
+  padding: 36px 24px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.totalProject {
+  color: #fff;
+  text-align: center;
+  font-size: clamp(1.8rem, 3vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+  padding-bottom: 12px;
+}
+
+.projectCompleted {
+  color: #fff;
+  text-align: center;
+  font-size: 1.8rem;
+  line-height: 1.12;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+}
+
+.flowerBox {
+  text-align: center;
+  padding: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.flower {
+  display: block;
+  margin: 0 auto;
+  width: 36px;
+  filter: brightness(0) saturate(100%) invert(50%) sepia(73%) saturate(413%) hue-rotate(323deg) brightness(103%) contrast(101%);
+  animation: rotation infinite 9s linear;
+}
+
+.freelance {
+  color: #909090;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.6;
+  padding-top: 18px;
+}
+
+.mouseScrollBox {
+  display: flex;
+  justify-content: center;
+  padding: 36px 0;
+}
+
+.mouseMain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mouse {
+  height: 74px;
+  width: 44px;
+  border: 2px solid #fff;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mouseArrowDown {
+  animation: bounce 1.6s infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.scrollDown {
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  max-width: 80px;
+  text-align: center;
+}
+
+/* =========================================================
+   Keyframes
+========================================================= */
+@keyframes wave {
+  0% { transform: rotate(0); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+  60%, 100% { transform: rotate(0); }
+}
+
+@keyframes hue {
+  from { filter: hue-rotate(0); }
+  to { filter: hue-rotate(-360deg); }
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes bounce {
+  50% { transform: translateY(10px); }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave, .gradientText, .flower, .mouseArrowDown,
+  .neonWrap1, .neonWrap2, .neonWrap3, .neonWrap4 {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE BREAKPOINTS
+========================================================= */
+
+/* Large desktops / wide monitors */
+@media (min-width: 1600px) {
+  .sectionMainSub { padding: 0 80px; }
+}
+
+/* Standard laptops */
+@media (max-width: 1440px) {
+  .sectionMainSub { padding: 0 36px; }
+  .sectionMainRightContain { max-width: 260px; }
+}
+
+/* Small laptops */
+@media (max-width: 1200px) {
+  .sectionMainSub { padding: 0 24px; }
+  .sectionMainRightContain { max-width: 220px; }
+  .statsSub { padding: 24px 16px; }
+  .flowerBox { padding: 18px; }
+}
+
+/* Tablets landscape — stack rails around the center */
+@media (max-width: 1024px) {
+  .sectionMainSub {
+    flex-direction: column;
+    min-height: auto;
+    padding: 24px 20px 32px;
+    gap: 12px;
+  }
+  .mediaMain {
+    flex-direction: row;
+    gap: 22px;
+    order: 1;
+  }
+  .mediaLine { display: none; }
+  .container2 { order: 2; padding-top: 12px; border-right: none; }
+  .sectionMainRightContain {
+    order: 3;
+    max-width: 520px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+    padding-top: 12px;
+  }
+  .statsSub, .flowerBox { border-bottom: none; padding: 10px 14px; }
+  .mouseScrollBox { padding: 0; }
+  .workedBox { left: 56%; }
+}
+
+/* Tablets portrait */
+@media (max-width: 900px) {
+  .heroHeading { font-size: clamp(2rem, 7vw, 3rem); }
+  .homeGirlImg { width: clamp(220px, 50vw, 380px); }
+  .workedBox { max-width: 260px; padding: 14px; left: 50%; transform: translateX(-6%); }
+}
+
+/* Large phones */
+@media (max-width: 768px) {
+  .sectionMainRightContain { flex-wrap: wrap; row-gap: 12px; }
+  .arrowMain { display: none; }
+  .neonWrap3 { display: none; }
+  .jessicaBiogiMain { right: -14%; top: 4%; }
+}
+
+/* Phones */
+@media (max-width: 600px) {
+  .mainText { font-size: 1rem; }
+  .heroHeading { font-size: clamp(1.7rem, 9vw, 2.3rem); }
+  .heroPara { font-size: 0.9rem; }
+  .homeGirlImg { width: clamp(200px, 60vw, 300px); }
+  .jessicaBiogi { font-size: 0.7rem; padding: 7px 12px; }
+  .jessicaBiogiMain { top: 2%; right: -4%; }
+  .neonWrap1, .neonWrap2, .neonWrap4 { width: clamp(48px, 14vw, 70px); }
+  .workedBox { position: static; margin: 16px auto 0; transform: none; max-width: 280px; }
+  .socialCircle { width: 38px; height: 38px; }
+  .socialIcon { width: 16px; height: 16px; }
+  .mediaMain { gap: 14px; }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .sectionMainSub { padding: 16px 14px 24px; }
+  .totalProject { font-size: 1.6rem; }
+  .projectCompleted { font-size: 0.7rem; }
+  .freelance { font-size: 0.75rem; }
+  .mouse { width: 36px; height: 60px; }
+  .scrollDown { font-size: 0.62rem; }
+  .neonWrap2 { display: none; }
+}
+
+/* Very small phones */
+@media (max-width: 380px) {
+  .heroHeading { font-size: 1.5rem; }
+  .heroPara { font-size: 0.8rem; }
+  .workedMore { font-size: 0.72rem; }
+  .neonWrap4 { display: none; }
+}
