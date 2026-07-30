@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "@/app/Layout/Header/page";
-import Cursor from "@/app/components/Cursor/Cursor"; // 👈 Import Cursor
 import "./globals.css";
 import Footer from "./Layout/Footer/page";
+import FloatingActionButtons from "./components/Homepage/Floatingactionbuttons/page";
+import BotpressWidget from "./components/BotpressWidget";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,8 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <Navbar />
         {children}
+         <BotpressWidget />
+         <FloatingActionButtons />
         <Footer />
       </body>
     </html>
