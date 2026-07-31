@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FaPalette,
   FaCode,
@@ -13,13 +13,15 @@ import {
 } from "react-icons/fa";
 import styles from "./Services.module.css";
 
+type Accent = "orange" | "blue" | "teal" | "pink" | "amber" | "purple" | "green";
+
 type Service = {
   id: string;
   icon: React.ElementType;
   title: string;
   shortDescription: string;
   description: string;
-  accent: "orange" | "blue" | "teal" | "pink" | "amber" | "purple" | "green";
+  accent: Accent;
 };
 
 const SERVICES: Service[] = [
@@ -88,29 +90,39 @@ const SERVICES: Service[] = [
   },
 ];
 
-// Bento positions for each slot index (desktop, 4-column x 3-row grid).
-// The featured card spans the full height so its full paragraph is readable.
-// Mobile overrides these in CSS.
-const POSITIONS = [
-  { "--col": "1 / 3", "--row": "1 / 4" }, // featured — tall card, full paragraph
-  { "--col": "3 / 4", "--row": "1 / 2" },
-  { "--col": "4 / 5", "--row": "1 / 2" },
-  { "--col": "3 / 4", "--row": "2 / 3" },
-  { "--col": "4 / 5", "--row": "2 / 3" },
-  { "--col": "3 / 4", "--row": "3 / 4" },
-  { "--col": "4 / 5", "--row": "3 / 4" },
-] as React.CSSProperties[];
+// Solid + soft colors per accent, used for the active indicator, icon glow
+// and background wash — kept as JS values since they need to be applied
+// dynamically (whichever service is currently selected).
+const ACCENT: Record<Accent, { solid: string; soft: string }> = {
+  orange: { solid: "#ff9d6b", soft: "rgba(255, 122, 69, 0.16)" },
+  blue: { solid: "#7fb4ff", soft: "rgba(66, 148, 255, 0.16)" },
+  teal: { solid: "#5dcaa5", soft: "rgba(29, 158, 117, 0.18)" },
+  pink: { solid: "#ed93b1", soft: "rgba(212, 83, 126, 0.18)" },
+  amber: { solid: "#f6bb5c", soft: "rgba(239, 159, 39, 0.18)" },
+  purple: { solid: "#afa9ec", soft: "rgba(127, 119, 221, 0.18)" },
+  green: { solid: "#97c459", soft: "rgba(99, 153, 34, 0.18)" },
+};
+
+const pad = (n: number) => String(n).padStart(2, "0");
 
 export default function Services() {
-  const [order, setOrder] = useState(SERVICES.map((s) => s.id));
+  const [activeId, setActiveId] = useState(SERVICES[0].id);
+  const activeIndex = SERVICES.findIndex((s) => s.id === activeId);
+  const active = SERVICES[activeIndex];
+  const ActiveIcon = active.icon;
+  const accent = ACCENT[active.accent];
 
-  const orderedServices = order.map(
-    (id) => SERVICES.find((s) => s.id === id)!
-  );
+  // Auto-advance to the next service every 4 seconds. The timer restarts
+  // whenever activeId changes — including a manual click — so clicking
+  // an item just gives it a fresh 4 seconds before it moves on.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const nextIndex = (activeIndex + 1) % SERVICES.length;
+      setActiveId(SERVICES[nextIndex].id);
+    }, 4000);
 
-  const bringToFront = (id: string) => {
-    setOrder((prev) => [id, ...prev.filter((x) => x !== id)]);
-  };
+    return () => clearTimeout(timer);
+  }, [activeIndex]);
 
   return (
     <section className={styles.section}>
@@ -120,42 +132,79 @@ export default function Services() {
           <h2 className={styles.heading}>our marketing services</h2>
         </div>
 
-        <div className={styles.grid}>
-          {orderedServices.map((service, index) => {
-            const isFeatured = index === 0;
-            const Icon = service.icon;
+        <div className={styles.layout}>
+          {/* ---------- Index list ---------- */}
+          <div className={styles.list} role="tablist">
+            {SERVICES.map((service, i) => {
+              const isActive = service.id === activeId;
+              const Icon = service.icon;
+              const c = ACCENT[service.accent];
 
-            return (
-              <motion.button
-                key={service.id}
-                type="button"
-                layout
-                onClick={() => bringToFront(service.id)}
-                className={`${styles.card} ${
-                  isFeatured ? styles.featured : styles.normal
-                }`}
-                style={POSITIONS[index]}
-                transition={{ type: "spring", stiffness: 320, damping: 32 }}
-                whileHover={{ y: -3 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <motion.span
-                  layout="position"
-                  className={`${styles.iconWrap} ${styles[service.accent]}`}
+              return (
+                <button
+                  key={service.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => setActiveId(service.id)}
+                  className={`${styles.listItem} ${isActive ? styles.listItemActive : ""}`}
                 >
-                  <Icon size={isFeatured ? 20 : 15} />
-                </motion.span>
+                  {isActive && (
+                    <motion.span
+                      layoutId="activeBar"
+                      className={styles.activeBar}
+                      style={{ background: c.solid }}
+                      transition={{ type: "spring", stiffness: 340, damping: 32 }}
+                    />
+                  )}
+                  <span className={styles.listNum}>{pad(i + 1)}</span>
+                  <span
+                    className={styles.listIcon}
+                    style={{
+                      color: isActive ? c.solid : undefined,
+                      background: isActive ? c.soft : undefined,
+                    }}
+                  >
+                    <Icon size={14} />
+                  </span>
+                  <span className={styles.listTitle}>{service.title}</span>
+                </button>
+              );
+            })}
+          </div>
 
-                <motion.h3 layout="position" className={styles.title}>
-                  {service.title}
-                </motion.h3>
+          {/* ---------- Detail panel ---------- */}
+          <div className={styles.panel}>
+            <div
+              className={styles.glow}
+              style={{ background: `radial-gradient(circle, ${accent.soft}, transparent 70%)` }}
+            />
 
-                <motion.p layout="position" className={styles.description}>
-                  {isFeatured ? service.description : service.shortDescription}
-                </motion.p>
-              </motion.button>
-            );
-          })}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeId}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className={styles.panelInner}
+              >
+                <span
+                  className={styles.panelIcon}
+                  style={{ background: accent.soft, color: accent.solid }}
+                >
+                  <ActiveIcon size={26} />
+                </span>
+
+                <span className={styles.panelIndex}>
+                  {pad(activeIndex + 1)} / {pad(SERVICES.length)}
+                </span>
+
+                <h3 className={styles.panelTitle}>{active.title}</h3>
+                <p className={styles.panelDescription}>{active.description}</p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </section>
