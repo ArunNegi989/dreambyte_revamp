@@ -22,7 +22,7 @@
   --radius-sm: 9px;
   --font-display: 'Space Grotesk', 'Sora', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  --font-num: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
 
   background: var(--bg);
   color: var(--text);
@@ -75,17 +75,15 @@
 .heroGrid {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-  background-size: 42px 42px;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1.4px, transparent 1.4px);
+  background-size: 26px 26px;
   mask-image: radial-gradient(70% 60% at 50% 20%, black, transparent 85%);
   pointer-events: none;
 }
 
 .floatShape {
   position: absolute;
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-weight: 600;
   color: var(--text-faint);
   opacity: 0.5;
@@ -97,18 +95,18 @@
 .floatShapeOne {
   top: 18%;
   left: 6%;
-  font-size: 34px;
-  color: var(--blue);
-  opacity: 0.35;
+  font-size: 30px;
+  color: var(--amber);
+  opacity: 0.4;
   animation-duration: 10s;
 }
 
 .floatShapeTwo {
   top: 66%;
   left: 10%;
-  font-size: 26px;
-  color: var(--amber);
-  opacity: 0.3;
+  font-size: 22px;
+  color: var(--blue);
+  opacity: 0.35;
   animation-duration: 8s;
   animation-delay: 1.2s;
 }
@@ -116,9 +114,9 @@
 .floatShapeThree {
   top: 30%;
   right: 8%;
-  font-size: 40px;
+  font-size: 32px;
   color: var(--violet);
-  opacity: 0.28;
+  opacity: 0.3;
   animation-duration: 11s;
   animation-delay: 0.6s;
 }
@@ -143,7 +141,8 @@
 }
 
 .eyebrow {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
+  font-weight: 600;
   font-size: 13px;
   letter-spacing: 0.08em;
   color: var(--amber);
@@ -152,9 +151,11 @@
 }
 
 .sectionEyebrow {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
+  font-weight: 600;
   font-size: 13px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--blue);
   margin: 0 0 10px;
 }
@@ -285,7 +286,7 @@
 }
 
 .heroStat dt {
-  font-family: var(--font-mono);
+  font-family: var(--font-num);
   font-size: 28px;
   font-weight: 700;
   color: var(--text);
@@ -343,8 +344,9 @@
 }
 
 .filterChip {
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 13.5px;
   color: var(--text-muted);
   background: var(--surface);
   border: 1px solid var(--border);
@@ -369,7 +371,7 @@
 .rolesGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
+  gap: 26px;
 }
 
 .roleCard {
@@ -377,17 +379,22 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 26px 24px 24px;
+  padding: 30px 24px 24px;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+  transform: rotate(var(--tilt, -1deg));
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
 }
 
+.rolesGrid .roleCard:nth-child(3n+1) { --tilt: -1.3deg; }
+.rolesGrid .roleCard:nth-child(3n+2) { --tilt: 0.9deg; }
+.rolesGrid .roleCard:nth-child(3n)   { --tilt: -0.6deg; }
+
 .roleCard:hover {
-  transform: translateY(-6px);
+  transform: rotate(0deg) translateY(-6px);
   border-color: var(--dept-color, var(--blue));
-  box-shadow: 0 18px 40px -14px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 20px 44px -14px rgba(0, 0, 0, 0.55);
 }
 
 .roleCard::before {
@@ -404,37 +411,20 @@
   opacity: 1;
 }
 
-.cornerTL,
-.cornerBR {
+.rolePin {
   position: absolute;
-  width: 16px;
-  height: 16px;
-  opacity: 0;
-  transition: opacity 0.3s ease, width 0.3s ease, height 0.3s ease;
-  pointer-events: none;
+  top: -7px;
+  left: 28px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--dept-color, var(--blue));
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease;
 }
 
-.cornerTL {
-  top: 10px;
-  left: 10px;
-  border-top: 2px solid var(--dept-color, var(--blue));
-  border-left: 2px solid var(--dept-color, var(--blue));
-  border-radius: 4px 0 0 0;
-}
-
-.cornerBR {
-  bottom: 10px;
-  right: 10px;
-  border-bottom: 2px solid var(--dept-color, var(--blue));
-  border-right: 2px solid var(--dept-color, var(--blue));
-  border-radius: 0 0 4px 0;
-}
-
-.roleCard:hover .cornerTL,
-.roleCard:hover .cornerBR {
-  opacity: 1;
-  width: 22px;
-  height: 22px;
+.roleCard:hover .rolePin {
+  transform: scale(1.15) translateY(1px);
 }
 
 .roleCardTop {
@@ -444,15 +434,15 @@
   margin-bottom: 18px;
 }
 
-.roleCode {
-  font-family: var(--font-mono);
+.roleIndex {
+  font-family: var(--font-num);
   font-size: 12px;
   color: var(--text-faint);
   letter-spacing: 0.03em;
 }
 
 .roleDept {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -675,6 +665,9 @@
 @media (max-width: 560px) {
   .rolesGrid {
     grid-template-columns: 1fr;
+  }
+  .roleCard {
+    --tilt: 0deg;
   }
   .whyGrid {
     grid-template-columns: 1fr;

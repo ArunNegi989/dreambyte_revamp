@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Navbar from "@/app/Layout/Header/page";
 import "./globals.css";
-import Footer from "./Layout/Footer/page";
-import FloatingActionButtons from "./components/Homepage/Floatingactionbuttons/page";
-import BotpressWidget from "./components/BotpressWidget";
+import ChromeWrapper from "./components/ChromeWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,11 +29,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Navbar />
-        {children}
-         <BotpressWidget />
-         <FloatingActionButtons />
-        <Footer />
+        <ChromeWrapper>{children}</ChromeWrapper>
       </body>
     </html>
   );

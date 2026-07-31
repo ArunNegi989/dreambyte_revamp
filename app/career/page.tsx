@@ -10,7 +10,6 @@ import styles from './Careerpage.module.css';
 type Dept = 'Engineering' | 'Marketing' | 'Sales' | 'Design';
 
 interface Role {
-  code: string;
   title: string;
   dept: Dept;
   tagline: string;
@@ -21,58 +20,52 @@ interface Role {
 
 const ROLES: Role[] = [
   {
-    code: 'DB-ENG-01',
     title: 'Full Stack Developer',
     dept: 'Engineering',
     tagline: 'From front-end to backend — own the stack.',
     date: '18 Nov 2025',
     type: 'Full-time',
-    location: 'Hybrid',
+    location: 'Dehradun',
   },
   {
-    code: 'DB-DES-01',
     title: 'Graphic Designer',
     dept: 'Design',
     tagline: 'Design visuals that inspire and connect.',
     date: '18 Nov 2025',
     type: 'Full-time',
-    location: 'Hybrid',
+    location: 'Dehradun',
   },
   {
-    code: 'DB-MKT-01',
     title: 'Social Media Executive',
     dept: 'Marketing',
     tagline: 'Drive engagement. Create impact. Be our voice online.',
     date: '18 Nov 2025',
     type: 'Full-time',
-    location: 'Hybrid',
+    location: 'Dehradun',
   },
   {
-    code: 'DB-MKT-02',
     title: 'Digital Marketing Executive — PPC Specialist',
     dept: 'Marketing',
     tagline: 'Turn clicks into customers.',
     date: '18 Nov 2025',
     type: 'Full-time',
-    location: 'Remote',
+    location: 'Dehradun',
   },
   {
-    code: 'DB-SAL-01',
     title: 'Tele Sales Executive',
     dept: 'Sales',
     tagline: 'Turn conversations into conversions.',
     date: '18 Nov 2025',
     type: 'Full-time',
-    location: 'Onsite',
+    location: 'Dehradun',
   },
   {
-    code: 'DB-SAL-02',
     title: 'Business Development Executive',
     dept: 'Sales',
     tagline: 'Driving growth, building partnerships, unlocking opportunity.',
     date: '18 Nov 2025',
     type: 'Full-time',
-    location: 'Hybrid',
+    location: 'Dehradun',
   },
 ];
 
@@ -81,7 +74,7 @@ const DEPT_FILTERS: Array<Dept | 'All'> = ['All', 'Engineering', 'Marketing', 'S
 const WHY_US = [
   {
     title: 'Exciting Projects',
-    body: 'Dive into real client builds — not sandbox work — with modern stacks and live stakes.',
+    body: 'Dive into real client campaigns and builds — not sandbox work — with real budgets and real stakes.',
     icon: 'rocket',
   },
   {
@@ -214,24 +207,24 @@ export default function CareerPage() {
       {/* ---------------- HERO ---------------- */}
       <section className={styles.hero}>
         <div className={styles.heroGrid} aria-hidden="true" />
-        <span className={`${styles.floatShape} ${styles.floatShapeOne}`} aria-hidden="true">{'{ }'}</span>
-        <span className={`${styles.floatShape} ${styles.floatShapeTwo}`} aria-hidden="true">{'</>'}</span>
-        <span className={`${styles.floatShape} ${styles.floatShapeThree}`} aria-hidden="true">{'#'}</span>
+        <span className={`${styles.floatShape} ${styles.floatShapeOne}`} aria-hidden="true">✦</span>
+        <span className={`${styles.floatShape} ${styles.floatShapeTwo}`} aria-hidden="true">◍</span>
+        <span className={`${styles.floatShape} ${styles.floatShapeThree}`} aria-hidden="true">❖</span>
 
         <div className={styles.heroContent}>
           <Reveal>
-            <p className={styles.eyebrow}>DreamByte · Careers</p>
+            <p className={styles.eyebrow}>Dream Byte Solutions · Careers</p>
           </Reveal>
           <Reveal delay={80}>
             <h1 className={styles.heroTitle}>
-              Code your <span className={styles.heroAccent}>next chapter.</span>
+              Your imagination. <span className={styles.heroAccent}>Our innovation.</span>
             </h1>
           </Reveal>
           <Reveal delay={140}>
             <p className={styles.heroSub}>
-              We&rsquo;re a small studio of builders, designers and closers shipping real products for
-              real clients — not a portfolio of buzzwords. If you&rsquo;d rather ship something true
-              than chase a title, you&rsquo;ll fit right in.
+              We&rsquo;re Dehradun&rsquo;s home for marketers, designers, developers and storytellers —
+              the team behind 200+ campaigns and websites for 50+ brands. If you&rsquo;d rather build
+              something real than chase a title, come make it with us.
             </p>
           </Reveal>
           <Reveal delay={200}>
@@ -240,7 +233,7 @@ export default function CareerPage() {
                 View open roles
                 <span className={styles.btnArrow}>↓</span>
               </button>
-              <a className={styles.ghostBtn} href="mailto:careers@dreambyte.in">
+              <a className={styles.ghostBtn} href="mailto:hr@dreambytesolution.com">
                 Or just say hi
               </a>
             </div>
@@ -248,16 +241,16 @@ export default function CareerPage() {
           <Reveal delay={260}>
             <dl className={styles.heroStats}>
               <div className={styles.heroStat}>
+                <dt>50+</dt>
+                <dd>Clients served</dd>
+              </div>
+              <div className={styles.heroStat}>
+                <dt>200+</dt>
+                <dd>Projects completed</dd>
+              </div>
+              <div className={styles.heroStat}>
                 <dt>{String(ROLES.length).padStart(2, '0')}</dt>
                 <dd>Open roles</dd>
-              </div>
-              <div className={styles.heroStat}>
-                <dt>{String(deptCount).padStart(2, '0')}</dt>
-                <dd>Teams hiring</dd>
-              </div>
-              <div className={styles.heroStat}>
-                <dt>~</dt>
-                <dd>Hybrid &amp; remote</dd>
               </div>
             </dl>
           </Reveal>
@@ -267,10 +260,11 @@ export default function CareerPage() {
       {/* ---------------- OPEN ROLES ---------------- */}
       <section id="open-roles" className={styles.rolesSection}>
         <Reveal className={styles.sectionHead}>
-          <p className={styles.sectionEyebrow}>// Open positions</p>
+          <p className={styles.sectionEyebrow}>Open Positions</p>
           <h2 className={styles.sectionTitle}>Find where you fit.</h2>
           <p className={styles.sectionSub}>
-            Every role below is live right now. Filter by team, or scan the full list.
+            Every role below is live right now, across {deptCount} teams. Filter by department, or
+            scan the full list.
           </p>
         </Reveal>
 
@@ -292,10 +286,11 @@ export default function CareerPage() {
 
         <div className={styles.rolesGrid}>
           {filteredRoles.map((role, i) => (
-            <Reveal delay={(i % 3) * 90} key={role.code}>
+            <Reveal delay={(i % 3) * 90} key={role.title}>
               <article className={`${styles.roleCard} ${styles[`dept${role.dept}`]}`}>
+                <span className={styles.rolePin} aria-hidden="true" />
                 <div className={styles.roleCardTop}>
-                  <span className={styles.roleCode}>{role.code}</span>
+                  <span className={styles.roleIndex}>{String(i + 1).padStart(2, '0')}</span>
                   <span className={styles.roleDept}>{role.dept}</span>
                 </div>
 
@@ -310,13 +305,10 @@ export default function CareerPage() {
                   <span>{role.date}</span>
                 </div>
 
-                <a className={styles.applyBtn} href={`mailto:careers@dreambyte.in?subject=Application: ${encodeURIComponent(role.title)}`}>
+                <a className={styles.applyBtn} href={`mailto:hr@dreambytesolution.com?subject=Application: ${encodeURIComponent(role.title)}`}>
                   Apply now
                   <span className={styles.btnArrow}>→</span>
                 </a>
-
-                <span className={styles.cornerTL} aria-hidden="true" />
-                <span className={styles.cornerBR} aria-hidden="true" />
               </article>
             </Reveal>
           ))}
@@ -326,7 +318,7 @@ export default function CareerPage() {
       {/* ---------------- WHY CHOOSE US ---------------- */}
       <section className={styles.whySection}>
         <Reveal className={styles.sectionHead}>
-          <p className={styles.sectionEyebrow}>// Why DreamByte</p>
+          <p className={styles.sectionEyebrow}>Why DreamByte</p>
           <h2 className={styles.sectionTitle}>Why choose us</h2>
         </Reveal>
 
@@ -350,15 +342,15 @@ export default function CareerPage() {
         <Reveal>
           <div className={styles.ctaCard}>
             <div>
-              <p className={styles.sectionEyebrow}>// Don&rsquo;t see your role?</p>
+              <p className={styles.sectionEyebrow}>Don&rsquo;t see your role?</p>
               <h2 className={styles.ctaTitle}>Send us your resume anyway.</h2>
               <p className={styles.sectionSub}>
                 We keep every good profile on file. If something opens up that fits, you&rsquo;ll hear
                 from us first.
               </p>
             </div>
-            <a className={styles.primaryBtn} href="mailto:careers@dreambyte.in?subject=General%20Application">
-              Email careers@dreambyte.in
+            <a className={styles.primaryBtn} href="mailto:hr@dreambytesolution.com?subject=General%20Application">
+              Email hr@dreambytesolution.com
               <span className={styles.btnArrow}>→</span>
             </a>
           </div>
