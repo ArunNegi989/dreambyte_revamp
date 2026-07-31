@@ -1,0 +1,135 @@
+.inbox {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.listPanel {
+  max-height: 640px;
+  overflow-y: auto;
+}
+
+.msgList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.msgRow {
+  display: flex;
+  gap: 10px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--admin-border);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.msgRow:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.msgRowActive {
+  background: var(--admin-amber-soft);
+}
+
+.unreadDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.unreadDotOn {
+  background: var(--admin-amber);
+  box-shadow: 0 0 0 4px var(--admin-amber-soft);
+}
+
+.msgMain {
+  min-width: 0;
+  flex: 1;
+}
+
+.msgTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.msgTop strong {
+  font-size: 0.88rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.msgTime {
+  font-size: 0.72rem;
+  color: var(--admin-muted);
+  flex-shrink: 0;
+}
+
+.msgMain p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--admin-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.detailPanel {
+  padding: 26px;
+  min-height: 300px;
+}
+
+.detailHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.detailHead h2 {
+  font-family: var(--admin-font-display);
+  font-size: 1.2rem;
+  margin: 0 0 6px;
+}
+
+.detailMeta {
+  font-size: 0.85rem;
+  color: var(--admin-muted);
+  margin: 0;
+}
+
+.detailMeta a {
+  color: var(--admin-violet);
+}
+
+.detailDate {
+  font-size: 0.78rem;
+  color: var(--admin-muted);
+  margin: 16px 0 4px;
+  font-family: var(--admin-font-mono);
+}
+
+.detailBody {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: var(--admin-text);
+  margin: 0 0 24px;
+}
+
+@media (max-width: 992px) {
+  .inbox {
+    grid-template-columns: 1fr;
+  }
+
+  .listPanel {
+    max-height: 320px;
+  }
+}

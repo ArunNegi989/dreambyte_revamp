@@ -7,7 +7,7 @@ import FloatingActionButtons from '@/app/components/Homepage/Floatingactionbutto
 import BotpressWidget from '@/app/components/BotpressWidget';
 
 // Routes jaha header/footer/widgets nahi chahiye
-const NO_CHROME_ROUTES = ['/login', '/signup'];
+const NO_CHROME_ROUTES = ['/login', '/signup', '/admin'];
 
 export default function ChromeWrapper({
   children,
