@@ -133,12 +133,16 @@ const ContactPage: React.FC<ContactPageProps> = ({
     <div className={styles.page}>
       <header className={styles.hero}>
         <span className={styles.heroFacet} aria-hidden="true" />
+        <span className={`${styles.orb} ${styles.orb1}`} aria-hidden="true" />
+        <span className={`${styles.orb} ${styles.orb2}`} aria-hidden="true" />
+        <span className={`${styles.orb} ${styles.orb3}`} aria-hidden="true" />
         <h1 className={styles.heroHeading}>{heading}</h1>
         <p className={styles.heroSub}>{subheading}</p>
       </header>
 
       <section className={styles.contentGrid}>
-        <div className={styles.formCard}>
+        {/* LEFT: form */}
+        <div className={`${styles.formCard} ${styles.reveal}`}>
           <h2 className={styles.cardTitle}>Contact Form</h2>
 
           <form onSubmit={handleSubmit} noValidate>
@@ -189,7 +193,7 @@ const ContactPage: React.FC<ContactPageProps> = ({
               <textarea
                 id="cf-message"
                 name="message"
-                rows={5}
+                rows={6}
                 placeholder="Type your message..."
                 value={form.message}
                 onChange={handleChange}
@@ -209,69 +213,80 @@ const ContactPage: React.FC<ContactPageProps> = ({
 
             {status === "sent" && (
               <p className={styles.successNote} role="status">
+                <span className={styles.successIcon} aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M7 12.5l3.2 3.2L17 9" />
+                  </svg>
+                </span>
                 Thanks! Your message is in — we'll get back to you soon.
               </p>
             )}
           </form>
+
+          <div className={styles.noteBox}>
+            <p>We aim to respond to all inquiries within 24 hours.</p>
+            <p>Looking forward to connecting with you!</p>
+          </div>
         </div>
 
-        <aside className={styles.detailsCard}>
-          <h2 className={styles.cardTitle}>Our Contact Details</h2>
+        {/* RIGHT: map on top, details + socials below */}
+        <aside className={styles.mapSide}>
+          <div className={`${styles.mapCard} ${styles.reveal} ${styles.revealDelay1}`}>
+            <iframe
+              src={mapEmbedSrc}
+              title="Office location map"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className={styles.map}
+            />
+            <span className={styles.mapPulse} aria-hidden="true" />
+          </div>
 
-          <ul className={styles.detailsList}>
-            {phones.map((phone) => (
-              <li key={phone}>
-                <a href={`tel:${phone.replace(/\s+/g, "")}`} className={styles.detailRow}>
-                  <span className={styles.detailIcon}>{ICONS.phone}</span>
-                  {phone}
+          <div className={`${styles.detailsCard} ${styles.reveal} ${styles.revealDelay2}`}>
+            <h2 className={styles.cardTitle}>Our Contact Details</h2>
+
+            <ul className={styles.detailsList}>
+              {phones.map((phone, i) => (
+                <li key={phone} style={{ animationDelay: `${0.35 + i * 0.08}s` }}>
+                  <a href={`tel:${phone.replace(/\s+/g, "")}`} className={styles.detailRow}>
+                    <span className={styles.detailIcon}>{ICONS.phone}</span>
+                    {phone}
+                  </a>
+                </li>
+              ))}
+              <li style={{ animationDelay: `${0.35 + phones.length * 0.08}s` }}>
+                <a href={`mailto:${email}`} className={styles.detailRow}>
+                  <span className={styles.detailIcon}>{ICONS.mail}</span>
+                  {email}
                 </a>
               </li>
-            ))}
-            <li>
-              <a href={`mailto:${email}`} className={styles.detailRow}>
-                <span className={styles.detailIcon}>{ICONS.mail}</span>
-                {email}
-              </a>
-            </li>
-            <li>
-              <span className={`${styles.detailRow} ${styles.address}`}>
-                <span className={styles.detailIcon}>{ICONS.pin}</span>
-                {address}
-              </span>
-            </li>
-          </ul>
+              <li style={{ animationDelay: `${0.35 + (phones.length + 1) * 0.08}s` }}>
+                <span className={`${styles.detailRow} ${styles.address}`}>
+                  <span className={styles.detailIcon}>{ICONS.pin}</span>
+                  {address}
+                </span>
+              </li>
+            </ul>
 
-          <div className={styles.socialRow}>
-            {socials.map((social) => (
-              <a
-                key={social.icon}
-                href={social.href}
-                aria-label={social.label}
-                className={styles.socialBtn}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {ICONS[social.icon]}
-              </a>
-            ))}
+            <div className={styles.socialRow}>
+              {socials.map((social, i) => (
+                <a
+                  key={social.icon}
+                  href={social.href}
+                  aria-label={social.label}
+                  className={styles.socialBtn}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ animationDelay: `${0.6 + i * 0.08}s` }}
+                >
+                  {ICONS[social.icon]}
+                </a>
+              ))}
+            </div>
           </div>
         </aside>
       </section>
-
-      <section className={styles.mapWrap}>
-        <iframe
-          src={mapEmbedSrc}
-          title="Office location map"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          className={styles.map}
-        />
-      </section>
-
-      <div className={styles.noteBox}>
-        <p>We aim to respond to all inquiries within 24 hours.</p>
-        <p>Looking forward to connecting with you!</p>
-      </div>
     </div>
   );
 };
