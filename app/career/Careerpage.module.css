@@ -10,7 +10,7 @@
   --border: #262f4a;
   --text: #f2f4fb;
   --text-muted: #93a0c2;
-  --text-faint: #5b6788;
+  --text-faint: #6d7aa0;
   --blue: #4c7dff;
   --blue-soft: rgba(76, 125, 255, 0.14);
   --amber: #ffc145;
@@ -163,8 +163,8 @@
 .heroTitle {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2.4rem, 6vw, 4.4rem);
-  line-height: 1.06;
+  font-size: clamp(2.1rem, 6vw, 4.4rem);
+  line-height: 1.08;
   letter-spacing: -0.02em;
   margin: 0 0 22px;
 }
@@ -196,7 +196,7 @@
 }
 
 .heroSub {
-  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
   line-height: 1.65;
   color: var(--text-muted);
   max-width: 560px;
@@ -210,17 +210,20 @@
   flex-wrap: wrap;
   justify-content: center;
   margin-bottom: 52px;
+  width: 100%;
 }
 
 .primaryBtn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   background: var(--blue);
   color: #060912;
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 15px;
+  min-height: 48px;
   padding: 14px 26px;
   border: none;
   border-radius: 999px;
@@ -243,6 +246,9 @@
 }
 
 .ghostBtn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
   color: var(--text-muted);
   font-size: 15px;
   font-weight: 500;
@@ -256,6 +262,12 @@
 .ghostBtn:focus-visible {
   color: var(--text);
   border-color: var(--text-muted);
+}
+
+.ghostBtn:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 4px;
+  border-radius: 2px;
 }
 
 .btnArrow {
@@ -277,6 +289,8 @@
   margin: 0;
   padding-top: 30px;
   border-top: 1px solid var(--border);
+  width: 100%;
+  justify-content: center;
 }
 
 .heroStat {
@@ -298,6 +312,7 @@
   font-size: 12.5px;
   color: var(--text-faint);
   letter-spacing: 0.03em;
+  text-align: center;
 }
 
 /* ------------------------------------------------------------------ */
@@ -313,7 +328,7 @@
 .sectionTitle {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
   letter-spacing: -0.01em;
   margin: 0 0 12px;
 }
@@ -333,6 +348,7 @@
   padding: 90px 24px;
   max-width: 1180px;
   margin: 0 auto;
+  scroll-margin-top: 24px;
 }
 
 .filterRow {
@@ -351,7 +367,10 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 9px 18px;
+  min-height: 40px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
   cursor: pointer;
   transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
@@ -359,6 +378,11 @@
 .filterChip:hover {
   color: var(--text);
   border-color: var(--text-faint);
+}
+
+.filterChip:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
 }
 
 .filterChipActive,
@@ -382,14 +406,15 @@
   padding: 30px 24px 24px;
   display: flex;
   flex-direction: column;
-  transform: rotate(var(--tilt, -1deg));
+  transform: rotate(var(--tilt, -0.5deg));
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
 }
 
-.rolesGrid .roleCard:nth-child(3n+1) { --tilt: -1.3deg; }
-.rolesGrid .roleCard:nth-child(3n+2) { --tilt: 0.9deg; }
-.rolesGrid .roleCard:nth-child(3n)   { --tilt: -0.6deg; }
+.rolesGrid .roleCard:nth-child(3n+1) { --tilt: -0.6deg; }
+.rolesGrid .roleCard:nth-child(3n+2) { --tilt: 0.45deg; }
+.rolesGrid .roleCard:nth-child(3n)   { --tilt: -0.3deg; }
 
 .roleCard:hover {
   transform: rotate(0deg) translateY(-6px);
@@ -493,6 +518,7 @@
   font-size: 0.92rem;
   text-decoration: none;
   border-bottom: 1px solid transparent;
+  padding: 4px 0;
   transition: border-color 0.2s ease;
 }
 
@@ -501,11 +527,43 @@
   border-color: var(--dept-color, var(--blue));
 }
 
+.applyBtn:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 /* department accent variables */
 .deptEngineering { --dept-color: var(--blue); --dept-glow: var(--blue-soft); }
 .deptMarketing    { --dept-color: var(--amber); --dept-glow: var(--amber-soft); }
 .deptSales        { --dept-color: var(--mint); --dept-glow: rgba(61, 220, 151, 0.14); }
 .deptDesign       { --dept-color: var(--violet); --dept-glow: rgba(185, 139, 255, 0.14); }
+
+/* ------------------------------------------------------------------ */
+/* Empty state (no roles match the active filter)                      */
+/* ------------------------------------------------------------------ */
+
+.emptyState {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 56px 24px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+}
+
+.emptyStateTitle {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.emptyStateBody {
+  font-size: 0.92rem;
+  margin: 0;
+}
 
 /* ------------------------------------------------------------------ */
 /* Why choose us                                                       */
@@ -599,7 +657,7 @@
 
 .ctaTitle {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
   font-weight: 700;
   margin: 0 0 10px;
 }
@@ -650,6 +708,11 @@
     flex-direction: column;
     gap: 16px;
   }
+  .primaryBtn,
+  .ghostBtn {
+    width: 100%;
+    justify-content: center;
+  }
   .heroStats {
     gap: 26px;
     padding-top: 24px;
@@ -658,6 +721,9 @@
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
+  }
+  .ctaCard .primaryBtn {
+    width: auto;
   }
 }
 
@@ -668,6 +734,7 @@
   }
   .roleCard {
     --tilt: 0deg;
+    padding: 26px 20px 20px;
   }
   .whyGrid {
     grid-template-columns: 1fr;
@@ -680,9 +747,13 @@
   .heroStat dt {
     font-size: 22px;
   }
+  .heroStat dd {
+    font-size: 11.5px;
+  }
   .filterRow {
     justify-content: flex-start;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     padding-bottom: 6px;
     margin: 0 -20px 40px;
     padding-inline: 20px;
@@ -695,5 +766,37 @@
   }
   .ctaCard {
     padding: 32px 24px;
+  }
+  .ctaCard .primaryBtn {
+    width: 100%;
+  }
+}
+
+/* Small phones */
+@media (max-width: 400px) {
+  .hero {
+    padding: 84px 16px 56px;
+  }
+  .rolesSection,
+  .whySection {
+    padding: 52px 16px;
+  }
+  .ctaSection {
+    padding: 0 16px 64px;
+  }
+  .heroStats {
+    gap: 10px;
+  }
+  .heroStat dt {
+    font-size: 19px;
+  }
+  .roleCard {
+    padding: 22px 16px 18px;
+  }
+  .floatShape {
+    display: none;
+  }
+  .ctaCard {
+    padding: 26px 18px;
   }
 }

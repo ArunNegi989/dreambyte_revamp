@@ -1,73 +1,13 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
 import styles from './Careerpage.module.css';
+import { ROLES, Dept } from '@/data/roles';
 
 /* ------------------------------------------------------------------ */
-/*  Data                                                               */
+/*  Filters                                                            */
 /* ------------------------------------------------------------------ */
-
-type Dept = 'Engineering' | 'Marketing' | 'Sales' | 'Design';
-
-interface Role {
-  title: string;
-  dept: Dept;
-  tagline: string;
-  date: string;
-  type: string;
-  location: string;
-}
-
-const ROLES: Role[] = [
-  {
-    title: 'Full Stack Developer',
-    dept: 'Engineering',
-    tagline: 'From front-end to backend — own the stack.',
-    date: '18 Nov 2025',
-    type: 'Full-time',
-    location: 'Dehradun',
-  },
-  {
-    title: 'Graphic Designer',
-    dept: 'Design',
-    tagline: 'Design visuals that inspire and connect.',
-    date: '18 Nov 2025',
-    type: 'Full-time',
-    location: 'Dehradun',
-  },
-  {
-    title: 'Social Media Executive',
-    dept: 'Marketing',
-    tagline: 'Drive engagement. Create impact. Be our voice online.',
-    date: '18 Nov 2025',
-    type: 'Full-time',
-    location: 'Dehradun',
-  },
-  {
-    title: 'Digital Marketing Executive — PPC Specialist',
-    dept: 'Marketing',
-    tagline: 'Turn clicks into customers.',
-    date: '18 Nov 2025',
-    type: 'Full-time',
-    location: 'Dehradun',
-  },
-  {
-    title: 'Tele Sales Executive',
-    dept: 'Sales',
-    tagline: 'Turn conversations into conversions.',
-    date: '18 Nov 2025',
-    type: 'Full-time',
-    location: 'Dehradun',
-  },
-  {
-    title: 'Business Development Executive',
-    dept: 'Sales',
-    tagline: 'Driving growth, building partnerships, unlocking opportunity.',
-    date: '18 Nov 2025',
-    type: 'Full-time',
-    location: 'Dehradun',
-  },
-];
 
 const DEPT_FILTERS: Array<Dept | 'All'> = ['All', 'Engineering', 'Marketing', 'Sales', 'Design'];
 
@@ -93,6 +33,8 @@ const WHY_US = [
     icon: 'handshake',
   },
 ];
+
+const HR_EMAIL = 'hr@dreambytesolution.com';
 
 /* ------------------------------------------------------------------ */
 /*  Icons (inline, no dependency)                                      */
@@ -233,7 +175,7 @@ export default function CareerPage() {
                 View open roles
                 <span className={styles.btnArrow}>↓</span>
               </button>
-              <a className={styles.ghostBtn} href="mailto:hr@dreambytesolution.com">
+              <a className={styles.ghostBtn} href={`mailto:${HR_EMAIL}`}>
                 Or just say hi
               </a>
             </div>
@@ -284,34 +226,44 @@ export default function CareerPage() {
           </div>
         </Reveal>
 
-        <div className={styles.rolesGrid}>
-          {filteredRoles.map((role, i) => (
-            <Reveal delay={(i % 3) * 90} key={role.title}>
-              <article className={`${styles.roleCard} ${styles[`dept${role.dept}`]}`}>
-                <span className={styles.rolePin} aria-hidden="true" />
-                <div className={styles.roleCardTop}>
-                  <span className={styles.roleIndex}>{String(i + 1).padStart(2, '0')}</span>
-                  <span className={styles.roleDept}>{role.dept}</span>
-                </div>
+        <div className={styles.rolesGrid} aria-live="polite">
+          {filteredRoles.length === 0 ? (
+            <div className={styles.emptyState}>
+              <p className={styles.emptyStateTitle}>No open roles in {activeFilter} right now.</p>
+              <p className={styles.emptyStateBody}>
+                Check back soon, or browse other teams — we&rsquo;re growing across the board.
+              </p>
+            </div>
+          ) : (
+            filteredRoles.map((role, i) => (
+              <Reveal delay={(i % 3) * 90} key={role.slug}>
+                <article className={`${styles.roleCard} ${styles[`dept${role.dept}`]}`}>
+                  <span className={styles.rolePin} aria-hidden="true" />
+                  <div className={styles.roleCardTop}>
+                    <span className={styles.roleIndex}>{String(i + 1).padStart(2, '0')}</span>
+                    <span className={styles.roleDept}>{role.dept}</span>
+                  </div>
 
-                <h3 className={styles.roleTitle}>{role.title}</h3>
-                <p className={styles.roleTagline}>{role.tagline}</p>
+                  <h3 className={styles.roleTitle}>{role.title}</h3>
+                  <p className={styles.roleTagline}>{role.tagline}</p>
 
-                <div className={styles.roleMeta}>
-                  <span>{role.type}</span>
-                  <span className={styles.metaDot}>·</span>
-                  <span>{role.location}</span>
-                  <span className={styles.metaDot}>·</span>
-                  <span>{role.date}</span>
-                </div>
+                  <div className={styles.roleMeta}>
+                    <span>{role.type}</span>
+                    <span className={styles.metaDot}>·</span>
+                    <span>{role.location}</span>
+                    <span className={styles.metaDot}>·</span>
+                    <span>{role.date}</span>
+                  </div>
 
-                <a className={styles.applyBtn} href={`mailto:hr@dreambytesolution.com?subject=Application: ${encodeURIComponent(role.title)}`}>
-                  Apply now
-                  <span className={styles.btnArrow}>→</span>
-                </a>
-              </article>
-            </Reveal>
-          ))}
+                  {/* Opens the dedicated job page for this role (slug-based route) */}
+                  <Link className={styles.applyBtn} href={`/career/${role.slug}`}>
+                    Apply now
+                    <span className={styles.btnArrow}>→</span>
+                  </Link>
+                </article>
+              </Reveal>
+            ))
+          )}
         </div>
       </section>
 
@@ -349,8 +301,11 @@ export default function CareerPage() {
                 from us first.
               </p>
             </div>
-            <a className={styles.primaryBtn} href="mailto:hr@dreambytesolution.com?subject=General%20Application">
-              Email hr@dreambytesolution.com
+            <a
+              className={styles.primaryBtn}
+              href={`mailto:${HR_EMAIL}?subject=${encodeURIComponent('General Application')}`}
+            >
+              Email {HR_EMAIL}
               <span className={styles.btnArrow}>→</span>
             </a>
           </div>
