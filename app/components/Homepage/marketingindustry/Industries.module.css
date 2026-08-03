@@ -1,34 +1,44 @@
 .section {
   background: #0b0f19;
-  padding: 72px 0;
+  padding: 96px 0;
 }
 
 .container {
-  max-width: 1180px;
+  max-width: 1320px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 40px;
 }
 
 .headerRow {
   text-align: center;
-  margin-bottom: 44px;
+  margin-bottom: 56px;
+  max-width: 640px;
+  margin-inline: auto;
 }
 
 .eyebrow {
   display: inline-block;
   color: #ff9d6b;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.6px;
   text-transform: uppercase;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .heading {
   color: #ffffff;
-  font-size: 30px;
+  font-size: 38px;
   font-weight: 800;
   letter-spacing: -0.3px;
+  margin: 0 0 14px;
+  line-height: 1.15;
+}
+
+.subheading {
+  color: #9a9fac;
+  font-size: 15.5px;
+  line-height: 1.65;
   margin: 0;
 }
 
@@ -36,19 +46,40 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
+  gap: 28px;
 }
 
 .card {
+  position: relative;
   background: #12172a;
-  border: 0.5px solid rgba(255, 255, 255, 0.08);
-  border-radius: 18px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 1px;
+  background: linear-gradient(140deg, var(--accent), transparent 40%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: 3;
 }
 
 .card:hover {
-  border-color: rgba(255, 122, 69, 0.35);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--accent-soft);
+}
+
+.card:hover::before {
+  opacity: 1;
 }
 
 /* ---------- Image ---------- */
@@ -62,16 +93,18 @@
   width: 100%;
   aspect-ratio: 16 / 11;
   overflow: hidden;
-  border-radius: 18px 18px 0 0;
+  border-radius: 20px 20px 0 0;
 }
 
 .image {
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+  filter: saturate(0.92);
 }
 
 .card:hover .image {
-  transform: scale(1.08);
+  transform: scale(1.1) rotate(0.5deg);
+  filter: saturate(1.05);
 }
 
 .imageOverlay {
@@ -79,107 +112,159 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(11, 15, 25, 0) 55%,
-    rgba(11, 15, 25, 0.95) 100%
+    rgba(11, 15, 25, 0) 45%,
+    rgba(11, 15, 25, 0.96) 100%
   );
 }
 
 .iconBadge {
   position: absolute;
-  left: 18px;
-  bottom: -20px;
-  width: 44px;
-  height: 44px;
+  left: 22px;
+  bottom: -24px;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #ffdd66, #ffc633);
+  border-radius: 14px;
   color: #14171f;
-  box-shadow: 0 8px 20px rgba(255, 198, 51, 0.35);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
   z-index: 2;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.card:hover .iconBadge {
+  transform: rotate(-8deg) scale(1.08);
 }
 
 /* ---------- Body ---------- */
 .body {
-  padding: 32px 22px 24px;
+  padding: 38px 26px 28px;
+  position: relative;
 }
 
 .title {
-  color: #ffdd66;
-  font-size: 17px;
+  color: #ffffff;
+  font-size: 20px;
   font-weight: 700;
-  margin: 0 0 10px;
+  margin: 0 0 12px;
+  transition: color 0.3s ease;
+}
+
+.card:hover .title {
+  color: var(--accent);
 }
 
 .description {
   color: #a7abb8;
-  font-size: 12.5px;
+  font-size: 14.5px;
   line-height: 1.7;
-  margin: 0 0 16px;
+  margin: 0 0 18px;
 }
 
+.exploreLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
 
+.card:hover .exploreLink {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.exploreArrow {
+  transition: transform 0.3s ease;
+}
+
+.card:hover .exploreArrow {
+  transform: translateX(4px);
+}
 
 /* =========================================================
    RESPONSIVE BREAKPOINTS
    ========================================================= */
 
-@media (max-width: 1180px) {
+@media (max-width: 1320px) {
   .container {
-    padding: 0 24px;
+    padding: 0 28px;
   }
 }
 
-@media (max-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
+@media (max-width: 1100px) {
+  .section {
+    padding: 80px 0;
   }
   .heading {
-    font-size: 26px;
+    font-size: 31px;
+  }
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
   }
 }
 
 @media (max-width: 768px) {
   .section {
-    padding: 56px 0;
+    padding: 64px 0;
   }
   .headerRow {
-    margin-bottom: 32px;
+    margin-bottom: 36px;
   }
   .heading {
-    font-size: 22px;
+    font-size: 25px;
+  }
+  .subheading {
+    font-size: 14px;
   }
   .body {
-    padding: 30px 18px 20px;
+    padding: 34px 20px 22px;
   }
 }
 
 @media (max-width: 640px) {
+  .container {
+    padding: 0 20px;
+  }
   .grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 22px;
   }
   .imageWrap {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 16 / 10;
+  }
+  .exploreLink {
+    opacity: 1;
+    transform: none;
   }
 }
 
 @media (max-width: 400px) {
   .heading {
-    font-size: 19px;
+    font-size: 21px;
   }
   .title {
-    font-size: 15.5px;
+    font-size: 17px;
   }
   .description {
-    font-size: 12px;
+    font-size: 13.5px;
   }
   .iconBadge {
-    width: 38px;
-    height: 38px;
-    left: 14px;
-    bottom: -18px;
+    width: 42px;
+    height: 42px;
+    left: 16px;
+    bottom: -20px;
+    border-radius: 12px;
+  }
+  .body {
+    padding: 30px 18px 20px;
   }
 }

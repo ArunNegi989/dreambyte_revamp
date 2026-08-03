@@ -1,6 +1,6 @@
 .wrapper {
   position: relative;
-  background: radial-gradient(ellipse 80% 60% at 50% 0%, #12182b 0%, #0a0e1a 55%, #0d1220 100%);
+  background: #161010;
   padding: 2.5rem 0 1.5rem;
   overflow: hidden;
 }

@@ -1,46 +1,47 @@
 .section {
   background: #08090f;
-  padding: 88px 0;
+  padding: 100px 0;
 }
 
 .container {
-  max-width: 1240px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 40px;
 }
 
 /* ---------- Header ---------- */
 .headerRow {
   text-align: center;
-  margin-bottom: 52px;
+  margin-bottom: 60px;
 }
 
 .eyebrow {
   display: inline-block;
   color: #ff9d6b;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.8px;
   text-transform: uppercase;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .heading {
   color: #ffffff;
-  font-size: 32px;
+  font-size: 44px;
   font-weight: 700;
+  letter-spacing: -0.01em;
   margin: 0;
 }
 
 /* ============================================================
    LAYOUT — a numbered index list on the left, a large detail
    panel on the right. Clicking an index item slides the accent
-   bar to it and cross-fades the panel content.
+   bar to it and cross-fades the panel content (text + image).
    ============================================================ */
 .layout {
   display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 28px;
+  grid-template-columns: 320px 1fr;
+  gap: 32px;
   align-items: stretch;
 }
 
@@ -50,20 +51,20 @@
   flex-direction: column;
   gap: 4px;
   border-right: 1px solid rgba(255, 255, 255, 0.08);
-  padding-right: 22px;
+  padding-right: 24px;
 }
 
 .listItem {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 13px;
   width: 100%;
   text-align: left;
   background: transparent;
   border: none;
-  border-radius: 10px;
-  padding: 13px 14px 13px 18px;
+  border-radius: 12px;
+  padding: 15px 16px 15px 20px;
   cursor: pointer;
   transition: background 0.2s ease;
 }
@@ -87,19 +88,19 @@
 
 .listNum {
   font-family: monospace;
-  font-size: 10.5px;
+  font-size: 11.5px;
   color: #565b6b;
   flex-shrink: 0;
-  width: 16px;
+  width: 18px;
 }
 
 .listIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
   color: #6d7280;
   background: rgba(255, 255, 255, 0.04);
   flex-shrink: 0;
@@ -108,7 +109,7 @@
 
 .listTitle {
   color: #b7bac4;
-  font-size: 13.5px;
+  font-size: 15px;
   font-weight: 600;
   text-transform: capitalize;
   white-space: nowrap;
@@ -124,12 +125,12 @@
 /* ---------- Detail panel ---------- */
 .panel {
   position: relative;
-  border-radius: 22px;
+  border-radius: 24px;
   border: 0.5px solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.02);
-  padding: 48px;
+  padding: 52px;
   overflow: hidden;
-  min-height: 360px;
+  min-height: 420px;
   display: flex;
 }
 
@@ -137,8 +138,8 @@
   position: absolute;
   top: -20%;
   right: -10%;
-  width: 480px;
-  height: 480px;
+  width: 520px;
+  height: 520px;
   filter: blur(10px);
   pointer-events: none;
 }
@@ -146,86 +147,131 @@
 .panelInner {
   position: relative;
   z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 48px;
+  align-items: center;
+  width: 100%;
+  margin: auto 0;
+}
+
+.panelText {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  max-width: 620px;
-  margin: auto 0;
+  min-width: 0;
 }
 
 .panelIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
-  margin-bottom: 22px;
+  width: 62px;
+  height: 62px;
+  border-radius: 16px;
+  margin-bottom: 24px;
 }
 
 .panelIndex {
   font-family: monospace;
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.06em;
   color: #565b6b;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .panelTitle {
   color: #ffffff;
-  font-size: 30px;
+  font-size: 38px;
   font-weight: 700;
   text-transform: capitalize;
-  margin: 0 0 18px;
+  margin: 0 0 20px;
   letter-spacing: -0.3px;
+  line-height: 1.15;
 }
 
 .panelDescription {
   color: #9a9fac;
-  font-size: 15.5px;
+  font-size: 17px;
   line-height: 1.85;
   margin: 0;
+  max-width: 620px;
+}
+
+/* ---------- Image ---------- */
+.panelImageWrap {
+  position: relative;
+  border-radius: 20px;
+}
+
+.panelImageFrame {
+  position: absolute;
+  inset: -2px;
+  border-radius: 22px;
+  padding: 2px;
+  opacity: 0.7;
+}
+
+.panelImageInner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #11131c;
+}
+
+.panelImage {
+  object-fit: cover;
 }
 
 /* =========================================================
    RESPONSIVE BREAKPOINTS
    ========================================================= */
 
-@media (max-width: 1180px) {
+@media (max-width: 1280px) {
   .container {
-    padding: 0 24px;
+    padding: 0 28px;
+  }
+  .panelInner {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 36px;
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1100px) {
   .section {
-    padding: 72px 0;
+    padding: 80px 0;
   }
 
   .heading {
-    font-size: 27px;
+    font-size: 34px;
   }
 
   .layout {
-    grid-template-columns: 250px 1fr;
-    gap: 20px;
+    grid-template-columns: 270px 1fr;
+    gap: 24px;
   }
 
   .panel {
-    padding: 36px;
+    padding: 40px;
   }
 
   .panelTitle {
-    font-size: 25px;
+    font-size: 30px;
+  }
+
+  .panelDescription {
+    font-size: 16px;
   }
 }
 
 /* Tablet & below — list becomes a horizontal scrollable pill row,
-   panel moves full-width underneath it. */
-@media (max-width: 860px) {
+   panel stacks: text first, then image underneath. */
+@media (max-width: 900px) {
   .layout {
     grid-template-columns: 1fr;
-    gap: 22px;
+    gap: 24px;
   }
 
   .list {
@@ -234,7 +280,7 @@
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     padding-right: 0;
-    padding-bottom: 16px;
+    padding-bottom: 18px;
     gap: 8px;
     scrollbar-width: none;
   }
@@ -245,7 +291,7 @@
 
   .listItem {
     flex: 0 0 auto;
-    padding: 10px 16px 10px 20px;
+    padding: 11px 18px 11px 22px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.03);
   }
@@ -253,73 +299,103 @@
   .activeBar {
     left: 0;
     top: unset;
-    bottom: -16px;
+    bottom: -18px;
     width: 60%;
     height: 3px;
     margin: 0 20%;
   }
 
   .listTitle {
-    max-width: 140px;
+    max-width: 150px;
   }
 
   .panel {
     min-height: 0;
   }
+
+  .panelInner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .panelImageWrap {
+    order: -1;
+    width: 100%;
+  }
+
+  .panelImageInner {
+    aspect-ratio: 16 / 9;
+  }
+
+  .panelText {
+    align-items: flex-start;
+  }
 }
 
 @media (max-width: 640px) {
   .section {
-    padding: 56px 0;
+    padding: 64px 0;
   }
 
   .headerRow {
-    margin-bottom: 30px;
+    margin-bottom: 34px;
   }
 
   .heading {
-    font-size: 23px;
+    font-size: 27px;
   }
 
   .panel {
-    padding: 28px 24px;
-    border-radius: 18px;
+    padding: 30px 26px;
+    border-radius: 20px;
   }
 
   .panelIcon {
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
-    margin-bottom: 16px;
+    width: 50px;
+    height: 50px;
+    border-radius: 13px;
+    margin-bottom: 18px;
   }
 
   .panelTitle {
-    font-size: 21px;
-    margin-bottom: 12px;
+    font-size: 24px;
+    margin-bottom: 14px;
   }
 
   .panelDescription {
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.75;
   }
 
   .glow {
-    width: 320px;
-    height: 320px;
+    width: 340px;
+    height: 340px;
+  }
+
+  .panelImageInner {
+    aspect-ratio: 4 / 3;
   }
 }
 
 @media (max-width: 420px) {
+  .container {
+    padding: 0 20px;
+  }
+
   .heading {
-    font-size: 20px;
+    font-size: 22px;
   }
 
   .listTitle {
-    max-width: 110px;
-    font-size: 12.5px;
+    max-width: 120px;
+    font-size: 13.5px;
   }
 
   .panelTitle {
-    font-size: 19px;
+    font-size: 21px;
+  }
+
+  .panel {
+    padding: 24px 20px;
   }
 }

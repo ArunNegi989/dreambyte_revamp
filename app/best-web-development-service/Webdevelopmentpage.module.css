@@ -1,0 +1,346 @@
+.page {
+  background: #0b0c11;
+  color: #d8d9de;
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 90px 24px 70px;
+  text-align: center;
+  background: #101218;
+  border-bottom: 1px solid #1c1e26;
+}
+
+.heroPattern {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.035) 0px,
+    rgba(255, 255, 255, 0.035) 2px,
+    transparent 2px,
+    transparent 46px
+  );
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent);
+  mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.heroTitle {
+  margin: 0 0 18px;
+  font-size: clamp(28px, 4.5vw, 46px);
+  font-weight: 800;
+  line-height: 1.2;
+  color: #f2f3f5;
+  letter-spacing: -0.5px;
+}
+
+.heroHighlight {
+  background: linear-gradient(90deg, #c084fc, #f472b6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #8b8d97;
+}
+
+.breadcrumb a {
+  color: #8b8d97;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.breadcrumb a:hover {
+  color: #c084fc;
+}
+
+.crumbCurrent {
+  color: #d8d9de;
+}
+
+.crumbSep {
+  margin: 0 6px;
+  color: #4a4c56;
+}
+
+/* ---------- Layout ---------- */
+
+.layout {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 56px 24px 100px;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 44px;
+  align-items: start;
+}
+
+.main {
+  min-width: 0;
+}
+
+.sidebarCol {
+  position: sticky;
+  top: 24px;
+}
+
+/* ---------- Intro / description ---------- */
+
+.intro {
+  font-size: 15px;
+  line-height: 1.75;
+  color: #9c9eaa;
+  margin: 0 0 28px;
+}
+
+.intro strong {
+  color: #eceef1;
+}
+
+.sectionHeading {
+  font-size: 28px;
+  font-weight: 800;
+  color: #f2f3f5;
+  margin: 0 0 20px;
+  letter-spacing: -0.3px;
+}
+
+.paragraph {
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: #9c9eaa;
+  margin: 0 0 16px;
+}
+
+/* ---------- Section header row ---------- */
+
+.headerRow {
+  margin: 56px 0 24px;
+}
+
+.blockHeading {
+  font-size: 22px;
+  font-weight: 800;
+  color: #f2f3f5;
+  margin: 0 0 6px;
+}
+
+.blockSubheading {
+  font-size: 14px;
+  color: #8b8d97;
+  margin: 0;
+}
+
+/* ---------- Process grid ---------- */
+
+.processBox {
+  background: #14161d;
+  border: 1px solid #23262f;
+  border-radius: 20px;
+  padding: 28px;
+}
+
+.processGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.processCard {
+  background: #191b23;
+  border: 1px solid #262933;
+  border-radius: 14px;
+  padding: 20px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.processCard:hover {
+  border-color: #3a3d4a;
+  transform: translateY(-3px);
+}
+
+.processNumber {
+  display: block;
+  font-size: 13px;
+  font-weight: 800;
+  color: #c084fc;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.processTitle {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #eceef1;
+}
+
+.processDesc {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #8b8d97;
+}
+
+/* ---------- Portfolio ---------- */
+
+.portfolioGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.portfolioCard {
+  position: relative;
+  margin: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border: 1px solid #23262f;
+}
+
+.portfolioImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.portfolioCard:hover .portfolioImage {
+  transform: scale(1.08);
+}
+
+.portfolioOverlay {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: linear-gradient(to top, rgba(9, 10, 14, 0.92), rgba(9, 10, 14, 0));
+}
+
+.portfolioCategory {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #f472b6;
+}
+
+.portfolioTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f2f3f5;
+}
+
+/* ---------- FAQ ---------- */
+
+.faqList {
+  border-top: 1px solid #23262f;
+}
+
+.faqItem {
+  border-bottom: 1px solid #23262f;
+}
+
+.faqQuestion {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 20px 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #eceef1;
+  font-family: inherit;
+}
+
+.faqQuestionOpen {
+  color: #ff8a65;
+}
+
+.faqIcon {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c084fc;
+  border: 1px solid #33353f;
+  transition: transform 0.25s ease, background 0.2s ease;
+}
+
+.faqIconOpen {
+  transform: rotate(45deg);
+  background: #1b1d25;
+}
+
+.faqAnswerWrap {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.faqAnswer {
+  margin: 0 0 20px;
+  padding-right: 40px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: #9c9eaa;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebarCol {
+    position: static;
+  }
+
+  .processGrid,
+  .portfolioGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 64px 20px 48px;
+  }
+
+  .processGrid,
+  .portfolioGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .processBox {
+    padding: 18px;
+  }
+}

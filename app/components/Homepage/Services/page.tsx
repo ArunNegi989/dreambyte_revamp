@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaPalette,
@@ -22,6 +23,11 @@ type Service = {
   shortDescription: string;
   description: string;
   accent: Accent;
+  // Free-license Unsplash photo (verified under the Unsplash License —
+  // free for commercial use, no attribution required). Swap any of these
+  // for your own photography whenever you have it; just keep using
+  // full URLs (or move to /public and use "/images/...") consistently.
+  image: string;
 };
 
 const SERVICES: Service[] = [
@@ -33,6 +39,8 @@ const SERVICES: Service[] = [
     shortDescription: "fast, custom-built sites",
     description:
       "experience the best of web development in dehradun with dream byte solutions. we build custom web and app solutions that are functional and user-friendly, helping you build a powerful online presence in today's hyper-connected world.",
+    image:
+      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: "digital-marketing",
@@ -42,6 +50,8 @@ const SERVICES: Service[] = [
     shortDescription: "seo, ppc and campaigns",
     description:
       "as a leading lead generation and seo team, we run targeted campaigns and optimize websites to boost search rankings, cutting through the noise to turn visitors into loyal, long-term customers.",
+    image:
+      "https://images.unsplash.com/photo-1557838923-2985c318be48?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: "graphic-design",
@@ -51,6 +61,8 @@ const SERVICES: Service[] = [
     shortDescription: "brand visuals that stand out",
     description:
       "our talented designers create stunning logos, branding, website visuals and marketing materials to make your business stand out, with designs built to enhance identity and drive real success.",
+    image:
+      "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: "performance-marketing",
@@ -60,6 +72,8 @@ const SERVICES: Service[] = [
     shortDescription: "data-driven roi",
     description:
       "we unlock the power of data-driven performance marketing, continuously analyzing and optimizing campaigns across search, social and display so every rupee spent brings a measurable return.",
+    image:
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: "photo-video",
@@ -69,6 +83,8 @@ const SERVICES: Service[] = [
     shortDescription: "stories worth sharing",
     description:
       "using top-tier equipment, we capture moments with creativity and precision, crafting compelling visuals perfect for corporate events or personal projects that elevate your brand.",
+    image:
+      "https://images.unsplash.com/photo-1635360381874-edd74cbd57f3?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: "event-management",
@@ -78,6 +94,8 @@ const SERVICES: Service[] = [
     shortDescription: "planned to perfection",
     description:
       "as one of dehradun's top event management teams, we handle every stage from planning to execution with reliability, innovation and precision, ensuring an unforgettable experience.",
+    image:
+      "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: "influencer-marketing",
@@ -87,12 +105,14 @@ const SERVICES: Service[] = [
     shortDescription: "genuine reach, real results",
     description:
       "we help businesses boost brand promotion and visibility by connecting with trusted influencers, building genuine connections with your audience that translate into real, lasting results.",
+    image:
+      "https://images.unsplash.com/photo-1522204538344-922f76ecc041?auto=format&fit=crop&w=1200&q=80",
   },
 ];
 
-// Solid + soft colors per accent, used for the active indicator, icon glow
-// and background wash — kept as JS values since they need to be applied
-// dynamically (whichever service is currently selected).
+// Solid + soft colors per accent, used for the active indicator, icon glow,
+// background wash and the image frame — kept as JS values since they need
+// to be applied dynamically (whichever service is currently selected).
 const ACCENT: Record<Accent, { solid: string; soft: string }> = {
   orange: { solid: "#ff9d6b", soft: "rgba(255, 122, 69, 0.16)" },
   blue: { solid: "#7fb4ff", soft: "rgba(66, 148, 255, 0.16)" },
@@ -165,7 +185,7 @@ export default function Services() {
                       background: isActive ? c.soft : undefined,
                     }}
                   >
-                    <Icon size={14} />
+                    <Icon size={15} />
                   </span>
                   <span className={styles.listTitle}>{service.title}</span>
                 </button>
@@ -189,19 +209,38 @@ export default function Services() {
                 transition={{ duration: 0.35, ease: "easeOut" }}
                 className={styles.panelInner}
               >
-                <span
-                  className={styles.panelIcon}
-                  style={{ background: accent.soft, color: accent.solid }}
-                >
-                  <ActiveIcon size={26} />
-                </span>
+                <div className={styles.panelText}>
+                  <span
+                    className={styles.panelIcon}
+                    style={{ background: accent.soft, color: accent.solid }}
+                  >
+                    <ActiveIcon size={28} />
+                  </span>
 
-                <span className={styles.panelIndex}>
-                  {pad(activeIndex + 1)} / {pad(SERVICES.length)}
-                </span>
+                  <span className={styles.panelIndex}>
+                    {pad(activeIndex + 1)} / {pad(SERVICES.length)}
+                  </span>
 
-                <h3 className={styles.panelTitle}>{active.title}</h3>
-                <p className={styles.panelDescription}>{active.description}</p>
+                  <h3 className={styles.panelTitle}>{active.title}</h3>
+                  <p className={styles.panelDescription}>{active.description}</p>
+                </div>
+
+                <div className={styles.panelImageWrap} style={{ boxShadow: `0 30px 60px -20px ${accent.soft}` }}>
+                  <span
+                    className={styles.panelImageFrame}
+                    style={{ background: `linear-gradient(135deg, ${accent.solid}, transparent 60%)` }}
+                  />
+                  <div className={styles.panelImageInner}>
+                    <Image
+                      src={active.image}
+                      alt={active.title}
+                      fill
+                      sizes="(max-width: 900px) 100vw, 420px"
+                      className={styles.panelImage}
+                      priority={activeIndex === 0}
+                    />
+                  </div>
+                </div>
               </motion.div>
             </AnimatePresence>
           </div>

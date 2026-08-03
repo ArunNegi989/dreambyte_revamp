@@ -14,26 +14,37 @@ type Project = {
   href: string;
 };
 
+/*
+ * NOTE: These are themed stock placeholders (free-license Unsplash),
+ * not screenshots of the actual live sites — erikahennaherbal.com etc.
+ * are real client projects, so swap each `image` for a real screenshot
+ * of the delivered site as soon as you have one, e.g.:
+ *   image: "/projects/erika-henna-herbal.jpg"
+ * (drop the file in /public/projects/ first).
+ */
 const PROJECTS: Project[] = [
   {
     id: "erika-henna-herbal",
     title: "Welcome to Erika Henna Herbal",
     category: "E-Commerce · Branding",
-    image: "/projects/erika-henna-herbal.jpg",
+    image:
+      "https://images.unsplash.com/photo-1611073761742-bce90ccd60ae?auto=format&fit=crop&w=1200&q=80",
     href: "/portfolio/erika-henna-herbal",
   },
   {
     id: "gauraaj",
     title: "Welcome to Gauraaj",
     category: "E-Commerce · Organic Foods",
-    image: "/projects/gauraaj.jpg",
+    image:
+      "https://images.unsplash.com/photo-1553787434-45e1d245bfbb?auto=format&fit=crop&w=1200&q=80",
     href: "/portfolio/gauraaj",
   },
   {
     id: "house-of-intimacy",
     title: "Welcome to House Of Intimacy",
     category: "E-Commerce · Lifestyle",
-    image: "/projects/house-of-intimacy.jpg",
+    image:
+      "https://images.unsplash.com/photo-1602952706017-f3cc19eb98af?auto=format&fit=crop&w=1200&q=80",
     href: "/portfolio/house-of-intimacy",
   },
 ];
@@ -59,6 +70,13 @@ function ViewfinderCorners() {
     </>
   );
 }
+
+/*
+ * ONCE YOU HAVE REAL SCREENSHOTS: drop the files in /public/projects/ and
+ * change each project's `image` above from the Unsplash URL to:
+ *   `/projects/${project.id}.jpg`
+ * No other changes needed — the <Image> below already points at `image`.
+ */
 
 export default function Projects() {
   return (
