@@ -1,33 +1,46 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import styles from "./Testimonialslider.module.css";
 
 export interface CardTestimonial {
   id: string;
   handle: string;
+  designation: string;
   rating: number;
   content: string;
   date: string;
+  avatar: string;
 }
 
-interface TestimonialCardsProps {
+interface TestimonialSliderProps {
   testimonials?: CardTestimonial[];
-  visibleCount?: number; // how many cards show at once (default 3)
-  intervalMs?: number; // how often the window advances
+  intervalMs?: number;
 }
 
-const HANDLES = [
-  "the_sleepy_reader", "emmaonbooks", "pageswithtea", "quietbookcorner",
-  "inkstained_soul", "novel_nights", "chapterandverse", "thepagechaser",
-  "bookishbex", "storiedshelf", "readsbyrhea", "marginalia_notes",
-  "wornoutpaperbacks", "thelitloft", "coffeeandclauses", "afterhoursreads",
-  "thumbedpages", "silentchapters", "bindingsandbrews", "novelnomad",
+const PEOPLE = [
+  { name: "Ava Reyes", photo: "1627161683077-e34782c24d81" },
+  { name: "Liam Carter", photo: "1560250097-0b93528c311a" },
+  { name: "Priya Nair", photo: "1573496359142-b8d87734a5a2" },
+  { name: "Noah Bennett", photo: "1629425733761-caae3b5f2e50" },
+  { name: "Sofia Marin", photo: "1573497019940-1c28c88b4f3e" },
+  { name: "Ethan Cole", photo: "1519085360753-af0119f7cbe7" },
+  { name: "Maya Fischer", photo: "1699899657680-421c2c2d5064" },
+  { name: "Owen Brooks", photo: "1500648767791-00dcc994a43e" },
+  { name: "Isla Thorne", photo: "1611432579699-484f7990b127" },
+  { name: "Leo Nakamura", photo: "1595211877493-41a4e5f236b3" },
+  { name: "Ruby Solano", photo: "1573496358961-3c82861ab8f4" },
+  { name: "Kai Sato", photo: "1507003211169-0a1dd7228f2d" },
 ];
 
+
+
 const CONTENTS = [
-  "A story that lingers long after the last page. Not loud, but deeply impactful.",
-  "One of those books you keep thinking about. Worth the read 👍",
+  "A story that lingers long after the last page. Not loud, but deeply impactful. story that lingers long after the last page. Not loud, but deeply impactful. story that lingers long after the last page. Not loud, but deeply impactful. story that lingers long after the last page. Not loud, but deeply impactful. story that lingers long after the last page. Not loud, but deeply impactful. story that lingers long after the last page. Not loud, but deeply impactful. story that lingers long after the last page. Not loud, but deeply impactful. story that lingers long after the last page. Not loud, but deeply impactful.",
+  "One of those books you keep thinking about. Worth the read.",
   "A thoughtful and well-paced read that stays with you.",
   "Couldn't put it down — finished it in a single weekend.",
   "The kind of writing that makes you slow down on purpose.",
@@ -36,12 +49,10 @@ const CONTENTS = [
   "Surprisingly funny for how much it made me think.",
 ];
 
-const ACCENTS = ["indianred", "slateblue", "seagreen", "#c98a2c", "#3a7ca5", "#a4508b"];
-const TILTS = [-4, 2, -5, 3, -3, 4];
-
-const DEFAULT_TESTIMONIALS: CardTestimonial[] = HANDLES.map((handle, i) => ({
-  id: handle,
-  handle: `@${handle}`,
+const DEFAULT_TESTIMONIALS: CardTestimonial[] = PEOPLE.map((person, i) => ({
+  id: person.name.toLowerCase().replace(/\s+/g, "-"),
+  handle: `@${person.name.toLowerCase().replace(/\s+/g, "")}`,
+  designation: "",
   rating: 5,
   content: CONTENTS[i % CONTENTS.length],
   date: new Date(2024, i % 12, (i % 27) + 1).toLocaleDateString("en-US", {
@@ -49,91 +60,145 @@ const DEFAULT_TESTIMONIALS: CardTestimonial[] = HANDLES.map((handle, i) => ({
     day: "numeric",
     year: "numeric",
   }),
+  avatar: `https://images.unsplash.com/photo-${person.photo}?auto=format&fit=crop&w=800&q=80`,
 }));
 
 function Stars({ rating }: { rating: number }) {
   const rounded = Math.max(0, Math.min(5, Math.round(rating)));
   return (
-    <span aria-label={`${rounded} out of 5 stars`}>
+    <span className={styles.stars} aria-label={`${rounded} out of 5 stars`}>
       {"★".repeat(rounded)}
       {"☆".repeat(5 - rounded)}
     </span>
   );
 }
 
-const TestimonialCards: React.FC<TestimonialCardsProps> = ({
+function getOffset(index: number, active: number, total: number) {
+  let diff = index - active;
+  if (diff > total / 2) diff -= total;
+  if (diff < -total / 2) diff += total;
+  return diff;
+}
+
+const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
   testimonials = DEFAULT_TESTIMONIALS,
-  visibleCount = 3,
-  intervalMs = 3200,
+  intervalMs = 5000,
 }) => {
-  // startIndex marks where the visible window begins in the (looping) list.
-  const [startIndex, setStartIndex] = useState(0);
+  const [active, setActive] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [exitingId, setExitingId] = useState<string | null>(null);
   const total = testimonials.length;
+  const current = testimonials[active];
 
-  // The window of testimonials currently on screen, wrapping around the end.
-  const visible = useMemo(() => {
-    return Array.from({ length: Math.min(visibleCount, total) }, (_, i) => {
-      const idx = (startIndex + i) % total;
-      return { ...testimonials[idx], _slot: i, _key: `${testimonials[idx].id}-${startIndex}-${i}` };
-    });
-  }, [startIndex, testimonials, total, visibleCount]);
-
-  const advance = () => {
-    if (total <= visibleCount) return;
-    const leavingId = testimonials[startIndex % total]?.id ?? null;
-    setExitingId(leavingId);
-    // let the exit animation play, then shift the window and bring in the next card
-    window.setTimeout(() => {
-      setStartIndex((prev) => (prev + 1) % total);
-      setExitingId(null);
-    }, 350);
+  const goTo = (direction: 1 | -1) => {
+    setActive((prev) => (prev + direction + total) % total);
   };
 
-  const advanceRef = useRef(advance);
-  advanceRef.current = advance;
+  const goToRef = useRef(goTo);
+  goToRef.current = goTo;
 
   useEffect(() => {
-    if (!intervalMs || isPaused || total <= visibleCount) return;
-    const id = window.setInterval(() => advanceRef.current(), intervalMs);
+    if (!intervalMs || isPaused || total <= 1) return;
+    const id = window.setInterval(() => goToRef.current(1), intervalMs);
     return () => window.clearInterval(id);
-  }, [intervalMs, isPaused, total, visibleCount]);
+  }, [intervalMs, isPaused, total]);
+
+  const words = useMemo(() => current.content.split(" "), [current.content]);
 
   return (
-    <div
+    <section
       className={styles.wrapper}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {visible.map((t, i) => {
-        const isExiting = t.id === exitingId && i === 0;
-        return (
-          <div
-            className={`${styles.cardWrapper} ${
-              isExiting ? styles.cardExiting : styles.cardEntering
-            }`}
-            key={t._key}
-            style={{
-              ["--accent" as any]: ACCENTS[(startIndex + i) % ACCENTS.length],
-              ["--tilt" as any]: `${TILTS[(startIndex + i) % TILTS.length]}deg`,
-            }}
-          >
-            <div className={styles.card}>
-              <div className={styles.account}>
-                <span className={styles.ratingStars}>
-                  <Stars rating={t.rating} />
-                </span>
-                <span>{t.handle}</span>
+      <div className={styles.grid}>
+        <div className={styles.imageStack}>
+          {testimonials.map((t, i) => {
+            const offset = getOffset(i, active, total);
+            if (Math.abs(offset) > 2) return null;
+
+            const isActive = offset === 0;
+            const style: React.CSSProperties = {
+              zIndex: total - Math.abs(offset),
+              opacity: isActive ? 1 : 0.55,
+              transform: isActive
+                ? "translate(0%, 0%) rotateY(0deg) scale(1)"
+                : `translate(${offset > 0 ? "18%" : "-18%"}, -14%) rotateY(${
+                    offset > 0 ? -15 : 15
+                  }deg) scale(0.88)`,
+            };
+
+            return (
+              <div key={t.id} className={styles.imageFrame} style={style}>
+                <Image
+                  src={t.avatar}
+                  alt={t.handle}
+                  fill
+                  sizes="(max-width: 768px) 60vw, 22rem"
+                  className={styles.image}
+                />
               </div>
-              <div className={styles.content}>{t.content}</div>
-              <div className={styles.date}>{t.date}</div>
-            </div>
+            );
+          })}
+        </div>
+
+        <div className={styles.content}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current.id}
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -14 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            >
+              <div className={styles.meta}>
+                <div>
+                  <h3 className={styles.handle}>{current.handle}</h3>
+                  <p className={styles.designation}>{current.designation}</p>
+                </div>
+                <div className={styles.metaRight}>
+                  <Stars rating={current.rating} />
+                  <span className={styles.date}>{current.date}</span>
+                </div>
+              </div>
+
+              <p className={styles.quote}>
+                {words.map((word, i) => (
+                  <motion.span
+                    key={`${current.id}-${i}`}
+                    className={styles.word}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.25, delay: 0.08 + i * 0.02 }}
+                  >
+                    {word}&nbsp;
+                  </motion.span>
+                ))}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+
+          <div className={styles.arrowButtons}>
+            <button
+              type="button"
+              aria-label="Previous testimonial"
+              className={styles.arrowButton}
+              onClick={() => goTo(-1)}
+            >
+              <FaChevronLeft size={13} />
+            </button>
+            <button
+              type="button"
+              aria-label="Next testimonial"
+              className={styles.arrowButton}
+              onClick={() => goTo(1)}
+            >
+              <FaChevronRight size={13} />
+            </button>
           </div>
-        );
-      })}
-    </div>
+        </div>
+      </div>
+    </section>
   );
 };
 
-export default TestimonialCards;
+export default TestimonialSlider;

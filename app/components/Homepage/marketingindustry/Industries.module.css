@@ -1,192 +1,155 @@
 .section {
-  background: #0b0f19;
-  padding: 96px 0;
+  background: #0a0b12;
+  padding: 128px 0;
 }
 
 .container {
-  max-width: 1320px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 48px;
 }
 
 .headerRow {
   text-align: center;
-  margin-bottom: 56px;
-  max-width: 640px;
+  margin-bottom: 68px;
+  max-width: 760px;
   margin-inline: auto;
 }
 
 .eyebrow {
   display: inline-block;
-  color: #ff9d6b;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 1.6px;
+  color: #4ee6d0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
   text-transform: uppercase;
-  margin-bottom: 12px;
+  margin-bottom: 18px;
 }
 
 .heading {
   color: #ffffff;
-  font-size: 38px;
+  font-size: 52px;
   font-weight: 800;
-  letter-spacing: -0.3px;
-  margin: 0 0 14px;
-  line-height: 1.15;
+  letter-spacing: -0.6px;
+  margin: 0 0 20px;
+  line-height: 1.12;
 }
 
 .subheading {
-  color: #9a9fac;
-  font-size: 15.5px;
+  color: #a2a5b8;
+  font-size: 19px;
   line-height: 1.65;
   margin: 0;
 }
 
-/* ---------- Grid ---------- */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
+/* ---------- Accordion row ---------- */
+.row {
+  display: flex;
+  gap: 10px;
+  height: 560px;
 }
 
 .card {
   position: relative;
-  background: #12172a;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex: 1 1 0;
+  min-width: 0;
   border-radius: 20px;
-  transition: border-color 0.35s ease, box-shadow 0.35s ease;
   overflow: hidden;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  background: #14161f;
+  transition: flex-grow 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
 }
 
-.card::before {
-  content: '';
+.card.active {
+  flex-grow: 4;
+}
+
+.card:focus-visible {
+  box-shadow: inset 0 0 0 2px #4ee6d0;
+}
+
+.imageWrap {
   position: absolute;
   inset: 0;
-  border-radius: 20px;
-  padding: 1px;
-  background: linear-gradient(140deg, var(--accent), transparent 40%);
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  pointer-events: none;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  z-index: 3;
-}
-
-.card:hover {
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--accent-soft);
-}
-
-.card:hover::before {
-  opacity: 1;
-}
-
-/* ---------- Image ---------- */
-.imageWrap {
-  position: relative;
-  width: 100%;
-}
-
-.imageInner {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 11;
-  overflow: hidden;
-  border-radius: 20px 20px 0 0;
 }
 
 .image {
   object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
-  filter: saturate(0.92);
+  transition: transform 0.6s ease;
 }
 
-.card:hover .image {
-  transform: scale(1.1) rotate(0.5deg);
-  filter: saturate(1.05);
+.card.active .image {
+  transform: scale(1.03);
 }
 
-.imageOverlay {
+.overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(11, 15, 25, 0) 45%,
-    rgba(11, 15, 25, 0.96) 100%
-  );
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.88) 10%, rgba(0, 0, 0, 0.15) 55%, rgba(0, 0, 0, 0.35) 100%);
+  pointer-events: none;
 }
 
-.iconBadge {
+.label {
   position: absolute;
-  left: 22px;
-  bottom: -24px;
-  width: 50px;
-  height: 50px;
-  display: flex;
+  bottom: 32px;
+  left: 32px;
+  right: 32px;
+  text-align: left;
+}
+
+.icon {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 48px;
+  height: 48px;
   border-radius: 14px;
-  color: #14171f;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
-  z-index: 2;
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.card:hover .iconBadge {
-  transform: rotate(-8deg) scale(1.08);
-}
-
-/* ---------- Body ---------- */
-.body {
-  padding: 38px 26px 28px;
-  position: relative;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 22px;
+  margin-bottom: 18px;
 }
 
 .title {
   color: #ffffff;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 700;
   margin: 0 0 12px;
-  transition: color 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.card:hover .title {
-  color: var(--accent);
+.card:not(.active) .title {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: normal;
+  font-size: 18px;
+  overflow: visible;
+  text-overflow: clip;
+  max-height: 280px;
 }
 
 .description {
-  color: #a7abb8;
-  font-size: 14.5px;
-  line-height: 1.7;
-  margin: 0 0 18px;
-}
-
-.exploreLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--accent);
-  font-size: 13.5px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  color: #d3d4de;
+  font-size: 16px;
+  line-height: 1.65;
+  margin: 0;
+  max-width: 420px;
   opacity: 0;
-  transform: translateX(-6px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.3s ease 0.15s;
 }
 
-.card:hover .exploreLink {
+.card.active .description {
   opacity: 1;
-  transform: translateX(0);
 }
 
-.exploreArrow {
-  transition: transform 0.3s ease;
-}
-
-.card:hover .exploreArrow {
-  transform: translateX(4px);
+.card:not(.active) .description {
+  display: none;
 }
 
 /* =========================================================
@@ -195,76 +158,153 @@
 
 @media (max-width: 1320px) {
   .container {
-    padding: 0 28px;
+    padding: 0 32px;
+  }
+  .heading {
+    font-size: 46px;
+  }
+  .row {
+    height: 500px;
   }
 }
 
 @media (max-width: 1100px) {
   .section {
-    padding: 80px 0;
+    padding: 100px 0;
   }
   .heading {
-    font-size: 31px;
+    font-size: 38px;
   }
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 22px;
+  .subheading {
+    font-size: 17px;
+  }
+  .row {
+    height: 460px;
+  }
+  .card.active {
+    flex-grow: 3.2;
+  }
+  .title {
+    font-size: 22px;
+  }
+  .card:not(.active) .title {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 900px) {
+  /* Switch to a vertical accordion: horizontal panels get too
+     narrow to read comfortably below this width. */
+  .row {
+    flex-direction: column;
+    height: auto;
+    gap: 12px;
+  }
+  .card {
+    height: 92px;
+    flex-grow: 0 !important;
+    transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card.active {
+    height: 360px;
+  }
+  .card:not(.active) .title {
+    writing-mode: horizontal-tb;
+    transform: none;
+    max-height: none;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    font-size: 19px;
+  }
+  .card:not(.active) .label {
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .card:not(.active) .icon {
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+  .card.active .label {
+    bottom: 28px;
+  }
+  .card.active .icon {
+    margin-bottom: 14px;
   }
 }
 
 @media (max-width: 768px) {
   .section {
-    padding: 64px 0;
+    padding: 84px 0;
   }
   .headerRow {
-    margin-bottom: 36px;
+    margin-bottom: 48px;
   }
   .heading {
-    font-size: 25px;
+    font-size: 32px;
   }
   .subheading {
-    font-size: 14px;
-  }
-  .body {
-    padding: 34px 20px 22px;
+    font-size: 16px;
   }
 }
 
 @media (max-width: 640px) {
   .container {
-    padding: 0 20px;
+    padding: 0 22px;
   }
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 22px;
+  .card:not(.active) {
+    height: 80px;
   }
-  .imageWrap {
-    aspect-ratio: 16 / 10;
+  .card.active {
+    height: 340px;
   }
-  .exploreLink {
-    opacity: 1;
-    transform: none;
+  .label {
+    left: 20px;
+    right: 20px;
+  }
+  .title {
+    font-size: 19px;
+  }
+  .description {
+    font-size: 14.5px;
+  }
+  .icon {
+    width: 42px;
+    height: 42px;
+    font-size: 19px;
   }
 }
 
 @media (max-width: 400px) {
   .heading {
-    font-size: 21px;
+    font-size: 26px;
+  }
+  .subheading {
+    font-size: 15px;
+  }
+  .card:not(.active) {
+    height: 72px;
+  }
+  .card.active {
+    height: 300px;
+  }
+  .icon {
+    width: 36px;
+    height: 36px;
+    font-size: 17px;
   }
   .title {
     font-size: 17px;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .image,
   .description {
-    font-size: 13.5px;
-  }
-  .iconBadge {
-    width: 42px;
-    height: 42px;
-    left: 16px;
-    bottom: -20px;
-    border-radius: 12px;
-  }
-  .body {
-    padding: 30px 18px 20px;
+    transition: none !important;
   }
 }
