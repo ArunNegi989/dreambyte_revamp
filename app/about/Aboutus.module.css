@@ -22,12 +22,15 @@
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
+  width: 100%;
+  max-width: 100vw;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
 .page * {
   box-sizing: border-box;
+  min-width: 0; /* fixes grid/flex children overflowing and causing horizontal scroll */
 }
 
 .page a {
@@ -214,6 +217,12 @@
   transform: scaleY(-1);
 }
 
+/* fix: flip variant is used at the TOP of quoteSection, so it must anchor to top, not bottom */
+.ridgeDivider.ridgeFlip {
+  bottom: auto;
+  top: -1px;
+}
+
 .ridgePath {
   fill: var(--bg);
 }
@@ -223,7 +232,7 @@
    ============================================================ */
 .aboutGrid {
   display: grid;
-  grid-template-columns: 260px 1fr;
+  grid-template-columns: 260px minmax(0, 1fr);
   gap: 48px;
   margin-bottom: 64px;
 }
@@ -253,6 +262,7 @@
   line-height: 1.85;
   color: var(--muted);
   margin: 0;
+  overflow-wrap: break-word;
 }
 
 .statsWrap {
@@ -279,7 +289,7 @@
 .statsRow {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 24px;
   z-index: 1;
 }
@@ -293,7 +303,6 @@
   text-align: center;
   overflow: hidden;
 }
-
 
 .statValue {
   display: block;
@@ -315,7 +324,7 @@
    ============================================================ */
 .teamRow {
   display: grid;
-  grid-template-columns: 360px 1fr;
+  grid-template-columns: 360px minmax(0, 1fr);
   gap: 56px;
   align-items: center;
   padding: 40px 0;
@@ -373,6 +382,7 @@
   color: var(--muted);
   line-height: 1.8;
   margin: 0;
+  overflow-wrap: break-word;
 }
 
 /* ============================================================
@@ -380,7 +390,7 @@
    ============================================================ */
 .mvGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 28px;
 }
 
@@ -416,6 +426,7 @@
   color: var(--muted);
   line-height: 1.75;
   margin: 0;
+  overflow-wrap: break-word;
 }
 
 /* ============================================================
@@ -423,14 +434,14 @@
    ============================================================ */
 .expertiseGrid {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
+  grid-template-columns: 1.1fr minmax(0, 1fr);
   gap: 56px;
   align-items: start;
 }
 
 .expertiseCards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
 }
 
@@ -471,6 +482,7 @@
   line-height: 1.6;
   margin: 0 0 22px;
   flex: 1;
+  overflow-wrap: break-word;
 }
 
 .expertiseLink {
@@ -509,6 +521,7 @@
   color: var(--muted);
   line-height: 1.8;
   margin: 0 0 20px;
+  overflow-wrap: break-word;
 }
 
 /* ============================================================
@@ -521,7 +534,7 @@
 
 .whyGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 24px;
   text-align: center;
 }
@@ -556,7 +569,7 @@
 }
 
 .quoteCard {
- max-width: 1600px;
+  max-width: 1600px;
   margin: 0 auto;
   background: var(--bg);
   border: 1px solid var(--border);
@@ -577,7 +590,7 @@
 
 .formRow {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
   margin-bottom: 24px;
 }
@@ -605,6 +618,7 @@
   font-size: 0.95rem;
   resize: vertical;
   transition: border-color 0.2s ease;
+  width: 100%;
 }
 
 .formField input::placeholder,
@@ -645,7 +659,7 @@
   }
 
   .teamRow {
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 300px minmax(0, 1fr);
     gap: 40px;
   }
 }
@@ -668,13 +682,13 @@
   }
 
   .statsRow {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .teamRow,
   .teamRowReverse {
     direction: ltr;
-    grid-template-columns: 260px 1fr;
+    grid-template-columns: 260px minmax(0, 1fr);
     gap: 32px;
   }
 
@@ -727,11 +741,11 @@
   }
 
   .expertiseCards {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .whyGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 32px;
   }
 
@@ -762,7 +776,7 @@
   }
 
   .statsRow {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
   }
 
@@ -775,7 +789,7 @@
   }
 
   .whyGrid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px;
   }
 
@@ -805,7 +819,7 @@
   }
 
   .statsRow {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .statValue {

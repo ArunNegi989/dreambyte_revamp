@@ -8,6 +8,7 @@ import TrustedBrands from "./components/Homepage/TrustedBrands/page";
 import WhyUs from "./components/Homepage/WhyUs/page";
 import HeroBanner from "./components/Homepage/Herobanner/page";
 import ReelsShowcase from "./components/Homepage/videoshowcase/page";
+import WorkShowcase from "./components/Homepage/WorkShowcase/page";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
    <WhyUs/>
    <TrustedBrands/>
     <Services/>
+    <WorkShowcase/>
    <Industries/>
    <Projects/>
    <ReelsShowcase/>
