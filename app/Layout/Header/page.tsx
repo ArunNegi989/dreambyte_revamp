@@ -16,9 +16,10 @@ const NAV_LINKS = [
     dropdown: [
       { label: "Graphic Design", href: "/best-graphic-design-service" },
       { label: "Web Development", href: "/best-web-development-service" },
+      { label: "Digital Marketing", href: "/best-digital-marketing-service" },
       { label: "App Development", href: "/best-app-development-service" },
       { label: "UI/UX Design", href: "/best-ui-ux-design-service" },
-      { label: "Digital Marketing", href: "/best-digital-marketing-service" },
+      
     ],
   },
   { label: "Portfolio", href: "/portfolio" },

@@ -82,7 +82,7 @@
 /* ---------- Layout ---------- */
 
 .layout {
-  max-width: 1320px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 56px 24px 100px;
   display: grid;
@@ -97,7 +97,7 @@
 
 .sidebarCol {
   position: sticky;
-  top: 24px;
+  top: calc(110px + 20px); /* navbar height (~110px) + breathing room */
 }
 
 /* ---------- Intro / description ---------- */
@@ -149,30 +149,76 @@
 
 /* ---------- Process grid ---------- */
 
-.processBox {
-  background: #14161d;
-  border: 1px solid #23262f;
-  border-radius: 20px;
-  padding: 28px;
-}
-
 .processGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+  gap: 22px;
 }
 
 .processCard {
-  background: #191b23;
-  border: 1px solid #262933;
-  border-radius: 14px;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  background: #14161d;
+  border: 1px solid #23262f;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
   transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
 .processCard:hover {
   border-color: #3a3d4a;
-  transform: translateY(-3px);
+  transform: translateY(-4px);
+}
+
+.processImageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.processImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.processCard:hover .processImage {
+  transform: scale(1.06);
+}
+
+.processZoomHint {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f2f3f5;
+  background: rgba(11, 12, 17, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.processCard:hover .processZoomHint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.processBody {
+  padding: 22px 24px 26px;
 }
 
 .processNumber {
@@ -186,69 +232,121 @@
 
 .processTitle {
   margin: 0 0 8px;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
   color: #eceef1;
+  line-height: 1.35;
 }
 
 .processDesc {
   margin: 0;
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 14px;
+  line-height: 1.65;
   color: #8b8d97;
 }
 
-/* ---------- Portfolio ---------- */
+/* ---------- Process modal ---------- */
 
-.portfolioGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(6, 7, 10, 0.82);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.2s ease;
 }
 
-.portfolioCard {
+.modalContent {
   position: relative;
-  margin: 0;
-  border-radius: 16px;
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-  border: 1px solid #23262f;
+  width: 100%;
+  max-width: 780px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #14161d;
+  border: 1px solid #262933;
+  border-radius: 24px;
+  animation: modalIn 0.25s ease;
 }
 
-.portfolioImage {
+.modalClose {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f2f3f5;
+  background: rgba(11, 12, 17, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.modalClose:hover {
+  background: rgba(11, 12, 17, 0.9);
+  transform: rotate(90deg);
+}
+
+.modalImageWrap {
+  width: 100%;
+  max-height: 60vh;
+  overflow: hidden;
+  border-radius: 24px 24px 0 0;
+}
+
+.modalImage {
   width: 100%;
   height: 100%;
+  max-height: 60vh;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s ease;
 }
 
-.portfolioCard:hover .portfolioImage {
-  transform: scale(1.08);
+.modalInfo {
+  padding: 28px 32px 32px;
 }
 
-.portfolioOverlay {
-  position: absolute;
-  inset: auto 0 0 0;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  background: linear-gradient(to top, rgba(9, 10, 14, 0.92), rgba(9, 10, 14, 0));
-}
-
-.portfolioCategory {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: #f472b6;
-}
-
-.portfolioTitle {
-  font-size: 14px;
-  font-weight: 700;
+.modalTitle {
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 800;
   color: #f2f3f5;
+}
+
+.modalDesc {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.75;
+  color: #9c9eaa;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* ---------- FAQ ---------- */
@@ -321,11 +419,10 @@
   }
 
   .sidebarCol {
-    position: static;
+    top: calc(110px + 12px);
   }
 
-  .processGrid,
-  .portfolioGrid {
+  .processGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -335,12 +432,11 @@
     padding: 64px 20px 48px;
   }
 
-  .processGrid,
-  .portfolioGrid {
+  .processGrid {
     grid-template-columns: 1fr;
   }
 
-  .processBox {
-    padding: 18px;
+  .modalInfo {
+    padding: 22px 20px 26px;
   }
 }

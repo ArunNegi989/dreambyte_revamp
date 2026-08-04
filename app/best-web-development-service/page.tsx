@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import ServicesSidebar from "@/app/components/common/ServicesSidebar/ServicesSidebar";
 import styles from "./Webdevelopmentpage.module.css";
@@ -9,71 +9,47 @@ const PROCESS_STEPS = [
   {
     title: "Custom Website Development",
     description: "Tailored solutions designed to fulfil your business goals.",
+    image: "https://picsum.photos/seed/dbs-web-custom/700/525",
   },
   {
     title: "E-Commerce Development",
     description: "Build secure, high-performing, and user-friendly online stores.",
+    image: "https://picsum.photos/seed/dbs-web-ecom/700/525",
   },
   {
     title: "Responsive Web Design",
     description: "Mobile-friendly websites that look perfect on all devices.",
+    image: "https://picsum.photos/seed/dbs-web-responsive/700/525",
   },
   {
     title: "Website Redesign & Optimization",
     description: "Revamp outdated websites with modern layouts and improved performance.",
+    image: "https://picsum.photos/seed/dbs-web-redesign/700/525",
   },
   {
     title: "Landing Page Design",
     description: "High-converting landing pages built for campaigns, ads, and lead generation.",
+    image: "https://picsum.photos/seed/dbs-web-landing/700/525",
   },
   {
     title: "Maintenance & Support",
     description: "Regular updates, bug fixes, and technical support for smooth website performance.",
+    image: "https://picsum.photos/seed/dbs-web-support/700/525",
   },
   {
     title: "Portfolio & Business Websites",
     description: "Elegant websites that showcase your brand, services, or personal portfolio.",
+    image: "https://picsum.photos/seed/dbs-web-portfolio/700/525",
   },
   {
     title: "CMS Development (WordPress / Shopify / Wix)",
     description: "Flexible and easy-to-manage websites built on popular platforms.",
+    image: "https://picsum.photos/seed/dbs-web-cms/700/525",
   },
   {
     title: "Web Hosting & Domain Setup",
     description: "Complete assistance in purchasing, configuring, and managing hosting and domain services.",
-  },
-];
-
-const PORTFOLIO = [
-  {
-    image: "https://picsum.photos/seed/dbs-web-ecom/700/525",
-    title: "E-Commerce Storefront",
-    category: "Online Store",
-  },
-  {
-    image: "https://picsum.photos/seed/dbs-web-corporate/700/525",
-    title: "Corporate Business Site",
-    category: "Business Website",
-  },
-  {
-    image: "https://picsum.photos/seed/dbs-web-landing/700/525",
-    title: "Product Launch Landing Page",
-    category: "Landing Page",
-  },
-  {
-    image: "https://picsum.photos/seed/dbs-web-portfolio/700/525",
-    title: "Creative Portfolio Site",
-    category: "Portfolio",
-  },
-  {
-    image: "https://picsum.photos/seed/dbs-web-saas/700/525",
-    title: "SaaS Dashboard Website",
-    category: "Web App",
-  },
-  {
-    image: "https://picsum.photos/seed/dbs-web-wordpress/700/525",
-    title: "WordPress Business Blog",
-    category: "CMS Website",
+    image: "https://picsum.photos/seed/dbs-web-hosting/700/525",
   },
 ];
 
@@ -150,43 +126,7 @@ export default function WebDevelopmentPage() {
           <div className={styles.headerRow}>
             <h3 className={styles.blockHeading}>Our Website Development Services</h3>
           </div>
-          <div className={styles.processBox}>
-            <div className={styles.processGrid}>
-              {PROCESS_STEPS.map((step, i) => (
-                <div className={styles.processCard} key={step.title}>
-                  <span className={styles.processNumber}>
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <h4 className={styles.processTitle}>{step.title}</h4>
-                  <p className={styles.processDesc}>{step.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Portfolio */}
-          <div className={styles.headerRow}>
-            <h3 className={styles.blockHeading}>Our Recent Work</h3>
-            <p className={styles.blockSubheading}>
-              A few websites we&apos;ve designed and developed
-            </p>
-          </div>
-          <div className={styles.portfolioGrid}>
-            {PORTFOLIO.map((item) => (
-              <figure className={styles.portfolioCard} key={item.image}>
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className={styles.portfolioImage}
-                  loading="lazy"
-                />
-                <figcaption className={styles.portfolioOverlay}>
-                  <span className={styles.portfolioCategory}>{item.category}</span>
-                  <span className={styles.portfolioTitle}>{item.title}</span>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
+          <ProcessGrid />
 
           {/* FAQ */}
           <div className={styles.headerRow}>
@@ -201,6 +141,102 @@ export default function WebDevelopmentPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function ProcessGrid() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const active = activeIndex !== null ? PROCESS_STEPS[activeIndex] : null;
+
+  useEffect(() => {
+    if (activeIndex === null) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveIndex(null);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [activeIndex]);
+
+  return (
+    <>
+      <div className={styles.processGrid}>
+        {PROCESS_STEPS.map((step, i) => (
+          <button
+            type="button"
+            className={styles.processCard}
+            key={step.title}
+            onClick={() => setActiveIndex(i)}
+          >
+            <div className={styles.processImageWrap}>
+              <img
+                src={step.image}
+                alt={step.title}
+                className={styles.processImage}
+                loading="lazy"
+              />
+              <span className={styles.processZoomHint}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.6" />
+                  <path d="M11 11L14.5 14.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                </svg>
+              </span>
+            </div>
+            <div className={styles.processBody}>
+              <span className={styles.processNumber}>{String(i + 1).padStart(2, "0")}</span>
+              <h4 className={styles.processTitle}>{step.title}</h4>
+              <p className={styles.processDesc}>{step.description}</p>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {active && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setActiveIndex(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={active.title}
+        >
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              className={styles.modalClose}
+              onClick={() => setActiveIndex(null)}
+              aria-label="Close"
+            >
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <path
+                  d="M2 2L16 16M16 2L2 16"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+
+            <div className={styles.modalImageWrap}>
+              <img src={active.image} alt={active.title} className={styles.modalImage} />
+            </div>
+
+            <div className={styles.modalInfo}>
+              <span className={styles.processNumber}>
+                {String(activeIndex! + 1).padStart(2, "0")}
+              </span>
+              <h4 className={styles.modalTitle}>{active.title}</h4>
+              <p className={styles.modalDesc}>{active.description}</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

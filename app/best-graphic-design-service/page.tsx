@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import ServicesSidebar from "@/app/components/common/ServicesSidebar/ServicesSidebar";
 import styles from "./Graphicdesigningpage.module.css";
@@ -9,71 +9,47 @@ const PROCESS_STEPS = [
   {
     title: "Logo Design",
     description: "Creative and memorable logos that represent your brand identity.",
+    image: "https://picsum.photos/seed/dbs-logo/700/525",
   },
   {
     title: "Branding & Identity Kit",
     description: "Complete brand setup with color palette, typography, and style guide.",
+    image: "https://picsum.photos/seed/dbs-branding/700/525",
   },
   {
     title: "Social Media Creatives",
     description: "Attractive posts, stories, and ad graphics designed for all platforms.",
+    image: "https://picsum.photos/seed/dbs-social/700/525",
   },
   {
     title: "Advertisement Video Editing",
     description: "Professional ad videos for marketing campaigns and brand promotions.",
+    image: "https://picsum.photos/seed/dbs-adedit/700/525",
   },
   {
     title: "Poster & Banner Design",
     description: "Stunning visuals for events, offers, and promotions.",
+    image: "https://picsum.photos/seed/dbs-poster/700/525",
   },
   {
     title: "Brochure & Flyer Design",
     description: "Eye-catching marketing materials for print or digital distribution.",
+    image: "https://picsum.photos/seed/dbs-brochure/700/525",
   },
   {
     title: "Product Showcase Videos",
     description: "Engaging videos that highlight product features and attract buyers.",
+    image: "https://picsum.photos/seed/dbs-product/700/525",
   },
   {
     title: "2D & 3D Video Editing",
     description: "High-quality motion and animation videos that bring ideas to life.",
+    image: "https://picsum.photos/seed/dbs-3d/700/525",
   },
   {
     title: "Website & App Graphics",
     description: "Modern and responsive UI/UX visuals for websites and mobile apps.",
-  },
-];
-
-const PORTFOLIO = [
-  {
-    image: "https://picsum.photos/seed/dbs-logo/700/525",
-    title: "Minimal Brand Logo",
-    category: "Logo Design",
-  },
-  {
-    image: "https://picsum.photos/seed/dbs-branding/700/525",
-    title: "Cafe Brand Identity Kit",
-    category: "Branding",
-  },
-  {
-    image: "https://picsum.photos/seed/dbs-social/700/525",
-    title: "Instagram Ad Creative Set",
-    category: "Social Media",
-  },
-  {
-    image: "https://picsum.photos/seed/dbs-poster/700/525",
-    title: "Festive Sale Poster",
-    category: "Poster Design",
-  },
-  {
-    image: "https://picsum.photos/seed/dbs-brochure/700/525",
-    title: "Corporate Brochure Layout",
-    category: "Brochure Design",
-  },
-  {
     image: "https://picsum.photos/seed/dbs-uiux/700/525",
-    title: "App Onboarding Screens",
-    category: "UI/UX Graphics",
   },
 ];
 
@@ -147,41 +123,7 @@ export default function GraphicDesigningPage() {
           <div className={styles.headerRow}>
             <h3 className={styles.blockHeading}>Our Process for Creative Designs</h3>
           </div>
-          <div className={styles.processBox}>
-            <div className={styles.processGrid}>
-              {PROCESS_STEPS.map((step, i) => (
-                <div className={styles.processCard} key={step.title}>
-                  <span className={styles.processNumber}>
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <h4 className={styles.processTitle}>{step.title}</h4>
-                  <p className={styles.processDesc}>{step.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Portfolio */}
-          <div className={styles.headerRow}>
-            <h3 className={styles.blockHeading}>Our Recent Work</h3>
-            <p className={styles.blockSubheading}>A few pieces from our design portfolio</p>
-          </div>
-          <div className={styles.portfolioGrid}>
-            {PORTFOLIO.map((item) => (
-              <figure className={styles.portfolioCard} key={item.image}>
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className={styles.portfolioImage}
-                  loading="lazy"
-                />
-                <figcaption className={styles.portfolioOverlay}>
-                  <span className={styles.portfolioCategory}>{item.category}</span>
-                  <span className={styles.portfolioTitle}>{item.title}</span>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
+          <ProcessGrid />
 
           {/* FAQ */}
           <div className={styles.headerRow}>
@@ -196,6 +138,102 @@ export default function GraphicDesigningPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function ProcessGrid() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const active = activeIndex !== null ? PROCESS_STEPS[activeIndex] : null;
+
+  useEffect(() => {
+    if (activeIndex === null) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveIndex(null);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [activeIndex]);
+
+  return (
+    <>
+      <div className={styles.processGrid}>
+        {PROCESS_STEPS.map((step, i) => (
+          <button
+            type="button"
+            className={styles.processCard}
+            key={step.title}
+            onClick={() => setActiveIndex(i)}
+          >
+            <div className={styles.processImageWrap}>
+              <img
+                src={step.image}
+                alt={step.title}
+                className={styles.processImage}
+                loading="lazy"
+              />
+              <span className={styles.processZoomHint}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.6" />
+                  <path d="M11 11L14.5 14.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                </svg>
+              </span>
+            </div>
+            <div className={styles.processBody}>
+              <span className={styles.processNumber}>{String(i + 1).padStart(2, "0")}</span>
+              <h4 className={styles.processTitle}>{step.title}</h4>
+              <p className={styles.processDesc}>{step.description}</p>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {active && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setActiveIndex(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={active.title}
+        >
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              className={styles.modalClose}
+              onClick={() => setActiveIndex(null)}
+              aria-label="Close"
+            >
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <path
+                  d="M2 2L16 16M16 2L2 16"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+
+            <div className={styles.modalImageWrap}>
+              <img src={active.image} alt={active.title} className={styles.modalImage} />
+            </div>
+
+            <div className={styles.modalInfo}>
+              <span className={styles.processNumber}>
+                {String(activeIndex! + 1).padStart(2, "0")}
+              </span>
+              <h4 className={styles.modalTitle}>{active.title}</h4>
+              <p className={styles.modalDesc}>{active.description}</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import ServicesSidebar from "@/app/components/common/ServicesSidebar/ServicesSidebar";
 import styles from "./Digitalmarketingpage.module.css";
@@ -10,31 +10,37 @@ const MARKETING_TYPES = [
     title: "Search Engine Optimization (SEO)",
     description:
       "As a professional SEO company in Dehradun we only trust in long term visibility rather than just quick ranking that doesn't last long. Our SEO process includes: keyword research, on-page SEO optimization, technical SEO, local SEO for businesses in Dehradun, high quality backlinks building.",
+    image: "https://picsum.photos/seed/dbs-dm-seo/700/525",
   },
   {
     title: "Google Ads & Paid Marketing (PPC)",
     description:
       "For businesses that want faster visibility, we manage Google ads and paid campaigns with close attention to performance. Campaigns are regularly reviewed and adjusted to ensure spending stays efficient and focused on conversions.",
+    image: "https://picsum.photos/seed/dbs-dm-ads/700/525",
   },
   {
     title: "Content Marketing & Branding",
     description:
       "Good content builds trust. We create website content, blogs, and marketing material that explains your services clearly, answers customer questions, and supports SEO without sounding forced or over-optimised.",
+    image: "https://picsum.photos/seed/dbs-dm-content/700/525",
   },
   {
     title: "Social Media Marketing",
     description:
       "Social media works best when it feels authentic. We help businesses maintain a consistent presence on platforms like Facebook, Instagram, and LinkedIn by focusing on engagement, brand credibility, and clear messaging — rather than chasing meaningless numbers.",
+    image: "https://picsum.photos/seed/dbs-dm-social/700/525",
   },
   {
     title: "Email Marketing",
     description:
       "One of the most cost-effective ways to reach customers. Send personalized emails to maintain relationships and nurture leads.",
+    image: "https://picsum.photos/seed/dbs-dm-email/700/525",
   },
   {
     title: "Influencer Marketing",
     description:
       "Uses credible social media influencers to expand brand reach and increase engagement with your target audience.",
+    image: "https://picsum.photos/seed/dbs-dm-influencer/700/525",
   },
 ];
 
@@ -53,39 +59,6 @@ const WHY_US = [
     title: "Experienced Digital Marketing Team in Dehradun",
     description:
       "Our team stays updated with changes in search trends, ads platforms, and google updates. This allows them to make trending strategies and campaigns that are effective in the long run. If you want to improve your online visibility and attract more customers locally, Dream Byte Solutions can support you with clear and practical guidance.",
-  },
-];
-
-const PORTFOLIO = [
-  {
-    image: "https://picsum.photos/seed/dbs-dm-seo/700/525",
-    title: "Local SEO Ranking Report",
-    category: "SEO",
-  },
-  {
-    image: "https://picsum.photos/seed/dbs-dm-ads/700/525",
-    title: "Google Ads Campaign Dashboard",
-    category: "Paid Marketing",
-  },
-  {
-    image: "https://picsum.photos/seed/dbs-dm-social/700/525",
-    title: "Instagram Growth Campaign",
-    category: "Social Media Marketing",
-  },
-  {
-    image: "https://picsum.photos/seed/dbs-dm-content/700/525",
-    title: "Brand Content Strategy",
-    category: "Content Marketing",
-  },
-  {
-    image: "https://picsum.photos/seed/dbs-dm-email/700/525",
-    title: "Email Newsletter Design",
-    category: "Email Marketing",
-  },
-  {
-    image: "https://picsum.photos/seed/dbs-dm-influencer/700/525",
-    title: "Influencer Collaboration Post",
-    category: "Influencer Marketing",
   },
 ];
 
@@ -164,19 +137,7 @@ export default function DigitalMarketingPage() {
               multiple available options.
             </p>
           </div>
-          <div className={styles.processBox}>
-            <div className={styles.processGrid}>
-              {MARKETING_TYPES.map((item, i) => (
-                <div className={styles.processCard} key={item.title}>
-                  <span className={styles.processNumber}>
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <h4 className={styles.processTitle}>{item.title}</h4>
-                  <p className={styles.processDesc}>{item.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <MarketingGrid />
 
           {/* Boost your brand */}
           <div className={styles.headerRow}>
@@ -193,30 +154,6 @@ export default function DigitalMarketingPage() {
             campaigns, our approach ensures your business reaches the right audience at the right
             time.
           </p>
-
-          {/* Portfolio */}
-          <div className={styles.headerRow}>
-            <h3 className={styles.blockHeading}>Our Recent Work</h3>
-            <p className={styles.blockSubheading}>
-              A glimpse of the digital marketing campaigns we&apos;ve run
-            </p>
-          </div>
-          <div className={styles.portfolioGrid}>
-            {PORTFOLIO.map((item) => (
-              <figure className={styles.portfolioCard} key={item.image}>
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className={styles.portfolioImage}
-                  loading="lazy"
-                />
-                <figcaption className={styles.portfolioOverlay}>
-                  <span className={styles.portfolioCategory}>{item.category}</span>
-                  <span className={styles.portfolioTitle}>{item.title}</span>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
 
           {/* Why Us */}
           <div className={styles.headerRow}>
@@ -251,6 +188,102 @@ export default function DigitalMarketingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function MarketingGrid() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const active = activeIndex !== null ? MARKETING_TYPES[activeIndex] : null;
+
+  useEffect(() => {
+    if (activeIndex === null) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveIndex(null);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [activeIndex]);
+
+  return (
+    <>
+      <div className={styles.processGrid}>
+        {MARKETING_TYPES.map((item, i) => (
+          <button
+            type="button"
+            className={styles.processCard}
+            key={item.title}
+            onClick={() => setActiveIndex(i)}
+          >
+            <div className={styles.processImageWrap}>
+              <img
+                src={item.image}
+                alt={item.title}
+                className={styles.processImage}
+                loading="lazy"
+              />
+              <span className={styles.processZoomHint}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.6" />
+                  <path d="M11 11L14.5 14.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                </svg>
+              </span>
+            </div>
+            <div className={styles.processBody}>
+              <span className={styles.processNumber}>{String(i + 1).padStart(2, "0")}</span>
+              <h4 className={styles.processTitle}>{item.title}</h4>
+              <p className={styles.processDesc}>{item.description}</p>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {active && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setActiveIndex(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={active.title}
+        >
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              className={styles.modalClose}
+              onClick={() => setActiveIndex(null)}
+              aria-label="Close"
+            >
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <path
+                  d="M2 2L16 16M16 2L2 16"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+
+            <div className={styles.modalImageWrap}>
+              <img src={active.image} alt={active.title} className={styles.modalImage} />
+            </div>
+
+            <div className={styles.modalInfo}>
+              <span className={styles.processNumber}>
+                {String(activeIndex! + 1).padStart(2, "0")}
+              </span>
+              <h4 className={styles.modalTitle}>{active.title}</h4>
+              <p className={styles.modalDesc}>{active.description}</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
