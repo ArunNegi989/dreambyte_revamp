@@ -505,6 +505,7 @@
   box-shadow: 0 40px 110px rgba(0, 0, 0, 0.55);
   animation: modalPopIn 0.45s var(--spring) both;
   overflow: hidden;
+  top: 50px;
 }
 
 .modalBoxOut {

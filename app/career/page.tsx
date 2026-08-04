@@ -36,6 +36,14 @@ const WHY_US = [
 
 const HR_EMAIL = 'hr@dreambytesolution.com';
 
+/* Images for the "Want to be part of our team?" section.
+   Drop your actual photos into /public/images/career/ with these names,
+   or update the paths below to match your real filenames. */
+const TEAM_IMAGES = [
+  { src: '/images/career/team-desks.jpg', alt: 'Team working at their desks at Dream Byte Solutions' },
+  { src: '/images/career/team-meeting.jpg', alt: 'Team collaborating in a strategy meeting' },
+];
+
 /* ------------------------------------------------------------------ */
 /*  Icons (inline, no dependency)                                      */
 /* ------------------------------------------------------------------ */
@@ -284,6 +292,35 @@ export default function CareerPage() {
                 <h3 className={styles.whyTitle}>{item.title}</h3>
                 <p className={styles.whyBody}>{item.body}</p>
               </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ---------------- JOIN OUR TEAM ---------------- */}
+      <section className={styles.joinSection}>
+        <Reveal className={styles.sectionHead}>
+          <p className={styles.sectionEyebrow}>Join Us</p>
+          <h2 className={styles.sectionTitle}>Want to be part of our team?</h2>
+          <p className={styles.sectionSub}>
+            At Dream Byte Solutions, we value great talent and believe opportunities can arise
+            anytime. Share your resume with us for future possibilities at
+          </p>
+          <a className={styles.joinEmailLink} href={`mailto:${HR_EMAIL}`}>
+            {HR_EMAIL}
+          </a>
+        </Reveal>
+
+        <div className={styles.joinImageGrid}>
+          {TEAM_IMAGES.map((img, i) => (
+            <Reveal delay={i * 100} key={img.src} className={styles.joinImageWrap}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={img.src}
+                alt={img.alt}
+                className={styles.joinImage}
+                loading="lazy"
+              />
             </Reveal>
           ))}
         </div>

@@ -268,17 +268,12 @@ export default function FloatingActionButtons() {
           type="button"
           className={`${styles.fabButton} ${styles.aiChat}`}
           onClick={() => {
-            // Opens the SAME Botpress bot that runs on dreambytesolution.com
-            // (loaded via <BotpressWidget /> in layout.tsx).
-            const bp = (window as any).botpress;
-            if (bp?.open) {
-              bp.open();
-            } else {
-              // Fallback: if the Botpress script hasn't loaded yet, or you
-              // haven't added <BotpressWidget /> yet, use the custom panel.
-              setIsChatOpen((prev) => !prev);
-              setIsMinimized(false);
-            }
+            // Opens the custom AI chat panel directly.
+            // (Botpress dependency removed — was silently failing to open
+            // because window.botpress existed but its config never
+            // loaded properly, so bp.open() did nothing.)
+            setIsChatOpen((prev) => !prev);
+            setIsMinimized(false);
           }}
           aria-label="Chat with AI assistant"
           aria-expanded={isChatOpen}

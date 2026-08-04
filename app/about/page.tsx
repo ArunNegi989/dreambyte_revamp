@@ -2,7 +2,8 @@
 
 import { JSX, useState, type FormEvent } from "react";
 import styles from "./Aboutus.module.css";
-
+import aboutusimage from "@/public/assets/images/about-us-main-section-webp.webp"
+import Image from "next/image";
 /* ------------------------------------------------------------------ */
 /*  Data — content is unchanged from the original site, just re-shaped */
 /*  into typed structures so it's easy to edit later.                  */
@@ -20,6 +21,46 @@ const STATS: Stat[] = [
   { value: "25", label: "Team Members", peak: 34 },
   { value: "2+", label: "Years Experience", peak: 26 },
   { value: "175+", label: "Happy Clients", peak: 50 },
+];
+
+interface TrustBadge {
+  label: string;
+  sub: string;
+  icon: JSX.Element;
+}
+
+/* NOTE: replace label/sub with your actual certifications / recognitions.
+   Icons kept generic (checkmark / shield / star) so no external logo assets
+   are needed — swap for real badge images if you have them. */
+const TRUST_BADGES: TrustBadge[] = [
+  {
+    label: "ISO Certified",
+    sub: "Process & Quality",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M9 12l2 2 4-4" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="12" cy="12" r="9" />
+      </svg>
+    ),
+  },
+  {
+    label: "Top Rated Agency",
+    sub: "Client Reviews",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l7.1-1.01z" />
+      </svg>
+    ),
+  },
+  {
+    label: "#StartupIndia",
+    sub: "Recognised Startup",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M3 17l6-6 4 4 8-8M21 4h-5v5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
 ];
 
 interface TeamMember {
@@ -108,22 +149,7 @@ const EXPERTISE: ExpertiseItem[] = [
   },
 ];
 
-/* ------------------------------------------------------------------ */
-/*  Reusable ridge-line divider — the recurring Himalayan motif        */
-/* ------------------------------------------------------------------ */
 
-function RidgeDivider({ flip = false }: { flip?: boolean }) {
-  return (
-    <div className={`${styles.ridgeDivider} ${flip ? styles.ridgeFlip : ""}`} aria-hidden="true">
-      <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
-        <path
-          d="M0 90 L0 55 L160 20 L300 50 L460 8 L620 46 L780 12 L940 42 L1100 6 L1260 38 L1440 18 L1440 90 Z"
-          className={styles.ridgePath}
-        />
-      </svg>
-    </div>
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /*  Main component                                                     */
@@ -186,33 +212,53 @@ export default function AboutUs() {
           </div>
         </div>
 
-        <RidgeDivider />
+       
       </section>
 
       {/* ---------------------------------------------------------- */}
-      {/* ABOUT + STATS RIDGE                                         */}
+      {/* OUR STORY — new split layout (visual left, copy right)      */}
       {/* ---------------------------------------------------------- */}
       <section className={styles.section}>
         <div className={styles.container}>
-          <div className={styles.aboutGrid}>
-            <div className={styles.aboutBadge}>
-              <span className={styles.badgeIcon}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                  <path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l7.1-1.01z" />
-                </svg>
-              </span>
-              <span>About Us</span>
+          <div className={styles.storyGrid}>
+            <div className={styles.storyVisual}>
+              <div className={styles.storyVisualGlow} aria-hidden="true" />
+              {/* Replace this image with a custom illustration / product shot
+                  whenever you have one — keeps the same rounded frame. */}
+              <Image
+                src={aboutusimage.src}
+                width={aboutusimage.width}
+                height={aboutusimage.height}
+                alt="Dream Byte Solutions team at work"
+                className={styles.storyImg}
+              />
             </div>
 
-            <p className={styles.aboutText}>
-              Dream byte Solutions is home for job seekers of Uttarakhand and partner of each and every
-              business in their journey of growth. As a Marketing Agency our focus is to provide 360 degree
-              angle of solutions for a business as every business owner deserve a best partner who can help
-              them grown without any second thought of need of anything else. Dream Byte Solutions is
-              providing multiple services like Graphic designing, Social media management, Ads making,
-              digital marketing, influencer marketing, performance, marketing, photography and videography,
-              event management, print media, extra.
-            </p>
+            <div className={styles.storyContent}>
+              <span className={styles.storyEyebrow}>The Story</span>
+              <h2 className={styles.storyHeading}>About Us</h2>
+              <p className={styles.storyText}>
+                Dream byte Solutions is home for job seekers of Uttarakhand and partner of each and every
+                business in their journey of growth. As a Marketing Agency our focus is to provide 360
+                degree angle of solutions for a business as every business owner deserve a best partner who
+                can help them grown without any second thought of need of anything else. Dream Byte
+                Solutions is providing multiple services like Graphic designing, Social media management,
+                Ads making, digital marketing, influencer marketing, performance marketing, photography and
+                videography, event management, print media, and more.
+              </p>
+
+              <div className={styles.trustRow}>
+                {TRUST_BADGES.map((b) => (
+                  <div className={styles.trustBadge} key={b.label}>
+                    <span className={styles.trustIcon}>{b.icon}</span>
+                    <span className={styles.trustText}>
+                      <strong>{b.label}</strong>
+                      <span>{b.sub}</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Ridge stat chart — the numbers, drawn as a mountain skyline */}
@@ -233,7 +279,6 @@ export default function AboutUs() {
             <div className={styles.statsRow}>
               {STATS.map((s) => (
                 <div className={styles.statCard} key={s.label}>
-                
                   <strong className={styles.statValue}>{s.value}</strong>
                   <span className={styles.statLabel}>{s.label}</span>
                 </div>
@@ -387,7 +432,7 @@ export default function AboutUs() {
       {/* GET A FREE QUOTE                                            */}
       {/* ---------------------------------------------------------- */}
       <section className={styles.quoteSection} id="quote">
-        <RidgeDivider flip />
+       
         <div className={styles.container}>
           <div className={styles.quoteCard}>
             <div className={styles.quoteHeader}>

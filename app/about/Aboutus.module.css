@@ -197,74 +197,122 @@
   color: var(--amber);
 }
 
-/* Ridge divider — the Himalayan-skyline signature motif */
-.ridgeDivider {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  line-height: 0;
-  z-index: 1;
-}
 
-.ridgeDivider svg {
-  width: 100%;
-  height: 70px;
-  display: block;
-}
 
-.ridgeFlip svg {
-  transform: scaleY(-1);
-}
 
-/* fix: flip variant is used at the TOP of quoteSection, so it must anchor to top, not bottom */
-.ridgeDivider.ridgeFlip {
-  bottom: auto;
-  top: -1px;
-}
 
-.ridgePath {
-  fill: var(--bg);
-}
+
 
 /* ============================================================
-   ABOUT + STATS RIDGE CHART
+   OUR STORY — new split layout (visual left, copy right)
    ============================================================ */
-.aboutGrid {
+.storyGrid {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
-  gap: 48px;
-  margin-bottom: 64px;
-}
-
-.aboutBadge {
-  display: flex;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  gap: 64px;
   align-items: center;
-  gap: 12px;
-  height: fit-content;
+  margin-bottom: 72px;
+}
+
+.storyVisual {
+  position: relative;
+  border-radius: 24px;
+  overflow: visible;
+  aspect-ratio: 4 / 3.4;
+  background: transparent;
+}
+
+.storyVisualGlow {
+  display: none;
+}
+
+.storyImg {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: transparent;
+  filter: none;
+}
+
+.storyContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.storyEyebrow {
   font-family: var(--font-mono);
-  font-size: 0.95rem;
-  color: var(--amber);
-  padding: 10px 18px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--surface);
-  white-space: nowrap;
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--violet);
+  margin-bottom: 14px;
 }
 
-.badgeIcon {
-  display: inline-flex;
-  color: var(--amber);
+.storyHeading {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  margin: 0 0 24px;
 }
 
-.aboutText {
+.storyText {
   font-size: 1.08rem;
   line-height: 1.85;
   color: var(--muted);
-  margin: 0;
+  margin: 0 0 36px;
   overflow-wrap: break-word;
 }
 
+.trustRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+}
+
+.trustBadge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.trustIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--amber-soft);
+  color: var(--amber);
+  flex-shrink: 0;
+}
+
+.trustText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.trustText strong {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.trustText span:last-child {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* ============================================================
+   ABOUT STATS RIDGE CHART
+   ============================================================ */
 .statsWrap {
   position: relative;
   padding-top: 8px;
@@ -662,6 +710,10 @@
     grid-template-columns: 300px minmax(0, 1fr);
     gap: 40px;
   }
+
+  .storyGrid {
+    gap: 44px;
+  }
 }
 
 /* ============================================================
@@ -672,13 +724,14 @@
     padding: 72px 0;
   }
 
-  .aboutGrid {
+  .storyGrid {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 40px;
   }
 
-  .aboutBadge {
-    width: fit-content;
+  .storyVisual {
+    aspect-ratio: 16 / 10;
+    max-width: 560px;
   }
 
   .statsRow {
@@ -723,6 +776,14 @@
 
   .sectionTitle {
     margin-bottom: 32px;
+  }
+
+  .storyVisual {
+    max-width: 100%;
+  }
+
+  .trustRow {
+    gap: 20px;
   }
 
   .teamRow {
@@ -773,6 +834,15 @@
 
   .heroTitle {
     max-width: 100%;
+  }
+
+  .storyHeading {
+    font-size: clamp(2rem, 8vw, 2.6rem);
+  }
+
+  .trustRow {
+    flex-direction: column;
+    gap: 16px;
   }
 
   .statsRow {
@@ -828,10 +898,6 @@
 
   .whyGrid {
     grid-template-columns: 1fr;
-  }
-
-  .aboutBadge {
-    font-size: 0.85rem;
   }
 }
 
