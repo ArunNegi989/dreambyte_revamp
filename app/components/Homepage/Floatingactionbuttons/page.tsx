@@ -23,7 +23,7 @@ interface ChatMessage {
 
 const WHATSAPP_NUMBER = "918279720490";
 const CALL_NUMBER = "+918279720490";
-const WHATSAPP_DEFAULT_MESSAGE = "Hello, I'm interested in your services.";
+const WHATSAPP_DEFAULT_MESSAGE = "Hello, I'm interested in your services. I'd like to discuss my requirements and explore how your team can help with my project.";
 
 function formatTime() {
   return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
