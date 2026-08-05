@@ -114,10 +114,7 @@ export default function Projects() {
                 <span className={styles.category}>{project.category}</span>
                 <span className={styles.index}>{String(i + 1).padStart(2, "0")}</span>
 
-                <span className={styles.viewBtn}>
-                  View Project
-                  <FaArrowRight size={11} />
-                </span>
+               
               </Link>
 
               <div className={styles.body}>

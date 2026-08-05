@@ -214,30 +214,6 @@
   font-size: 72px;
 }
 
-/* ---------- View button ---------- */
-.viewBtn {
-  position: absolute;
-  left: 18px;
-  bottom: 18px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #ffffff;
-  color: #0b0f19;
-  font-size: 12.5px;
-  font-weight: 700;
-  padding: 11px 22px;
-  border-radius: 30px;
-  transform: translateY(14px);
-  opacity: 0;
-  transition: transform 0.4s ease 0.05s, opacity 0.4s ease 0.05s;
-}
-
-.card:hover .viewBtn {
-  transform: translateY(0);
-  opacity: 1;
-}
-
 /* ---------- Body ---------- */
 .body {
   padding-top: 18px;
