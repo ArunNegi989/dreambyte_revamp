@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import styles from "./AdminShell.module.css";
 
 /* ------------------------------------------------------------------ */
@@ -90,11 +91,24 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { label: "Dashboard", href: "/admin", icon: Icons.grid },
-  { label: "Career", href: "/admin/career", icon: Icons.briefcase },
+  { label: "Brands", href: "/admin/brands", icon: Icons.briefcase },
   { label: "Blog", href: "/admin/blog", icon: Icons.fileText },
-  { label: "Contact Messages", href: "/admin/contact", icon: Icons.mail, badge: 4 },
   { label: "Portfolio", href: "/admin/portfolio", icon: Icons.images },
+  { label: "Career", href: "/admin/career", icon: Icons.briefcase },
+  { label: "Contact Messages", href: "/admin/contact", icon: Icons.mail, badge: 4 },
 ];
+
+/* ------------------------------------------------------------------ */
+/*  Helper — build initials from a name (e.g. "Lalit Kushwaha" -> "LK") */
+/* ------------------------------------------------------------------ */
+
+function getInitials(name?: string) {
+  if (!name) return "?";
+  const parts = name.trim().split(/\s+/);
+  const first = parts[0]?.[0] ?? "";
+  const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
+  return (first + last).toUpperCase() || "?";
+}
 
 /* ------------------------------------------------------------------ */
 /*  Shell — sidebar + content only, no header/topbar, no footer         */
@@ -102,12 +116,24 @@ const NAV: NavItem[] = [
 
 export default function AdminShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const { user, logout } = useAuth();
 
-  function handleLogout() {
-    // TODO: clear your auth cookie / JWT and call your Express logout route
-    router.push("/login");
+  async function handleLogout() {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    try {
+      await logout();
+    } catch (err) {
+      // even if the API call fails, don't trap the user on the dashboard —
+      // still send them to login so they can re-authenticate
+      console.error("Logout request failed:", err);
+    } finally {
+      setLoggingOut(false);
+      router.push("/admin/login");
+    }
   }
 
   return (
@@ -165,15 +191,20 @@ export default function AdminShell({ children }: { children: ReactNode }) {
 
         <div className={styles.sidebarFooter}>
           <div className={styles.userChip}>
-            <span className={styles.userAvatar}>LK</span>
+            <span className={styles.userAvatar}>{getInitials(user?.name)}</span>
             <span className={styles.userMeta}>
-              <strong>Lalit Kushwaha</strong>
-              <span>Founder &amp; CEO</span>
+              <strong>{user?.name ?? "Admin"}</strong>
+              <span>{user?.email ?? ""}</span>
             </span>
           </div>
-          <button type="button" className={styles.logoutBtn} onClick={handleLogout}>
+          <button
+            type="button"
+            className={styles.logoutBtn}
+            onClick={handleLogout}
+            disabled={loggingOut}
+          >
             {Icons.logout}
-            Logout
+            {loggingOut ? "Logging out..." : "Logout"}
           </button>
         </div>
       </aside>

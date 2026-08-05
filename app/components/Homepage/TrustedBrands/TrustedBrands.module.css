@@ -14,7 +14,11 @@
   background: linear-gradient(90deg, transparent, #d4a94f 20%, #f2cd6b 50%, #d4a94f 80%, transparent);
   opacity: 0.85;
 }
-
+.trackStatic {
+  animation: none;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 /* soft ambient glow behind the header, purely decorative */
 .glowOrb {
   position: absolute;
@@ -131,11 +135,11 @@
 }
 
 .trackLeft {
-  animation: scroll-left 34s linear infinite;
+  animation: scroll-left 54s linear infinite;
 }
 
 .trackRight {
-  animation: scroll-right 34s linear infinite;
+  animation: scroll-right 54s linear infinite;
 }
 
 .row:hover .track {
@@ -212,7 +216,7 @@
   }
   .trackLeft,
   .trackRight {
-    animation-duration: 42s;
+    animation-duration: 90s;
   }
   .logoCard {
     height: 112px;
@@ -238,7 +242,7 @@
   }
   .trackLeft,
   .trackRight {
-    animation-duration: 26s;
+    animation-duration: 76s;
   }
   .logoCard {
     height: 86px;
@@ -273,7 +277,7 @@
   }
   .trackLeft,
   .trackRight {
-    animation-duration: 20s;
+    animation-duration: 50s;
   }
   .logoCard {
     height: 72px;
