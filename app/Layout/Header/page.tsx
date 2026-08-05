@@ -19,8 +19,8 @@ const NAV_LINKS = [
       { label: "Digital Marketing", href: "/best-digital-marketing-service" },
       { label: "Influence Marketing", href: "/best-influence-marketing-service" },
       { label: "Performance Marketing", href: "/best-performance-marketing-service" },
-      { label: "App Development", href: "/best-app-development-service" },
-      { label: "UI/UX Design", href: "/best-ui-ux-design-service" },
+      { label: "Photography / Videography", href: "/best-photography-service" },
+      { label: "Event Management", href: "/best-event-management-management-service" },
       
     ],
   },

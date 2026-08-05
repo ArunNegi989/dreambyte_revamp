@@ -108,10 +108,20 @@
   font-weight: 700;
   line-height: 1.4;
   color: #f5f5f7;
+  min-height: 3.2em; /* reserves space so rotating text of varying length doesn't shift the layout */
 }
 
 .ctaHighlight {
+  display: inline-block;
   color: #ff8a65;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.ctaHighlightVisible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .callLabel {

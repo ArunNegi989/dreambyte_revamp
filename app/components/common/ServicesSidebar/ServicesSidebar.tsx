@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./ServicesSidebar.module.css";
 
@@ -11,7 +14,7 @@ interface ServicesSidebarProps {
   services?: SidebarService[];
   /**
    * Name of the service this page belongs to.
-   * - Highlighted in the "Looking for ___ Service?" CTA
+   * - Used as the starting point for the rotating "Looking for ___ Service?" CTA
    * - Automatically excluded from the "More Services" list (no point linking to the page you're already on)
    */
   currentService: string;
@@ -19,6 +22,8 @@ interface ServicesSidebarProps {
   phone?: string;
   /** Optional heading override for the list card */
   heading?: string;
+  /** Milliseconds between CTA rotations. Set to 0 to disable rotation and keep it static on currentService. */
+  rotateInterval?: number;
 }
 
 const DEFAULT_SERVICES: SidebarService[] = [
@@ -36,9 +41,48 @@ export default function ServicesSidebar({
   currentService,
   phone = "+91 8279720490",
   heading = "More Services",
+  rotateInterval = 4500,
 }: ServicesSidebarProps) {
   const list = services.filter((s) => s.name !== currentService);
   const telHref = `tel:${phone.replace(/[^\d+]/g, "")}`;
+
+  // CTA rotates through every service name (starting with the current page's
+  // service), fading out/in on each change. Shared across all service pages
+  // since this component is reused everywhere.
+  const rotation = [currentService, ...list.map((s) => s.name)];
+  const [rotationIndex, setRotationIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    setRotationIndex(0);
+    setIsVisible(true);
+  }, [currentService]);
+
+  useEffect(() => {
+    if (!rotateInterval || rotation.length <= 1) return;
+
+    const fadeOutTimer = setInterval(() => {
+      setIsVisible(false);
+    }, rotateInterval);
+
+    return () => clearInterval(fadeOutTimer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rotateInterval, rotation.length]);
+
+  useEffect(() => {
+    if (isVisible) return;
+
+    // once faded out, swap the word then fade back in
+    const swapTimer = setTimeout(() => {
+      setRotationIndex((prev) => (prev + 1) % rotation.length);
+      setIsVisible(true);
+    }, 250);
+
+    return () => clearTimeout(swapTimer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isVisible]);
+
+  const highlightedService = rotation[rotationIndex] ?? currentService;
 
   return (
     <aside className={styles.sidebar}>
@@ -92,7 +136,11 @@ export default function ServicesSidebar({
         <p className={styles.ctaText}>
           Looking for
           <br />
-          <span className={styles.ctaHighlight}>{currentService}</span>
+          <span
+            className={`${styles.ctaHighlight} ${isVisible ? styles.ctaHighlightVisible : ""}`}
+          >
+            {highlightedService}
+          </span>
           <br />
           Service?
         </p>
