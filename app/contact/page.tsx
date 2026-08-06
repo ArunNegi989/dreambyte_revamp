@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import styles from "./Contactpage.module.css";
+import { submitContactForm } from "@/lib/api/contact";
 
 interface ContactItem {
   icon: "phone" | "mail" | "pin";
@@ -20,12 +21,6 @@ interface ContactPageProps {
   mapLabel?: string;
   newsletterHeading?: string;
   newsletterSub?: string;
-  onSubmit?: (data: {
-    name: string;
-    email: string;
-    subject: string;
-    message: string;
-  }) => Promise<void> | void;
   onNewsletterSubmit?: (email: string) => Promise<void> | void;
 }
 
@@ -80,7 +75,6 @@ const ContactPage: React.FC<ContactPageProps> = ({
   mapLabel = "Dream Byte Solutions, Dehradun",
   newsletterHeading = "Keep Updated About Our Services",
   newsletterSub = "Subscribe to get the latest updates, offers and news from Dream Byte Solutions.",
-  onSubmit,
   onNewsletterSubmit,
 }) => {
   const [form, setForm] = useState({
@@ -89,7 +83,8 @@ const ContactPage: React.FC<ContactPageProps> = ({
     subject: "",
     message: "",
   });
-  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [newsEmail, setNewsEmail] = useState("");
@@ -123,13 +118,15 @@ const ContactPage: React.FC<ContactPageProps> = ({
     e.preventDefault();
     if (!validate()) return;
     setStatus("sending");
+    setErrorMsg("");
     try {
-      await onSubmit?.(form);
+      await submitContactForm(form);
       setStatus("sent");
       setForm({ name: "", email: "", subject: "", message: "" });
-      window.setTimeout(() => setStatus("idle"), 4000);
-    } catch {
-      setStatus("idle");
+      window.setTimeout(() => setStatus("idle"), 5000);
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "Failed to send message. Please try again.");
     }
   };
 
@@ -201,109 +198,130 @@ const ContactPage: React.FC<ContactPageProps> = ({
 
         {/* RIGHT: form */}
         <div className={styles.formCard}>
-          <h3 className={styles.formTitle}>Your Details</h3>
-
-          <form onSubmit={handleSubmit} noValidate>
-            <div className={styles.row2}>
-              <div className={styles.field}>
-                <label htmlFor="cf-name">Name *</label>
-                <input
-                  id="cf-name"
-                  name="name"
-                  type="text"
-                  placeholder="Your Name"
-                  value={form.name}
-                  onChange={handleChange}
-                  aria-invalid={!!errors.name}
-                />
-                {errors.name && (
-                  <span className={styles.error}>{errors.name}</span>
-                )}
-              </div>
-
-              <div className={styles.field}>
-                <label htmlFor="cf-email">Email Address *</label>
-                <input
-                  id="cf-email"
-                  name="email"
-                  type="email"
-                  placeholder="Your Email"
-                  value={form.email}
-                  onChange={handleChange}
-                  aria-invalid={!!errors.email}
-                />
-                {errors.email && (
-                  <span className={styles.error}>{errors.email}</span>
-                )}
-              </div>
-            </div>
-
-            <div className={styles.field}>
-              <label htmlFor="cf-subject">Subject *</label>
-              <input
-                id="cf-subject"
-                name="subject"
-                type="text"
-                placeholder="Message Subject"
-                value={form.subject}
-                onChange={handleChange}
-                aria-invalid={!!errors.subject}
-              />
-              {errors.subject && (
-                <span className={styles.error}>{errors.subject}</span>
-              )}
-            </div>
-
-            <div className={styles.field}>
-              <label htmlFor="cf-message">Comments / Questions *</label>
-              <textarea
-                id="cf-message"
-                name="message"
-                rows={4}
-                placeholder="Your Message"
-                value={form.message}
-                onChange={handleChange}
-                aria-invalid={!!errors.message}
-              />
-              {errors.message && (
-                <span className={styles.error}>{errors.message}</span>
-              )}
-            </div>
-
-            <button
-              type="submit"
-              className={styles.submitBtn}
-              disabled={status === "sending"}
-            >
-              {status === "sending"
-                ? "Sending..."
-                : status === "sent"
-                ? "Sent ✓"
-                : "Send Message"}
-              {status !== "sending" && (
-                <svg
-                  viewBox="0 0 24 24"
-                  className={styles.submitArrow}
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M5 12h14M13 6l6 6-6 6"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+          {status === "sent" ? (
+            <div className={styles.successState} role="status">
+              <div className={styles.successIconWrap}>
+                <svg className={styles.successCircle} viewBox="0 0 52 52">
+                  <circle className={styles.successCircleBg} cx="26" cy="26" r="24" fill="none" />
+                  <path className={styles.successCheck} fill="none" d="M14 27l7 7 16-16" />
                 </svg>
-              )}
-            </button>
-
-            {status === "sent" && (
-              <p className={styles.successNote} role="status">
-                Thanks! Your message is in — we&apos;ll get back to you soon.
+                <span className={styles.successPulse} aria-hidden="true" />
+              </div>
+              <h3 className={styles.successStateTitle}>Message sent!</h3>
+              <p className={styles.successStateBody}>
+                Thanks for reaching out — our team will get back to you within 24 hours.
               </p>
-            )}
-          </form>
+              <button
+                type="button"
+                className={styles.sendAnotherBtn}
+                onClick={() => setStatus("idle")}
+              >
+                Send another message
+              </button>
+            </div>
+          ) : (
+            <>
+              <h3 className={styles.formTitle}>Your Details</h3>
+
+              <form onSubmit={handleSubmit} noValidate>
+                {status === "error" && (
+                  <p className={styles.formErrorBanner} role="alert">
+                    {errorMsg}
+                  </p>
+                )}
+
+                <div className={styles.row2}>
+                  <div className={styles.field}>
+                    <label htmlFor="cf-name">Name *</label>
+                    <input
+                      id="cf-name"
+                      name="name"
+                      type="text"
+                      placeholder="Your Name"
+                      value={form.name}
+                      onChange={handleChange}
+                      aria-invalid={!!errors.name}
+                    />
+                    {errors.name && (
+                      <span className={styles.error}>{errors.name}</span>
+                    )}
+                  </div>
+
+                  <div className={styles.field}>
+                    <label htmlFor="cf-email">Email Address *</label>
+                    <input
+                      id="cf-email"
+                      name="email"
+                      type="email"
+                      placeholder="Your Email"
+                      value={form.email}
+                      onChange={handleChange}
+                      aria-invalid={!!errors.email}
+                    />
+                    {errors.email && (
+                      <span className={styles.error}>{errors.email}</span>
+                    )}
+                  </div>
+                </div>
+
+                <div className={styles.field}>
+                  <label htmlFor="cf-subject">Subject *</label>
+                  <input
+                    id="cf-subject"
+                    name="subject"
+                    type="text"
+                    placeholder="Message Subject"
+                    value={form.subject}
+                    onChange={handleChange}
+                    aria-invalid={!!errors.subject}
+                  />
+                  {errors.subject && (
+                    <span className={styles.error}>{errors.subject}</span>
+                  )}
+                </div>
+
+                <div className={styles.field}>
+                  <label htmlFor="cf-message">Comments / Questions *</label>
+                  <textarea
+                    id="cf-message"
+                    name="message"
+                    rows={4}
+                    placeholder="Your Message"
+                    value={form.message}
+                    onChange={handleChange}
+                    aria-invalid={!!errors.message}
+                  />
+                  {errors.message && (
+                    <span className={styles.error}>{errors.message}</span>
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  className={styles.submitBtn}
+                  disabled={status === "sending"}
+                >
+                  {status === "sending" ? "Sending..." : "Send Message"}
+                  {status !== "sending" && (
+                    <svg
+                      viewBox="0 0 24 24"
+                      className={styles.submitArrow}
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M5 12h14M13 6l6 6-6 6"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  )}
+                </button>
+              </form>
+            </>
+          )}
         </div>
       </section>
 

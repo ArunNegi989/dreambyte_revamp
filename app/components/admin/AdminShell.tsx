@@ -95,7 +95,7 @@ const NAV: NavItem[] = [
   { label: "Blog", href: "/admin/blog", icon: Icons.fileText },
   { label: "Portfolio", href: "/admin/portfolio", icon: Icons.images },
   { label: "Career", href: "/admin/career", icon: Icons.briefcase },
-  { label: "Contact Messages", href: "/admin/contact", icon: Icons.mail, badge: 4 },
+  { label: "Contact Messages", href: "/admin/contact", icon: Icons.mail},
 ];
 
 /* ------------------------------------------------------------------ */

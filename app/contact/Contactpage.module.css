@@ -582,3 +582,144 @@ a.itemLink:hover .itemIcon {
     max-width: 100%;
   }
 }
+
+/* ---------------- Animated success state ---------------- */
+
+.successState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px 20px;
+  animation: successCardIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes successCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.successIconWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  margin-bottom: 20px;
+}
+
+.successCircle {
+  width: 84px;
+  height: 84px;
+  position: relative;
+  z-index: 2;
+}
+
+.successCircleBg {
+  stroke: #22c55e;
+  stroke-width: 2.5;
+  stroke-miterlimit: 10;
+  stroke-dasharray: 151;
+  stroke-dashoffset: 151;
+  animation: circleDraw 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.successCheck {
+  stroke: #22c55e;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 36;
+  stroke-dashoffset: 36;
+  animation: checkDraw 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.55s forwards;
+}
+
+.successPulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid #22c55e;
+  opacity: 0;
+  z-index: 1;
+  animation: pulseRing 1.1s ease-out 0.6s;
+}
+
+@keyframes circleDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes checkDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes pulseRing {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.successStateTitle {
+  margin: 0 0 8px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  animation: fadeUpText 0.4s ease 0.75s both;
+}
+
+.successStateBody {
+  margin: 0 0 20px;
+  font-size: 0.92rem;
+  color: var(--text-muted, #888);
+  max-width: 320px;
+  line-height: 1.55;
+  animation: fadeUpText 0.4s ease 0.85s both;
+}
+
+.sendAnotherBtn {
+  background: transparent;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: inherit;
+  animation: fadeUpText 0.4s ease 0.95s both;
+  transition: border-color 0.2s ease;
+}
+
+.sendAnotherBtn:hover {
+  border-color: #f4a93c;
+}
+
+@keyframes fadeUpText {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.formErrorBanner {
+  background: rgba(255, 90, 90, 0.1);
+  border: 1px solid rgba(255, 90, 90, 0.3);
+  color: #ff5a5a;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .successState,
+  .successCircleBg,
+  .successCheck,
+  .successPulse,
+  .successStateTitle,
+  .successStateBody,
+  .sendAnotherBtn {
+    animation: none !important;
+  }
+}
