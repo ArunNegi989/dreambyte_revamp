@@ -18,6 +18,17 @@ interface Project {
   subCategory: string;
 }
 
+/** Raw shape returned by the Express /api/portfolio endpoint. */
+interface ApiProject {
+  _id: string;
+  title: string;
+  shortDesc: string;
+  description: string;
+  images: string[];
+  category: MainCategory;
+  subCategory: string;
+}
+
 const FILTERS: ("All" | MainCategory)[] = [
   "All",
   "Web Development",
@@ -27,234 +38,43 @@ const FILTERS: ("All" | MainCategory)[] = [
 ];
 
 /* ══════════════════════════════════════════════════════════════
-   PLACEHOLDER IMAGES — swap for real client screenshots later.
+   API — NEXT_PUBLIC_API_URL already includes /api
 ══════════════════════════════════════════════════════════════ */
-const IMG = [
-  "https://images.unsplash.com/photo-1533750349088-cd871a92f312?q=80&w=1400&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1571677246347-5040036b95cc?q=80&w=1400&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?q=80&w=1400&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1400&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1400&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=1400&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1611262588024-d12430b98920?q=80&w=1400&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1400&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1621839673705-6617adf9e890?q=80&w=1400&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=1400&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=1400&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1553484771-047a44eee27b?q=80&w=1400&auto=format&fit=crop",
-];
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
+const PORTFOLIO_API = `${API_BASE}/portfolio`;
 
-function gallery(...idx: number[]) {
-  return idx.map((i) => IMG[i % IMG.length]);
+// backend "/uploads/xyz.jpg" jaisa relative path deta hai (static files),
+// jo Express server ke origin se serve hota hai, Next.js app se nahi —
+// isliye API_BASE se "/api" hata kar us origin ko prefix karna padta hai.
+const API_ORIGIN = API_BASE.replace(/\/api\/?$/, "");
+
+function resolveImageUrl(url: string) {
+  if (!url) return url;
+  if (/^https?:\/\//i.test(url) || url.startsWith("blob:") || url.startsWith("data:")) {
+    return url; // already absolute
+  }
+  return `${API_ORIGIN}${url}`;
 }
 
-const PROJECTS: Project[] = [
-  // ── Web Development / Ecommerce ──
-  {
-    id: "wd-ec-1",
-    title: "Balaji Furniture",
-    shortDesc: "A luxurious fusion of comfort and connectivity.",
-    description:
-      "A full ecommerce build for a Dehradun furniture brand — product catalogue, cart, and checkout tuned for mobile-first shopping. Every collection page was designed to feel like a showroom, not a spreadsheet.",
-    images: gallery(0, 5, 3),
-    category: "Web Development",
-    subCategory: "Ecommerce",
-  },
-  {
-    id: "wd-ec-2",
-    title: "Erika Henna Herbal",
-    shortDesc: "Rooted in tradition, built for modern shopping.",
-    description:
-      "Storefront rebuild for a natural henna manufacturer — category filters, bulk order flow, and a faster checkout that cut cart drop-off significantly within the first month of launch.",
-    images: gallery(1, 4, 7),
-    category: "Web Development",
-    subCategory: "Ecommerce",
-  },
-  {
-    id: "wd-ec-3",
-    title: "Shiva Tears",
-    shortDesc: "Where every stone tells a certified story.",
-    description:
-      "Gemstone and rudraksha marketplace with certificate uploads per product and a trust-first product detail layout, built to reassure first-time spiritual shoppers.",
-    images: gallery(2, 6, 9),
-    category: "Web Development",
-    subCategory: "Ecommerce",
-  },
-  {
-    id: "wd-ec-4",
-    title: "5Rivers Chicago",
-    shortDesc: "Fresh arrivals, delivered every single week.",
-    description:
-      "A snacks-and-groceries marketplace built for weekly new arrivals — fast search, saved carts, and a clean mobile grid that keeps repeat shoppers moving quickly.",
-    images: gallery(3, 8, 0),
-    category: "Web Development",
-    subCategory: "Ecommerce",
-  },
+async function parseJsonSafe(res: Response) {
+  try {
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
 
-  // ── Web Development / Corporate & Product Sites ──
-  {
-    id: "wd-corp-1",
-    title: "Wellstone Homes",
-    shortDesc: "A portfolio that speaks before you scroll.",
-    description:
-      "Corporate site for an interior design studio — portfolio-led homepage with project case-study pages that let the work do most of the talking.",
-    images: gallery(4, 9, 1),
-    category: "Web Development",
-    subCategory: "Corporate & Product Sites",
-  },
-  {
-    id: "wd-corp-2",
-    title: "Rangoli Décor",
-    shortDesc: "A dealer network, made easy to navigate.",
-    description:
-      "Brand site with a product lookbook, dealer locator, and a lightweight admin panel that lets the client's own team manage listings without developer help.",
-    images: gallery(5, 10, 2),
-    category: "Web Development",
-    subCategory: "Corporate & Product Sites",
-  },
-  {
-    id: "wd-corp-3",
-    title: "Style That Speaks",
-    shortDesc: "One hero product, zero distractions.",
-    description:
-      "Furniture brand microsite built around a single hero product line, optimised for speed and clarity from the very first scroll.",
-    images: gallery(6, 11, 3),
-    category: "Web Development",
-    subCategory: "Corporate & Product Sites",
-  },
-
-  // ── Digital Marketing / SEO Campaigns ──
-  {
-    id: "dm-seo-1",
-    title: "AYM Yoga School",
-    shortDesc: "Ranking a Rishikesh school, worldwide.",
-    description:
-      "A 12-month organic growth programme for a Rishikesh yoga school — technical audit, content clusters, and local search optimisation that brought steady, compounding traffic.",
-    images: gallery(7, 0, 4),
-    category: "Digital Marketing",
-    subCategory: "SEO Campaigns",
-  },
-  {
-    id: "dm-seo-2",
-    title: "Yakka Puka Café Group",
-    shortDesc: "Five outlets, one search strategy.",
-    description:
-      "Local SEO and Google Business Profile overhaul across five outlets, rebuilding review velocity and map-pack visibility city by city.",
-    images: gallery(8, 1, 5),
-    category: "Digital Marketing",
-    subCategory: "SEO Campaigns",
-  },
-
-  // ── Digital Marketing / Paid & Analytics ──
-  {
-    id: "dm-ads-1",
-    title: "5Rivers — Performance Ads",
-    shortDesc: "Lower cost per lead, at higher scale.",
-    description:
-      "Google & Meta ad restructure that cut cost-per-lead while scaling monthly spend for a growing ecommerce brand — rebuilt from the funnel up.",
-    images: gallery(9, 2, 6),
-    category: "Digital Marketing",
-    subCategory: "Paid & Analytics",
-  },
-  {
-    id: "dm-ads-2",
-    title: "Shiva Tears — Funnel Rebuild",
-    shortDesc: "A funnel built to earn trust, then convert.",
-    description:
-      "Rebuilt the acquisition funnel end to end — landing pages, retargeting sequences, and a monthly performance dashboard the client actually reads.",
-    images: gallery(10, 3, 7),
-    category: "Digital Marketing",
-    subCategory: "Paid & Analytics",
-  },
-
-  // ── Graphic Designing / Social Creatives ──
-  {
-    id: "gd-social-1",
-    title: "Erika Henna — Seasonal Campaign",
-    shortDesc: "A full festive season, frame by frame.",
-    description:
-      "A complete festive-season content calendar — static and motion creatives designed as a single cohesive story across the feed.",
-    images: gallery(11, 4, 8),
-    category: "Graphic Designing",
-    subCategory: "Social Media Creatives",
-  },
-  {
-    id: "gd-social-2",
-    title: "Balaji Furniture — Product Drops",
-    shortDesc: "Every launch, on-brand from frame one.",
-    description:
-      "Launch creative sets for new furniture collections, built around a consistent grid and typography system that scales with every new drop.",
-    images: gallery(0, 5, 9),
-    category: "Graphic Designing",
-    subCategory: "Social Media Creatives",
-  },
-
-  // ── Graphic Designing / Print & Packaging ──
-  {
-    id: "gd-print-1",
-    title: "Mamta Gold — Packaging Refresh",
-    shortDesc: "Shelf-ready, across fourteen SKUs.",
-    description:
-      "Full packaging redesign for a spice and tea brand — shelf-ready artwork designed to stand out without shouting.",
-    images: gallery(1, 6, 10),
-    category: "Graphic Designing",
-    subCategory: "Print & Packaging",
-  },
-  {
-    id: "gd-print-2",
-    title: "Shiva Tears — Certificate & Box Design",
-    shortDesc: "Unboxing that reinforces the promise.",
-    description:
-      "Authenticity certificate layout and unboxing packaging designed to reinforce the brand's trust positioning from the very first touch.",
-    images: gallery(2, 7, 11),
-    category: "Graphic Designing",
-    subCategory: "Print & Packaging",
-  },
-
-  // ── Branding / Identity ──
-  {
-    id: "br-id-1",
-    title: "5Rivers Chicago",
-    shortDesc: "An identity built from a blank page.",
-    description:
-      "Full identity system from scratch — logomark, colour system, and packaging language for a brand-new snacks marketplace.",
-    images: gallery(3, 8, 0),
-    category: "Branding",
-    subCategory: "Brand Identity",
-  },
-  {
-    id: "br-id-2",
-    title: "Wellstone Homes",
-    shortDesc: "A quiet identity, built to last.",
-    description:
-      "A quiet, materials-led identity for an interior studio — logomark, stationery, and signage guidelines that age well.",
-    images: gallery(4, 9, 1),
-    category: "Branding",
-    subCategory: "Brand Identity",
-  },
-
-  // ── Branding / Logo Design ──
-  {
-    id: "br-logo-1",
-    title: "Rangoli Décor",
-    shortDesc: "One motif, a hundred applications.",
-    description:
-      "A geometric logomark built around a repeatable motif, designed to work from favicon size all the way up to storefront signage.",
-    images: gallery(5, 10, 2),
-    category: "Branding",
-    subCategory: "Logo Design",
-  },
-  {
-    id: "br-logo-2",
-    title: "Yakka Puka",
-    shortDesc: "Friendly on a cup, sharp on a sign.",
-    description:
-      "A friendly, hand-tuned wordmark and icon pairing for a growing café chain, built to reproduce well at every size it's printed on.",
-    images: gallery(6, 11, 3),
-    category: "Branding",
-    subCategory: "Logo Design",
-  },
-];
+function mapApiProject(p: ApiProject): Project {
+  return {
+    id: p._id,
+    title: p.title,
+    shortDesc: p.shortDesc,
+    description: p.description,
+    images: p.images.map(resolveImageUrl),
+    category: p.category,
+    subCategory: p.subCategory,
+  };
+}
 
 /* ══════════════════════════════════════════════════════════════
    ICONS
@@ -388,18 +208,54 @@ function ProjectCard({ project, onOpen }: { project: Project; onOpen: (p: Projec
    PROJECT MODAL — big image slider + short description
 ══════════════════════════════════════════════════════════════ */
 function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
-  const [index, setIndex] = useState(0);
+  const hasMultiple = project.images.length > 1;
+
+  // Seamless loop ke liye: last image ka clone shuru mai, first image ka clone end mai
+  const slides = useMemo(
+    () =>
+      hasMultiple
+        ? [project.images[project.images.length - 1], ...project.images, project.images[0]]
+        : project.images,
+    [project.images, hasMultiple]
+  );
+
+  // index=1 se start (kyunki 0 pe clone hai), real images 1..length ke beech hain
+  const [index, setIndex] = useState(hasMultiple ? 1 : 0);
+  const [withTransition, setWithTransition] = useState(true);
   const [closing, setClosing] = useState(false);
   const touchStartX = useRef<number | null>(null);
 
-  const next = useCallback(
-    () => setIndex((i) => (i + 1) % project.images.length),
-    [project.images.length]
-  );
-  const prev = useCallback(
-    () => setIndex((i) => (i - 1 + project.images.length) % project.images.length),
-    [project.images.length]
-  );
+  const next = useCallback(() => {
+    setWithTransition(true);
+    setIndex((i) => i + 1);
+  }, []);
+
+  const prev = useCallback(() => {
+    setWithTransition(true);
+    setIndex((i) => i - 1);
+  }, []);
+
+  // Jab clone pe pahunchein, transition khatam hone ke baad bina animation ke asli slide pe snap karo
+  const handleTransitionEnd = useCallback(() => {
+    if (!hasMultiple) return;
+    if (index === slides.length - 1) {
+      // last clone (= first image) par pahunch gaye -> asli first (index 1) pe snap
+      setWithTransition(false);
+      setIndex(1);
+    } else if (index === 0) {
+      // first clone (= last image) par pahunch gaye -> asli last pe snap
+      setWithTransition(false);
+      setIndex(slides.length - 2);
+    }
+  }, [index, slides.length, hasMultiple]);
+
+  // withTransition false karne ke agle frame mai wapas true kar do taaki next animation chale
+  useEffect(() => {
+    if (!withTransition) {
+      const id = requestAnimationFrame(() => setWithTransition(true));
+      return () => cancelAnimationFrame(id);
+    }
+  }, [withTransition]);
 
   const handleClose = useCallback(() => {
     setClosing(true);
@@ -416,7 +272,6 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
     return () => window.removeEventListener("keydown", onKey);
   }, [handleClose, next, prev]);
 
-  // Lock body scroll while modal is open (position-fixed technique avoids layout jump)
   useEffect(() => {
     const scrollY = window.scrollY;
     document.body.style.position = "fixed";
@@ -441,6 +296,11 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
     touchStartX.current = null;
   };
 
+  // Dots ke liye asli (0-indexed) image number nikalna
+  const realIndex = hasMultiple
+    ? (index - 1 + project.images.length) % project.images.length
+    : 0;
+
   return (
     <div
       className={`${styles.modalBackdrop} ${closing ? styles.modalBackdropOut : ""}`}
@@ -455,7 +315,6 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
         </button>
 
         <div className={styles.modalScroll}>
-          {/* Slider */}
           <div
             className={styles.sliderWrap}
             onTouchStart={handleTouchStart}
@@ -463,15 +322,19 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           >
             <div
               className={styles.sliderTrack}
-              style={{ transform: `translateX(-${index * 100}%)` }}
+              style={{
+                transform: `translateX(-${index * 100}%)`,
+                transition: withTransition ? "transform 0.4s ease" : "none",
+              }}
+              onTransitionEnd={handleTransitionEnd}
             >
-              {project.images.map((src, i) => (
+              {slides.map((src, i) => (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img key={i} src={src} alt={`${project.title} ${i + 1}`} className={styles.sliderImg} />
               ))}
             </div>
 
-            {project.images.length > 1 && (
+            {hasMultiple && (
               <>
                 <button className={`${styles.sliderNav} ${styles.sliderNavLeft}`} onClick={prev} aria-label="Previous image">
                   <ChevronIcon dir="left" />
@@ -483,8 +346,11 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                   {project.images.map((_, i) => (
                     <button
                       key={i}
-                      className={`${styles.sliderDot} ${i === index ? styles.sliderDotActive : ""}`}
-                      onClick={() => setIndex(i)}
+                      className={`${styles.sliderDot} ${i === realIndex ? styles.sliderDotActive : ""}`}
+                      onClick={() => {
+                        setWithTransition(true);
+                        setIndex(i + 1);
+                      }}
                       aria-label={`Go to image ${i + 1}`}
                     />
                   ))}
@@ -493,7 +359,6 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
             )}
           </div>
 
-          {/* Description */}
           <div className={styles.modalBody}>
             <span className={styles.modalEyebrow}>{project.subCategory}</span>
             <h3 className={styles.modalTitle}>{project.title}</h3>
@@ -509,10 +374,45 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
    MAIN COMPONENT
 ══════════════════════════════════════════════════════════════ */
 export default function AgencyPortfolio() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [active, setActive] = useState<(typeof FILTERS)[number]>("All");
   const [openProject, setOpenProject] = useState<Project | null>(null);
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const [indicator, setIndicator] = useState({ left: 0, width: 0 });
+
+  /* ---------- fetch: GET /api/portfolio ---------- */
+  useEffect(() => {
+    let ignore = false;
+
+    async function load() {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(PORTFOLIO_API);
+        const data = await parseJsonSafe(res);
+        if (!res.ok || !data?.success) {
+          throw new Error(data?.message || "Portfolio load nahi ho paaya.");
+        }
+        if (!ignore) {
+          setProjects((data.data as ApiProject[]).map(mapApiProject));
+        }
+      } catch (err) {
+        if (!ignore) {
+          setError(err instanceof Error ? err.message : "Kuch galat ho gaya, dobara try karo.");
+        }
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const updateIndicator = useCallback(() => {
     const el = tabRefs.current[active];
@@ -523,21 +423,21 @@ export default function AgencyPortfolio() {
     updateIndicator();
     window.addEventListener("resize", updateIndicator);
     return () => window.removeEventListener("resize", updateIndicator);
-  }, [updateIndicator]);
+  }, [updateIndicator, projects]);
 
   const grouped = useMemo(() => {
-    const filtered = active === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === active);
+    const filtered = active === "All" ? projects : projects.filter((p) => p.category === active);
     const map = new Map<string, Project[]>();
     filtered.forEach((p) => {
       const key = `${p.category} — ${p.subCategory}`;
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(p);
     });
-    return Array.from(map.entries()).map(([key, projects]) => ({
-      label: active === "All" ? key : projects[0].subCategory,
-      projects,
+    return Array.from(map.entries()).map(([key, group]) => ({
+      label: active === "All" ? key : group[0].subCategory,
+      projects: group,
     }));
-  }, [active]);
+  }, [active, projects]);
 
   return (
     <div className={styles.page}>
@@ -576,26 +476,42 @@ export default function AgencyPortfolio() {
 
       {/* ---------- Grouped project sections ---------- */}
       <div className={styles.container} key={active}>
-        {grouped.map((group, gi) => (
-          <section key={group.label} className={styles.categoryBlock}>
-            <div className={styles.categoryHeader}>
-              <h2 className={styles.categoryTitle}>{group.label}</h2>
-              <span className={styles.categoryCount}>{group.projects.length} projects</span>
-            </div>
-            <div className={styles.grid}>
-              {group.projects.map((project, i) => (
-                <RevealCard key={project.id} delay={(gi * 2 + i) * 60}>
-                  <ProjectCard project={project} onOpen={setOpenProject} />
-                </RevealCard>
-              ))}
-            </div>
-          </section>
-        ))}
-
-        {grouped.length === 0 && (
+        {loading && (
           <div className={styles.emptyState}>
-            <p>No projects in this category yet.</p>
+            <p>Loading portfolio...</p>
           </div>
+        )}
+
+        {!loading && error && (
+          <div className={styles.emptyState}>
+            <p>{error}</p>
+          </div>
+        )}
+
+        {!loading && !error && (
+          <>
+            {grouped.map((group, gi) => (
+              <section key={group.label} className={styles.categoryBlock}>
+                <div className={styles.categoryHeader}>
+                  <h2 className={styles.categoryTitle}>{group.label}</h2>
+                  <span className={styles.categoryCount}>{group.projects.length} projects</span>
+                </div>
+                <div className={styles.grid}>
+                  {group.projects.map((project, i) => (
+                    <RevealCard key={project.id} delay={(gi * 2 + i) * 60}>
+                      <ProjectCard project={project} onOpen={setOpenProject} />
+                    </RevealCard>
+                  ))}
+                </div>
+              </section>
+            ))}
+
+            {grouped.length === 0 && (
+              <div className={styles.emptyState}>
+                <p>No projects in this category yet.</p>
+              </div>
+            )}
+          </>
         )}
       </div>
 
