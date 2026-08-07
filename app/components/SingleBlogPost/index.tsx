@@ -1,35 +1,33 @@
+// app/components/SingleBlogPost/index.tsx
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./Singleblogpost.module.css";
-import {
-  type BlogPost,
-  type ContentBlock,
-  calcReadTime,
-} from "@/data/blogPosts";
+import { Blog, BlogSection } from "@/types/blog";
+import { resolveImage } from "@/lib/api/blogs";
+import { calcReadTime, getInitials, getEmbedUrl, slugify, formatDisplayDate } from "@/lib/utils/blog";
 
 interface SingleBlogPostProps {
-  post: BlogPost;
-  relatedPosts: BlogPost[];
-  recentPosts: BlogPost[];
-  prevPost?: BlogPost;
-  nextPost?: BlogPost;
-}
-
-function slugify(text: string) {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
+  post: Blog;
+  relatedPosts: Blog[];
+  recentPosts: Blog[];
+  prevPost?: Blog;
+  nextPost?: Blog;
 }
 
 /* ---------------------------------------------------------------
-   Fixed reading-progress rail — the page's signature element.
-   Tracks scroll through the ARTICLE body specifically, not the
-   whole page, so it reaches 100% right as the content ends.
+   Strip a plain-text field of stray HTML tags — used ONLY as a
+   fallback safety net for heading/subheading (jo hamesha plain text
+   hone chahiye, id/slug banane ke liye).
+--------------------------------------------------------------- */
+function stripTags(html: string): string {
+  return html.replace(/<\/?[^>]+(>|$)/g, "").trim();
+}
+
+/* ---------------------------------------------------------------
+   Fixed reading-progress rail
 --------------------------------------------------------------- */
 function ReadingProgress({ targetRef }: { targetRef: React.RefObject<HTMLElement | null> }) {
   const [progress, setProgress] = useState(0);
@@ -60,86 +58,214 @@ function ReadingProgress({ targetRef }: { targetRef: React.RefObject<HTMLElement
 }
 
 /* ---------------------------------------------------------------
-   Content block renderer
+   Content block renderer — matches the real BlogSection union.
+   NOTE: text/paragraph/quote/callout ka `text` field rich-text
+   editor se aata hai aur already HTML string hota hai (e.g.
+   "<p>Hello <strong>world</strong></p>") — isliye dangerouslySetInnerHTML
+   use kar rahe hain, plain {block.text} nahi. Isse tags literally
+   text ki tarah nahi dikhenge.
 --------------------------------------------------------------- */
-function ContentRenderer({ blocks }: { blocks: ContentBlock[] }) {
+function ContentRenderer({ blocks }: { blocks: BlogSection[] }) {
   let paraCount = 0;
+
   return (
     <>
-      {blocks.map((block, i) => {
+      {blocks.map((block) => {
         switch (block.type) {
           case "heading": {
-            const id = slugify(block.text);
+            const plainText = stripTags(block.text || "");
+            const id = slugify(plainText);
             return (
-              <h2 key={i} id={id} className={styles.h2}>
+              <h2 key={block.id} id={id} className={styles.h2}>
                 <span className={styles.headingMark} />
-                {block.text}
+                {plainText}
               </h2>
             );
           }
+
+          case "subheading": {
+            const plainText = stripTags(block.text || "");
+            const id = slugify(plainText);
+            return (
+              <h3 key={block.id} id={id} className={styles.h3}>
+                {plainText}
+              </h3>
+            );
+          }
+
           case "paragraph": {
             paraCount += 1;
             const isFirst = paraCount === 1;
             return (
-              <p
-                key={i}
+              <div
+                key={block.id}
                 className={`${styles.paragraph} ${isFirst ? styles.dropCap : ""}`}
-              >
-                {block.text}
-              </p>
+                dangerouslySetInnerHTML={{ __html: block.text || "" }}
+              />
             );
           }
-          case "list":
+
+          case "divider":
+            return <hr key={block.id} className={styles.divider} />;
+
+          case "list": {
+            const Tag = block.listType === "ordered" ? "ol" : "ul";
             return (
-              <ul key={i} className={styles.list}>
-                {block.items.map((item, j) => (
+              <Tag key={block.id} className={styles.list}>
+                {(block.listItems || []).map((item, j) => (
                   <li key={j} className={styles.listItem}>
                     <span className={styles.listBullet} />
-                    <span>{item}</span>
+                    <span dangerouslySetInnerHTML={{ __html: item }} />
                   </li>
                 ))}
-              </ul>
+              </Tag>
             );
+          }
+
           case "quote":
             return (
-              <blockquote key={i} className={styles.quote}>
+              <blockquote key={block.id} className={styles.quote}>
                 <span className={styles.quoteMark}>&ldquo;</span>
-                <p className={styles.quoteText}>{block.text}</p>
-                {block.author && (
+                <div
+                  className={styles.quoteText}
+                  dangerouslySetInnerHTML={{ __html: block.text || "" }}
+                />
+                {block.quoteAuthor && (
                   <cite className={styles.quoteAuthor}>
                     <span className={styles.quoteLine} />
-                    {block.author}
+                    {stripTags(block.quoteAuthor)}
                   </cite>
                 )}
               </blockquote>
             );
-          case "image":
+
+          case "code":
             return (
-              <figure key={i} className={styles.figure}>
-                <div className={styles.figureImgWrap}>
-                  <Image
-                    src={block.src}
-                    alt={block.alt}
-                    fill
-                    sizes="(max-width: 860px) 100vw, 720px"
-                    className={styles.figureImg}
+              <div key={block.id} className={styles.codeBlock}>
+                {block.codeLanguage && (
+                  <span className={styles.codeLang}>{block.codeLanguage}</span>
+                )}
+                <pre className={styles.codePre}>
+                  <code>{block.text}</code>
+                </pre>
+              </div>
+            );
+
+          case "video": {
+            const embedUrl = getEmbedUrl(block.videoUrl || "");
+            if (!embedUrl) return null;
+            return (
+              <figure key={block.id} className={styles.videoFigure}>
+                <div className={styles.videoWrap}>
+                  <iframe
+                    src={embedUrl}
+                    title={block.videoCaption || "Embedded video"}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className={styles.videoIframe}
                   />
                 </div>
-                {block.caption && (
-                  <figcaption className={styles.figureCaption}>{block.caption}</figcaption>
+                {block.videoCaption && (
+                  <figcaption className={styles.figureCaption}>{block.videoCaption}</figcaption>
                 )}
               </figure>
             );
-          case "callout":
+          }
+
+          case "table":
             return (
-              <div key={i} className={styles.callout}>
+              <div key={block.id} className={styles.tableWrap}>
+                <table className={styles.table}>
+                  {block.tableHeaders && block.tableHeaders.length > 0 && (
+                    <thead>
+                      <tr>
+                        {block.tableHeaders.map((h, i) => (
+                          <th key={i}>{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                  )}
+                  <tbody>
+                    {(block.tableRows || []).map((row, i) => (
+                      <tr key={i}>
+                        {row.map((cell, j) => (
+                          <td key={j}>{cell}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            );
+
+          case "callout": {
+            const variant = block.calloutVariant || "info";
+            return (
+              <div key={block.id} className={`${styles.callout} ${styles[`callout_${variant}`] || ""}`}>
                 <div className={styles.calloutBar} />
                 <div className={styles.calloutBody}>
-                  <span className={styles.calloutTitle}>{block.title || "Note"}</span>
-                  <p className={styles.calloutText}>{block.text}</p>
+                  <span className={styles.calloutTitle}>{block.calloutTitle || "Note"}</span>
+                  <div
+                    className={styles.calloutText}
+                    dangerouslySetInnerHTML={{ __html: block.text || "" }}
+                  />
                 </div>
               </div>
             );
+          }
+
+          case "spacer":
+            return (
+              <div
+                key={block.id}
+                aria-hidden="true"
+                style={{ height: `${block.spacerHeight ?? 32}px` }}
+              />
+            );
+
+          case "html":
+            return (
+              <div
+                key={block.id}
+                className={styles.htmlBlock}
+                dangerouslySetInnerHTML={{ __html: block.text || "" }}
+              />
+            );
+
+          case "images": {
+            const images = block.images || [];
+            if (images.length === 0) return null;
+            const layoutClass =
+              block.imageLayout === "two-col"
+                ? styles.imagesTwoCol
+                : block.imageLayout === "three-col"
+                ? styles.imagesThreeCol
+                : block.imageLayout === "wide"
+                ? styles.imagesWide
+                : styles.imagesSingle;
+
+            return (
+              <div key={block.id} className={`${styles.imagesGrid} ${layoutClass}`}>
+                {images.map((img) => (
+                  <figure key={img.id} className={styles.figure}>
+                    <div className={styles.figureImgWrap}>
+                      <Image
+                        src={resolveImage(img.src)}
+                        alt={img.altText || img.caption || ""}
+                        fill
+                        sizes="(max-width: 860px) 100vw, 720px"
+                        className={styles.figureImg}
+                      />
+                    </div>
+                    {img.caption && (
+                      <figcaption className={styles.figureCaption}>{img.caption}</figcaption>
+                    )}
+                  </figure>
+                ))}
+              </div>
+            );
+          }
+
           default:
             return null;
         }
@@ -162,14 +288,14 @@ export default function SingleBlogPost({
   const headings = useMemo(
     () =>
       post.content
-        .filter((b): b is Extract<ContentBlock, { type: "heading" }> => b.type === "heading")
-        .map((b) => ({ id: slugify(b.text), text: b.text })),
+        .filter((b) => b.type === "heading" && b.text)
+        .map((b) => ({ id: slugify(stripTags(b.text || "")), text: stripTags(b.text || "") })),
     [post.content]
   );
 
   const readTime = useMemo(() => calcReadTime(post.content), [post.content]);
+  const displayDate = useMemo(() => formatDisplayDate(post.date), [post.date]);
 
-  // Scroll-synced active TOC entry
   useEffect(() => {
     if (headings.length === 0) return;
     const observer = new IntersectionObserver(
@@ -195,11 +321,8 @@ export default function SingleBlogPost({
     }
   };
 
-  const initials = post.author
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2);
+  const initials = getInitials(post.author);
+  const coverImage = resolveImage(post.coverImage);
 
   return (
     <div className={styles.page}>
@@ -208,14 +331,16 @@ export default function SingleBlogPost({
       {/* ---------- Hero ---------- */}
       <section className={styles.hero}>
         <div className={styles.heroImgWrap}>
-          <Image
-            src={post.image}
-            alt={post.title}
-            fill
-            priority
-            sizes="100vw"
-            className={styles.heroImg}
-          />
+          {coverImage && (
+            <Image
+              src={coverImage}
+              alt={post.title}
+              fill
+              priority
+              sizes="100vw"
+              className={styles.heroImg}
+            />
+          )}
           <div className={styles.heroOverlay} />
         </div>
 
@@ -233,17 +358,23 @@ export default function SingleBlogPost({
           <p className={styles.excerpt}>{post.excerpt}</p>
 
           <div className={styles.metaRow}>
-            <div className={styles.authorChip}>
-              <span className={styles.authorAvatar}>{initials}</span>
-              <div className={styles.authorInfo}>
-                <span className={styles.authorName}>{post.author}</span>
-                <span className={styles.authorRole}>{post.authorRole}</span>
-              </div>
-            </div>
-            <span className={styles.metaDivider} />
+            {post.author && (
+              <>
+                <div className={styles.authorChip}>
+                  <span className={styles.authorAvatar}>{initials}</span>
+                  <div className={styles.authorInfo}>
+                    <span className={styles.authorName}>{post.author}</span>
+                    {post.authorRole && (
+                      <span className={styles.authorRole}>{post.authorRole}</span>
+                    )}
+                  </div>
+                </div>
+                <span className={styles.metaDivider} />
+              </>
+            )}
             <div className={styles.metaStat}>
               <span className={styles.metaLabel}>Published</span>
-              <span className={styles.metaVal}>{post.displayDate}</span>
+              <span className={styles.metaVal}>{displayDate}</span>
             </div>
             <div className={styles.metaStat}>
               <span className={styles.metaLabel}>Read time</span>
@@ -262,17 +393,17 @@ export default function SingleBlogPost({
               <ContentRenderer blocks={post.content} />
             </div>
 
-            {/* Tags */}
-            <div className={styles.tagsRow}>
-              <span className={styles.tagsLabel}>Filed under</span>
-              <div className={styles.tagsList}>
-                {post.tags.map((tag) => (
-                  <span key={tag} className={styles.tag}>#{tag.replace(/\s+/g, "")}</span>
-                ))}
+            {post.tags.length > 0 && (
+              <div className={styles.tagsRow}>
+                <span className={styles.tagsLabel}>Filed under</span>
+                <div className={styles.tagsList}>
+                  {post.tags.map((tag) => (
+                    <span key={tag} className={styles.tag}>#{tag.replace(/\s+/g, "")}</span>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Share */}
             <div className={styles.shareRow}>
               <span className={styles.shareLabel}>Share this article</span>
               <div className={styles.shareBtns}>
@@ -300,7 +431,6 @@ export default function SingleBlogPost({
               </div>
             </div>
 
-            {/* Prev / Next */}
             {(prevPost || nextPost) && (
               <div className={styles.prevNextRow}>
                 {prevPost ? (
@@ -330,7 +460,6 @@ export default function SingleBlogPost({
 
           {/* ===== Sidebar ===== */}
           <aside className={styles.sidebar}>
-            {/* On This Page — signature TOC, synced with reading progress */}
             {headings.length > 0 && (
               <nav className={styles.tocCard} aria-label="Table of contents">
                 <span className={styles.tocLabel}>On this page</span>
@@ -350,7 +479,6 @@ export default function SingleBlogPost({
               </nav>
             )}
 
-            {/* Agency CTA */}
             <div className={styles.ctaCard}>
               <span className={styles.ctaEyebrow}>Dream Byte Solutions</span>
               <h3 className={styles.ctaTitle}>Need this done for your business?</h3>
@@ -362,7 +490,6 @@ export default function SingleBlogPost({
               </Link>
             </div>
 
-            {/* Recent posts */}
             {recentPosts.length > 0 && (
               <div className={styles.sideWidget}>
                 <div className={styles.sideWidgetHeader}>
@@ -371,15 +498,15 @@ export default function SingleBlogPost({
                 </div>
                 <ul className={styles.recentList}>
                   {recentPosts.map((p) => (
-                    <li key={p.id} className={styles.recentItem}>
+                    <li key={p._id} className={styles.recentItem}>
                       <Link href={`/blog/${p.slug}`} className={styles.recentLink}>
                         <div className={styles.recentImgWrap}>
-                          <Image src={p.image} alt={p.title} fill sizes="60px" className={styles.recentImg} />
+                          <Image src={resolveImage(p.coverImage)} alt={p.title} fill sizes="60px" className={styles.recentImg} />
                         </div>
                         <div className={styles.recentInfo}>
                           <span className={styles.recentCategory}>{p.category}</span>
                           <p className={styles.recentTitle}>{p.title}</p>
-                          <span className={styles.recentDate}>{p.displayDate}</span>
+                          <span className={styles.recentDate}>{formatDisplayDate(p.date)}</span>
                         </div>
                       </Link>
                     </li>
@@ -388,7 +515,6 @@ export default function SingleBlogPost({
               </div>
             )}
 
-            {/* Related posts */}
             {relatedPosts.length > 0 && (
               <div className={styles.sideWidget}>
                 <div className={styles.sideWidgetHeader}>
@@ -396,14 +522,14 @@ export default function SingleBlogPost({
                 </div>
                 <ul className={styles.recentList}>
                   {relatedPosts.map((p) => (
-                    <li key={p.id} className={styles.recentItem}>
+                    <li key={p._id} className={styles.recentItem}>
                       <Link href={`/blog/${p.slug}`} className={styles.recentLink}>
                         <div className={styles.recentImgWrap}>
-                          <Image src={p.image} alt={p.title} fill sizes="60px" className={styles.recentImg} />
+                          <Image src={resolveImage(p.coverImage)} alt={p.title} fill sizes="60px" className={styles.recentImg} />
                         </div>
                         <div className={styles.recentInfo}>
                           <p className={styles.recentTitle}>{p.title}</p>
-                          <span className={styles.recentDate}>{p.displayDate}</span>
+                          <span className={styles.recentDate}>{formatDisplayDate(p.date)}</span>
                         </div>
                       </Link>
                     </li>
@@ -412,7 +538,6 @@ export default function SingleBlogPost({
               </div>
             )}
 
-            {/* Newsletter */}
             <div className={styles.newsletterCard}>
               <span className={styles.newsletterIcon}>✉</span>
               <h4 className={styles.newsletterTitle}>Get articles like this monthly</h4>

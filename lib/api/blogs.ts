@@ -1,10 +1,4 @@
 // lib/api/blogs.ts
-// Self-contained — creates its own axios instance so this file has no
-// dependency on an unresolved "@/lib/api" module. If your project already
-// has a shared axios instance elsewhere (with auth interceptors etc.),
-// swap the `axios.create(...)` block below for an import of that instance
-// instead — everything else in this file stays the same.
-
 import axios from "axios";
 import {
   Blog,
@@ -18,37 +12,55 @@ const RAW_BASE =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ??
   "http://localhost:5000/api";
 
-// Origin without the trailing /api — used to resolve relative /uploads/... paths
 export const BASE_URL = RAW_BASE.replace(/\/api\/?$/, "");
 
 const api = axios.create({
   baseURL: RAW_BASE,
-  withCredentials: true, // sends the auth cookie used by protect/isAdmin middleware
+  withCredentials: true,
 });
+
+// ---------- Debug interceptors ----------
+// Server Components me ye logs sirf TERMINAL me dikhenge (jaha npm run dev
+// chal raha hai), browser console me nahi — kyunki fetch server pe hota hai.
+api.interceptors.request.use((config) => {
+  console.log(
+    `[blogs-api] → ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`
+  );
+  return config;
+});
+
+api.interceptors.response.use(
+  (res) => {
+    console.log(
+      `[blogs-api] ← ${res.status} ${res.config.url} | items:`,
+      Array.isArray(res.data?.data) ? res.data.data.length : "single"
+    );
+    return res;
+  },
+  (err) => {
+    console.error(
+      `[blogs-api] ✗ ${err.config?.url} failed:`,
+      err.response?.status,
+      err.response?.data || err.message
+    );
+    return Promise.reject(err);
+  }
+);
 
 export default api;
 
 // ---------- Helpers ----------
 
-/** Resolve a possibly-relative /uploads/... path to an absolute URL */
 export function resolveImage(src?: string): string {
   if (!src) return "";
   if (src.startsWith("http") || src.startsWith("blob:")) return src;
   return `${BASE_URL}${src.startsWith("/") ? "" : "/"}${src}`;
 }
 
-/** Strip the absolute base URL back off before saving (edit page pattern) */
 export function relativizeImage(src: string): string {
   return src.replace(BASE_URL, "");
 }
 
-/**
- * Builds the multipart FormData for create/update, matching the
- * cleanContent logic used in the admin add-new / edit pages:
- * - block.images with a matching File get isFile:true + pushed into contentImages
- * - block.images without a File keep their src (relativized if editing)
- * - every other block type only sends the fields relevant to it
- */
 export function buildBlogFormData(
   values: BlogFormValues,
   files: BlogFormFiles = {},
@@ -130,25 +142,21 @@ export function buildBlogFormData(
 
 // ---------- Reads ----------
 
-/** Admin — all blogs (Draft + Published). GET /blogs/get-all */
 export async function getAllBlogsAdmin(): Promise<Blog[]> {
   const res = await api.get("/blogs/get-all");
   return res.data.data;
 }
 
-/** Public — Published only. GET /blogs */
 export async function getPublishedBlogs(): Promise<Blog[]> {
   const res = await api.get("/blogs");
   return res.data.data;
 }
 
-/** Admin — single blog by id. GET /blogs/get-single/:id */
 export async function getSingleBlog(id: string): Promise<Blog> {
   const res = await api.get(`/blogs/get-single/${id}`);
   return res.data.data;
 }
 
-/** Public — single published blog by slug. GET /blogs/slug/:slug */
 export async function getBlogBySlug(slug: string): Promise<Blog> {
   const res = await api.get(`/blogs/slug/${slug}`);
   return res.data.data;
@@ -156,7 +164,6 @@ export async function getBlogBySlug(slug: string): Promise<Blog> {
 
 // ---------- Writes ----------
 
-/** POST /blogs/create */
 export async function createBlog(
   values: BlogFormValues,
   files: BlogFormFiles = {}
@@ -168,7 +175,6 @@ export async function createBlog(
   return res.data.data;
 }
 
-/** PUT /blogs/update/:id */
 export async function updateBlog(
   id: string,
   values: BlogFormValues,
@@ -181,13 +187,11 @@ export async function updateBlog(
   return res.data.data;
 }
 
-/** Quick status toggle used on the list page. PUT /blogs/update/:id */
 export async function updateBlogStatus(id: string, status: BlogStatus): Promise<Blog> {
   const res = await api.put(`/blogs/update/${id}`, { status });
   return res.data.data;
 }
 
-/** DELETE /blogs/delete/:id */
 export async function deleteBlog(id: string): Promise<void> {
   await api.delete(`/blogs/delete/${id}`);
 }

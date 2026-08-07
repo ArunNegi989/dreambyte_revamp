@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Dev me localhost backend private IP resolve karta hai jise Next.js
+    // SSRF-protection ke tehat block kar deta hai. Optimizer sirf prod
+    // (real domain) ke liye chalao, dev me raw image serve karo.
+    unoptimized: process.env.NODE_ENV === "development",
     remotePatterns: [
       {
         protocol: "https",
@@ -17,8 +21,11 @@ const nextConfig: NextConfig = {
         port: "5000",
         pathname: "/uploads/**",
       },
-      // production mein backend ka real domain bhi yahan add karna, e.g.:
-      // { protocol: "https", hostname: "api.dreambytesolution.com", pathname: "/uploads/**" },
+      {
+        protocol: "https",
+        hostname: "api.dreambytesolutions.com",
+        pathname: "/uploads/**",
+      },
     ],
   },
 };
