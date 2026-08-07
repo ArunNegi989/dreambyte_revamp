@@ -21,7 +21,6 @@ const NAV_LINKS = [
       { label: "Performance Marketing", href: "/best-performance-marketing-service" },
       { label: "Photography / Videography", href: "/best-photography-service" },
       { label: "Event Management", href: "/best-event-management-management-service" },
-      
     ],
   },
   { label: "Portfolio", href: "/portfolio" },
@@ -35,7 +34,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
   const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
-  const closeTimer = useRef(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Small delay on leave so the dropdown doesn't flicker shut
   // while the cursor moves from the trigger into the panel
@@ -80,7 +79,6 @@ export default function Navbar() {
             className={styles.logoIcon}
             priority
           />
-         
         </Link>
 
         {/* Desktop Nav */}

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { FiArrowLeft, FiCheck, FiPlus, FiX } from "react-icons/fi";
-import styles from "../../Career.module.css";
+import styles from ".././Career.module.css";
 import { Dept } from "@/types/career";
 import { fetchCareerById, updateCareer } from "@/lib/api/careers";
 
