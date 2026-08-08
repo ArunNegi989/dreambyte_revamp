@@ -8,6 +8,8 @@
 .listPanel {
   max-height: 640px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .msgList {
@@ -124,6 +126,93 @@
   margin: 0 0 24px;
 }
 
+/* ══════════════════════════════════════════════════════════════
+   Pagination — sits at the bottom of the message list panel
+══════════════════════════════════════════════════════════════ */
+.paginationWrap {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-top: 1px solid var(--admin-border);
+  background: var(--admin-surface);
+  flex-wrap: wrap;
+}
+
+.paginationRange {
+  font-size: 0.74rem;
+  color: var(--admin-muted);
+  white-space: nowrap;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pageNumbers {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.pageBtn {
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--admin-border);
+  border-radius: 7px;
+  color: var(--admin-text);
+  font-size: 0.76rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.pageBtn:hover:not(:disabled) {
+  border-color: var(--admin-amber-soft);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageBtnActive {
+  background: var(--admin-amber);
+  border-color: var(--admin-amber);
+  color: #111;
+  font-weight: 700;
+}
+
+.pageBtnActive:hover {
+  background: var(--admin-amber);
+}
+
+.pageEllipsis {
+  min-width: 18px;
+  text-align: center;
+  color: var(--admin-muted);
+  font-size: 0.76rem;
+}
+
+.pageMobileLabel {
+  display: none;
+  font-size: 0.76rem;
+  color: var(--admin-muted);
+  white-space: nowrap;
+  padding: 0 2px;
+}
+
 @media (max-width: 992px) {
   .inbox {
     grid-template-columns: 1fr;
@@ -131,5 +220,36 @@
 
   .listPanel {
     max-height: 320px;
+  }
+}
+
+/* Below this width, collapse the list panel's pagination to just
+   Prev / Page X of Y / Next so it never wraps awkwardly in the narrow column */
+@media (max-width: 560px) {
+  .pageNumbers {
+    display: none;
+  }
+
+  .pageMobileLabel {
+    display: inline-flex;
+  }
+
+  .paginationWrap {
+    justify-content: center;
+  }
+
+  .paginationRange {
+    display: none;
+  }
+
+  .pagination {
+    width: 100%;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .pageBtn {
+    min-width: 36px;
+    height: 36px;
   }
 }

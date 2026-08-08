@@ -6,12 +6,47 @@ import styles from "./contact.module.css";
 import { ContactMessage } from "@/types/contact";
 import { fetchContactMessages, markContactAsRead, deleteContactMessage } from "@/lib/api/contact";
 
+const ITEMS_PER_PAGE = 10;
+
+/** Builds a compact page-number list with ellipses, e.g.
+ *  [1, '...', 4, 5, 6, '...', 12] — keeps first/last + a window around current. */
+function getPageNumbers(current: number, total: number): (number | "...")[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+
+  const pages: (number | "...")[] = [1];
+
+  if (current > 3) pages.push("...");
+
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+  for (let i = start; i <= end; i++) pages.push(i);
+
+  if (current < total - 2) pages.push("...");
+
+  pages.push(total);
+  return pages;
+}
+
+const ChevronLeftIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+const ChevronRightIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
 export default function ContactAdminPage() {
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  // ---- pagination state (applies to the message list panel) ----
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     loadMessages();
@@ -39,6 +74,37 @@ export default function ContactAdminPage() {
       ),
     [messages, query]
   );
+
+  /* ---------- pagination derived state ---------- */
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+
+  const paginated = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filtered.slice(start, start + ITEMS_PER_PAGE);
+  }, [filtered, currentPage]);
+
+  // search badalte hi page 1 par wapas
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query]);
+
+  // delete ke baad agar current page khali ho jaye to pichle valid page par le jao
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(totalPages);
+  }, [currentPage, totalPages]);
+
+  function goToPage(page: number) {
+    const clamped = Math.min(Math.max(1, page), totalPages);
+    setCurrentPage(clamped);
+  }
+
+  const pageNumbers = useMemo(
+    () => getPageNumbers(currentPage, totalPages),
+    [currentPage, totalPages]
+  );
+
+  const rangeStart = filtered.length === 0 ? 0 : (currentPage - 1) * ITEMS_PER_PAGE + 1;
+  const rangeEnd = Math.min(currentPage * ITEMS_PER_PAGE, filtered.length);
 
   const active = messages.find((m) => m._id === activeId) ?? null;
   const unreadCount = messages.filter((m) => !m.read).length;
@@ -113,7 +179,7 @@ export default function ContactAdminPage() {
         <div className={styles.inbox}>
           <div className={`${ui.panel} ${styles.listPanel}`}>
             <ul className={styles.msgList}>
-              {filtered.map((m) => (
+              {paginated.map((m) => (
                 <li
                   key={m._id}
                   className={`${styles.msgRow} ${activeId === m._id ? styles.msgRowActive : ""}`}
@@ -131,6 +197,61 @@ export default function ContactAdminPage() {
               ))}
               {filtered.length === 0 && <div className={ui.emptyState}>No messages found.</div>}
             </ul>
+
+            {/* ---------- Pagination (list panel only) ---------- */}
+            {filtered.length > 0 && (
+              <div className={styles.paginationWrap}>
+                <span className={styles.paginationRange}>
+                  {rangeStart}–{rangeEnd} of {filtered.length}
+                </span>
+
+                <nav className={styles.pagination} aria-label="Pagination">
+                  <button
+                    type="button"
+                    className={styles.pageBtn}
+                    onClick={() => goToPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    aria-label="Previous page"
+                  >
+                    <ChevronLeftIcon />
+                  </button>
+
+                  <div className={styles.pageNumbers}>
+                    {pageNumbers.map((n, i) =>
+                      n === "..." ? (
+                        <span key={`ellipsis-${i}`} className={styles.pageEllipsis}>
+                          …
+                        </span>
+                      ) : (
+                        <button
+                          key={n}
+                          type="button"
+                          className={`${styles.pageBtn} ${n === currentPage ? styles.pageBtnActive : ""}`}
+                          onClick={() => goToPage(n)}
+                          aria-current={n === currentPage ? "page" : undefined}
+                        >
+                          {n}
+                        </button>
+                      )
+                    )}
+                  </div>
+
+                  <span className={styles.pageMobileLabel}>
+                    Page {currentPage} of {totalPages}
+                  </span>
+
+                  <button
+                    type="button"
+                    className={styles.pageBtn}
+                    onClick={() => goToPage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    aria-label="Next page"
+                  >
+                    <ChevronRightIcon />
+                  </button>
+                </nav>
+              </div>
+            )}
           </div>
 
           <div className={`${ui.panel} ${styles.detailPanel}`}>

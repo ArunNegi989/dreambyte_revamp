@@ -238,6 +238,138 @@
   background: rgba(255, 90, 90, 0.08);
 }
 
+/* ══════════════════════════════════════════════════════════════
+   Pagination
+══════════════════════════════════════════════════════════════ */
+.paginationWrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.paginationRange {
+  font-size: 0.8rem;
+  color: #999;
+  white-space: nowrap;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pageNumbers {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pageBtn {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a1a;
+  border: 1px solid #2e2e2e;
+  border-radius: 8px;
+  color: #f5f5f5;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.pageBtn:hover:not(:disabled) {
+  border-color: #f4a93c;
+  background: rgba(244, 169, 60, 0.08);
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageBtnActive {
+  background: linear-gradient(90deg, #f4a93c, #ff7a45);
+  border-color: transparent;
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
+.pageBtnActive:hover {
+  background: linear-gradient(90deg, #f4a93c, #ff7a45);
+}
+
+.pageEllipsis {
+  min-width: 24px;
+  text-align: center;
+  color: #777;
+  font-size: 0.82rem;
+}
+
+.pageMobileLabel {
+  display: none;
+  font-size: 0.82rem;
+  color: #999;
+  white-space: nowrap;
+  padding: 0 4px;
+}
+
+/* Tablet — keep numbers but tighten spacing */
+@media (max-width: 768px) {
+  .paginationWrap {
+    justify-content: center;
+  }
+
+  .paginationRange {
+    order: 2;
+    width: 100%;
+    text-align: center;
+  }
+
+  .pagination {
+    order: 1;
+  }
+}
+
+/* Mobile — collapse number row, show Prev / Page X of Y / Next only */
+@media (max-width: 560px) {
+  .pageNumbers {
+    display: none;
+  }
+
+  .pageMobileLabel {
+    display: inline-flex;
+  }
+
+  .pagination {
+    width: 100%;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .pageBtn {
+    min-width: 40px;
+    height: 40px;
+  }
+
+  .listWrapper {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .paginationWrap {
+    margin-top: 16px;
+  }
+}
+
 /* ===== DELETE MODAL ===== */
 .modalOverlay {
   position: fixed;
