@@ -185,6 +185,12 @@
   font-weight: 600;
   color: var(--ink);
   line-height: 1.3;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .blogExcerpt {
@@ -232,6 +238,7 @@
 
 .table {
   width: 100%;
+  table-layout: fixed;   /* columns respect their set widths — title can no longer blow the table out horizontally */
   border-collapse: collapse;
   min-width: 720px;
 }
@@ -245,6 +252,9 @@
   padding: 0.9rem 1rem;
   border-bottom: 1px solid var(--border);
   background: var(--parchment-alt);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .table td {
@@ -253,6 +263,14 @@
   vertical-align: middle;
   font-size: 0.88rem;
   color: var(--ink);
+}
+
+/* title/excerpt cell — takes the remaining flexible width (no explicit
+   <col> width) and wraps/clamps instead of forcing the table wider */
+.titleCell {
+  min-width: 0;
+  max-width: 0; /* forces the cell to respect the table's fixed layout width */
+  overflow: hidden;
 }
 
 .row:last-child td {
@@ -387,6 +405,102 @@
   font-family: var(--serif);
   font-size: 2.2rem;
   color: var(--border);
+}
+
+/* ============================================================
+   Pagination bar
+   ============================================================ */
+.paginationBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  padding: 0.85rem 1rem;
+  background: var(--parchment);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.paginationInfo {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.paginationControls {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.pageNavBtn,
+.pageNumBtn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #0a0a0a;
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.pageNavBtn:hover:not(:disabled),
+.pageNumBtn:hover:not(.pageNumBtnActive) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.pageNavBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageNumBtnActive {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0a0a0a;
+  font-weight: 700;
+}
+
+.pageEllipsis {
+  padding: 0 0.35rem;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 560px) {
+  .paginationBar {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .paginationControls {
+    justify-content: center;
+  }
+
+  .paginationInfo {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 360px) {
+  .pageNavBtn,
+  .pageNumBtn {
+    min-width: 28px;
+    height: 28px;
+    font-size: 0.76rem;
+  }
 }
 
 .modalOverlay {

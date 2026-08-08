@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import styles from "./Pageloader.module.css";
 
-const MIN_VISIBLE_MS = 1500; // loader stays visible at least this long on every navigation
-const SAFETY_TIMEOUT_MS = 8000; // auto-hide if something goes wrong
+const MIN_VISIBLE_MS = 1500;
+const SAFETY_TIMEOUT_MS = 8000;
+const EXCLUDED_PREFIXES = ["/admin"]; // yahan aur routes bhi add kar sakte ho
 
-export default function PageLoader() {
+function PageLoaderInner() {
   const [loading, setLoading] = useState(false);
   const shownAt = useRef<number>(0);
   const safetyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -15,10 +16,11 @@ export default function PageLoader() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  /* ---------------------------------------------------------- */
-  /* 1) Show the loader the instant an internal link is clicked  */
-  /* ---------------------------------------------------------- */
+  const isExcluded = EXCLUDED_PREFIXES.some((prefix) => pathname?.startsWith(prefix));
+
   useEffect(() => {
+    if (isExcluded) return; // admin route par listener hi mat lagao
+
     function handleClick(e: MouseEvent) {
       const anchor = (e.target as HTMLElement)?.closest("a");
       if (!anchor) return;
@@ -42,11 +44,8 @@ export default function PageLoader() {
 
     document.addEventListener("click", handleClick, true);
     return () => document.removeEventListener("click", handleClick, true);
-  }, [pathname]);
+  }, [pathname, isExcluded]);
 
-  /* ---------------------------------------------------------- */
-  /* 2) Hide it once the new route has actually rendered          */
-  /* ---------------------------------------------------------- */
   useEffect(() => {
     if (!loading) return;
 
@@ -62,11 +61,20 @@ export default function PageLoader() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, searchParams]);
 
+  if (isExcluded) return null;
   if (!loading) return null;
 
   return (
     <div className={styles.overlay} role="status" aria-live="polite" aria-label="Loading page">
       <img src="/loader.gif" alt="Loading" className={styles.gif} />
     </div>
+  );
+}
+
+export default function PageLoader() {
+  return (
+    <Suspense fallback={null}>
+      <PageLoaderInner />
+    </Suspense>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import styles from "./Blog.module.css";
 import { Blog, BlogListItem, BlogStatus } from "@/types/blog";
@@ -10,6 +10,8 @@ import {
   deleteBlog,
   resolveImage,
 } from "@/lib/api/blogs";
+
+const ITEMS_PER_PAGE = 10;
 
 function useBreakpoint() {
   const [width, setWidth] = useState<number>(
@@ -45,12 +47,29 @@ function normalise(raw: Blog): BlogListItem {
   };
 }
 
+/** Windowed page numbers with ellipsis, e.g. 1 … 4 5 [6] 7 8 … 12 */
+function getPageNumbers(current: number, total: number): (number | "...")[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+
+  const pages: (number | "...")[] = [1];
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+
+  if (start > 2) pages.push("...");
+  for (let i = start; i <= end; i++) pages.push(i);
+  if (end < total - 1) pages.push("...");
+  pages.push(total);
+
+  return pages;
+}
+
 export default function BlogListPage() {
   const [blogs, setBlogs] = useState<BlogListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const { isMobile, isTablet, width } = useBreakpoint();
 
   useEffect(() => {
@@ -67,6 +86,25 @@ export default function BlogListPage() {
     };
     fetchBlogs();
   }, []);
+
+  const totalPages = Math.max(1, Math.ceil(blogs.length / ITEMS_PER_PAGE));
+
+  // agar blogs list chhoti ho jaaye (delete ke baad) aur current page ab exist na kare,
+  // to wapas last valid page par le aao
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(totalPages);
+  }, [totalPages, currentPage]);
+
+  const paginatedBlogs = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return blogs.slice(start, start + ITEMS_PER_PAGE);
+  }, [blogs, currentPage]);
+
+  const goToPage = (page: number) => {
+    const clamped = Math.min(Math.max(1, page), totalPages);
+    setCurrentPage(clamped);
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const toggleStatus = async (id: string) => {
     const blog = blogs.find((b) => b.id === id);
@@ -128,6 +166,61 @@ export default function BlogListPage() {
     </div>
   );
 
+  /* ---------- Pagination bar — shown under every view ---------- */
+  const PaginationBar = () => {
+    if (blogs.length === 0) return null;
+
+    const start = (currentPage - 1) * ITEMS_PER_PAGE + 1;
+    const end = Math.min(currentPage * ITEMS_PER_PAGE, blogs.length);
+
+    return (
+      <div className={styles.paginationBar}>
+        <span className={styles.paginationInfo}>
+          Showing {start}–{end} of {blogs.length}
+        </span>
+
+        <div className={styles.paginationControls}>
+          <button
+            className={styles.pageNavBtn}
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+            aria-label="Previous page"
+          >
+            ‹
+          </button>
+
+          {getPageNumbers(currentPage, totalPages).map((p, i) =>
+            p === "..." ? (
+              <span key={`ellipsis-${i}`} className={styles.pageEllipsis}>
+                …
+              </span>
+            ) : (
+              <button
+                key={p}
+                className={`${styles.pageNumBtn} ${
+                  p === currentPage ? styles.pageNumBtnActive : ""
+                }`}
+                onClick={() => goToPage(p)}
+                aria-current={p === currentPage ? "page" : undefined}
+              >
+                {p}
+              </button>
+            )
+          )}
+
+          <button
+            className={styles.pageNavBtn}
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            aria-label="Next page"
+          >
+            ›
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   if (isLoading) {
     return (
       <div className={styles.successScreen}>
@@ -140,7 +233,7 @@ export default function BlogListPage() {
 
   const MobileCards = () => (
     <div className={styles.cardList}>
-      {blogs.map((b) => (
+      {paginatedBlogs.map((b) => (
         <div key={b.id} className={styles.card}>
           {b.image ? (
             <img
@@ -178,17 +271,24 @@ export default function BlogListPage() {
   const TabletTable = () => (
     <div className={styles.tableWrap}>
       <table className={styles.table}>
+        <colgroup>
+          <col style={{ width: 80 }} />
+          <col />
+          <col style={{ width: 110 }} />
+          <col style={{ width: 100 }} />
+          <col style={{ width: 130 }} />
+        </colgroup>
         <thead>
           <tr>
-            <th style={{ width: 80 }}>Cover</th>
+            <th>Cover</th>
             <th>Title</th>
-            <th style={{ width: 110 }}>Category</th>
-            <th style={{ width: 100 }}>Status</th>
-            <th style={{ width: 130 }}>Actions</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {blogs.map((b) => (
+          {paginatedBlogs.map((b) => (
             <tr key={b.id} className={styles.row}>
               <td className={styles.tdCenter}>
                 {b.image ? (
@@ -204,7 +304,7 @@ export default function BlogListPage() {
                   <div className={styles.blogThumbEmpty}>🖼</div>
                 )}
               </td>
-              <td>
+              <td className={styles.titleCell}>
                 <p className={styles.blogTitle}>{b.title}</p>
                 <p className={styles.blogExcerpt}>{b.excerpt}</p>
               </td>
@@ -227,20 +327,30 @@ export default function BlogListPage() {
   const DesktopTable = () => (
     <div className={styles.tableWrap}>
       <table className={styles.table}>
+        <colgroup>
+          <col style={{ width: 80 }} />
+          <col />
+          <col style={{ width: 150 }} />
+          {width >= 1024 && <col style={{ width: 120 }} />}
+          {width >= 1024 && <col style={{ width: 100 }} />}
+          {width >= 1024 && <col style={{ width: 90 }} />}
+          <col style={{ width: 110 }} />
+          <col style={{ width: 160 }} />
+        </colgroup>
         <thead>
           <tr>
-            <th style={{ width: 80 }}>Cover</th>
+            <th>Cover</th>
             <th>Title / Excerpt</th>
-            <th style={{ width: 150 }}>Category</th>
-            {width >= 1024 && <th style={{ width: 120 }}>Author</th>}
-            {width >= 1024 && <th style={{ width: 100 }}>Date</th>}
-            {width >= 1024 && <th style={{ width: 90 }}>Blocks</th>}
-            <th style={{ width: 110 }}>Status</th>
-            <th style={{ width: 160 }}>Actions</th>
+            <th>Category</th>
+            {width >= 1024 && <th>Author</th>}
+            {width >= 1024 && <th>Date</th>}
+            {width >= 1024 && <th>Blocks</th>}
+            <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {blogs.map((b) => (
+          {paginatedBlogs.map((b) => (
             <tr key={b.id} className={styles.row}>
               <td className={styles.tdCenter}>
                 {b.image ? (
@@ -256,7 +366,7 @@ export default function BlogListPage() {
                   <div className={styles.blogThumbEmpty}>🖼</div>
                 )}
               </td>
-              <td>
+              <td className={styles.titleCell}>
                 <p className={styles.blogTitle}>{b.title}</p>
                 <p className={styles.blogExcerpt}>{b.excerpt}</p>
               </td>
@@ -306,23 +416,21 @@ export default function BlogListPage() {
         </Link>
       </div>
 
-   
-
       {isMobile && <MobileCards />}
       {isTablet && <TabletTable />}
       {!isMobile && !isTablet && <DesktopTable />}
 
       {!isLoading && blogs.length === 0 && (
         <div className={styles.empty}>
-        
           <p>No blog posts found. Write your first post.</p>
         </div>
       )}
 
+      <PaginationBar />
+
       {deleteModal && (
         <div className={styles.modalOverlay} onClick={() => !isDeleting && setDeleteModal(null)}>
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-          
             <h3 className={styles.modalTitle}>Delete Blog Post?</h3>
             <p className={styles.modalText}>
               This will permanently remove the post and all its content. This cannot be undone.

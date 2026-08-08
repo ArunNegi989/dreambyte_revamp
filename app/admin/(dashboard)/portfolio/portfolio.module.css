@@ -87,6 +87,134 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
+   Pagination
+══════════════════════════════════════════════════════════════ */
+.paginationWrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.paginationRange {
+  font-size: 0.8rem;
+  color: var(--admin-muted);
+  white-space: nowrap;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pageNumbers {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pageBtn {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.pageBtn:hover:not(:disabled) {
+  border-color: var(--admin-amber-soft);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageBtnActive {
+  background: var(--admin-amber);
+  border-color: var(--admin-amber);
+  color: #111;
+  font-weight: 700;
+}
+
+.pageBtnActive:hover {
+  background: var(--admin-amber);
+}
+
+.pageEllipsis {
+  min-width: 24px;
+  text-align: center;
+  color: var(--admin-muted);
+  font-size: 0.82rem;
+}
+
+.pageMobileLabel {
+  display: none;
+  font-size: 0.82rem;
+  color: var(--admin-muted);
+  white-space: nowrap;
+  padding: 0 4px;
+}
+
+/* Tablet — keep numbers but tighten spacing */
+@media (max-width: 768px) {
+  .paginationWrap {
+    justify-content: center;
+  }
+
+  .paginationRange {
+    order: 2;
+    width: 100%;
+    text-align: center;
+  }
+
+  .pagination {
+    order: 1;
+  }
+}
+
+/* Mobile — collapse number row, show Prev / Page X of Y / Next only */
+@media (max-width: 560px) {
+  .pageNumbers {
+    display: none;
+  }
+
+  .pageMobileLabel {
+    display: inline-flex;
+  }
+
+  .pagination {
+    width: 100%;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .pageBtn {
+    min-width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 420px) {
+  .paginationWrap {
+    margin-top: 18px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
    Confirm Dialog — small centered modal for destructive actions
 ══════════════════════════════════════════════════════════════ */
 .confirmOverlay {
