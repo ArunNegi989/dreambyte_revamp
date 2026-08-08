@@ -74,14 +74,14 @@ const TEAM: TeamMember[] = [
   {
     name: "Lalit Kushwaha",
     role: "Founder & CEO",
-    bio: "A visionary leader with a true passion for technology, Lalit founded Dream Byte Solutions to transform complex tech challenges into straightforward, impactful solutions. With a wealth of expertise in digital innovation, he drives the company's mission to achieve excellence and foster growth for every client.",
+    bio: "A visionary leader with a true passion for technology, Lalit founded Dream Byte Solutions to transform complex tech challenges into straightforward, impactful solutions. With a wealth of expertise in digital innovation, he drives the company’s mission to achieve excellence and foster growth for every client.Under his leadership, Dream Byte Solutions continues to build innovative digital solutions that combine technology, creativity, and business strategy. Lalit believes in creating long-term value by understanding each client’s unique challenges and delivering solutions that are both effective and scalable.",
     photo:
       "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=900&auto=format&fit=crop",
   },
   {
     name: "Pooja Sakta",
     role: "Co-Founder",
-    bio: "Bringing a collaborative spirit and a sharp strategic mind, Pooja is instrumental in guiding the company's vision. She ensures that every solution is not only technically robust but also perfectly aligned with client needs, establishing Dream Byte Solutions as a reliable partner for digital success.",
+    bio: "Bringing a collaborative spirit and a sharp strategic mind, Pooja is instrumental in guiding the company’s vision. She ensures that every solution is not only technically robust but also perfectly aligned with client needs, establishing Dream Byte Solutions as a reliable partner for digital success.As a Co-Founder, Pooja plays a key role in shaping the company’s growth, strengthening client relationships, and ensuring seamless collaboration across teams. Her ability to combine strategic thinking with a deep understanding of business requirements helps turn ideas into practical and impactful digital solutions.",
     photo:
       "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=900&auto=format&fit=crop",
   },
@@ -238,13 +238,7 @@ export default function AboutUs() {
               <span className={styles.storyEyebrow}>The Story</span>
               <h2 className={styles.storyHeading}>About Us</h2>
               <p className={styles.storyText}>
-                Dream byte Solutions is home for job seekers of Uttarakhand and partner of each and every
-                business in their journey of growth. As a Marketing Agency our focus is to provide 360
-                degree angle of solutions for a business as every business owner deserve a best partner who
-                can help them grown without any second thought of need of anything else. Dream Byte
-                Solutions is providing multiple services like Graphic designing, Social media management,
-                Ads making, digital marketing, influencer marketing, performance marketing, photography and
-                videography, event management, print media, and more.
+                Dream byte Solutions is home for job seekers of Uttarakhand and partner of each and every business in their journey of growth. As a Marketing Agency our focus is to provide 360 degree angle of solutions for a business as every business owner deserve a best partner who can help them grown without any second thought of need of anything else. Dream Byte Solutions is providing multiple services like Graphic designing, Social media management, Ads making, digital marketing, influencer marketing, performance, marketing, photography and videography, event management, print media, extra.
               </p>
 
               <div className={styles.trustRow}>

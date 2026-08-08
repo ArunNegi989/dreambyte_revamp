@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./WorkShowcase.module.css";
 
+
 interface ReelVideo {
   id: string;
   videoSrc: string;
@@ -14,25 +15,25 @@ const DEFAULT_REELS: ReelVideo[] = [
   {
     id: "r1",
     videoSrc:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "/videos/studio_bts.mov",
     poster: "https://picsum.photos/seed/reel1/540/960",
   },
   {
     id: "r2",
     videoSrc:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "/videos/trycone_foot_cream_shoot.mp4",
     poster: "https://picsum.photos/seed/reel2/540/960",
   },
   {
     id: "r3",
     videoSrc:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      "/videos/UTTARAKHAND_WEDDING_AWARDS.mov",
     poster: "https://picsum.photos/seed/reel3/540/960",
   },
   {
     id: "r4",
     videoSrc:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      "/videos/ERIKA LUXE 4 AUG.mov",
     poster: "https://picsum.photos/seed/reel4/540/960",
   },
 ];

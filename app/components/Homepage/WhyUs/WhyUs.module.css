@@ -130,9 +130,10 @@
 
 /* Description */
 .description {
-  font-size: 1.05rem;
+  font-size: 1.35rem;
   line-height: 1.85;
   color: #cbd2e1;
+  font-weight: 500;
 }
 
 /* Bullets */
@@ -213,7 +214,7 @@
     gap: 6rem;
   }
   .description {
-    font-size: 1.15rem;
+    font-size: 1.35rem;
   }
   .characterImg {
     max-width: 440px;

@@ -18,7 +18,7 @@ export type Reel = {
 const defaultReels: Reel[] = [
   {
     id: "1",
-    src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    src: "/videos/studio_bts.mov",
     poster:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
     title: "Big Buck Bunny",
@@ -27,7 +27,7 @@ const defaultReels: Reel[] = [
   },
   {
     id: "2",
-    src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    src: "/videos/trycone_foot_cream_shoot.mp4",
     poster:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg",
     title: "Elephants Dream",
@@ -36,7 +36,7 @@ const defaultReels: Reel[] = [
   },
   {
     id: "3",
-    src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    src: "/videos/UTTARAKHAND_WEDDING_AWARDS.mov",
     poster:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg",
     title: "For Bigger Blazes",
@@ -45,7 +45,7 @@ const defaultReels: Reel[] = [
   },
   {
     id: "4",
-    src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+    src: "/videos/ERIKA LUXE 4 AUG.mov",
     poster:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerJoyrides.jpg",
     title: "For Bigger Joyrides",

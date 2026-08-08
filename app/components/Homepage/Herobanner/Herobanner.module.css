@@ -22,10 +22,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  min-height: 100vh;
+  /* gap: 24px; */
+  min-height: 86vh;
   width: 100%;
-  padding: 0 48px;
+  padding: 0px 0px 0px 50px;
 }
 
 /* =========================================================
@@ -97,7 +97,7 @@
   max-width: 1606px;
   min-width: 0;
   text-align: center;
-  padding: 0 12px;
+  padding: 40px 12px;
   border-right: 1px solid rgba(255, 255, 255, 0.22);
 }
 
@@ -482,7 +482,7 @@
 
 /* Large desktops / wide monitors */
 @media (min-width: 1600px) {
-  .sectionMainSub { padding: 0 80px; }
+  .sectionMainSub { padding: 0px 0px 0px 50px; }
 }
 
 /* Standard laptops */

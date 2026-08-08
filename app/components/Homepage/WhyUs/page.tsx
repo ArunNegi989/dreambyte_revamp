@@ -21,7 +21,7 @@ const sections: Section[] = [
     badgeTitle: "Where Your Imagination",
     badgeSubtitle: "is our innovation",
     description:
-      "Welcome to Dream Byte Solutions Pvt. Ltd., the best digital marketing agency in Dehradun. We keep our work simple, clear, and effective. Our motive is to make customers happy by providing them with the best quality services. We have a friendly and skilled team that uses new ideas and latest tools, to help your businesses grow. From SEO and PPC to social media and website development, we have everything your company is looking for. By understanding your goals, we create the best strategy to achieve real results.",
+      "Welcome to Dream Byte Solutions Pvt. Ltd., the best digital marketing agency in Dehradun. We keep our work simple, clear, and effective. Our motive is to make customers happy by providing them with the best quality services. We have a friendly and skilled team that uses new ideas and latest tools, to help your businesses grow. From SEO and PPC to social media and website development, we have everything your company is looking for. By understanding your goals, we create the best strategy to achieve real results. Together, we can grow and achieve our goal online.Dream Byte Solutions,top digital marketing agency in Dehradun, Uttarakhand.",
     imageSrc:
       image1.src,
     imageAlt: "Creative digital marketing strategist",

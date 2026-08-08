@@ -127,7 +127,7 @@
   cursor: pointer;
   background: transparent;
   opacity: 0;
-  transform-origin: bottom center;
+  /* transform-origin: bottom center; */
   animation: reelIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
