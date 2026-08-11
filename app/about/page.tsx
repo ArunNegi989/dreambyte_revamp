@@ -6,6 +6,7 @@ import aboutusimage from "@/public/assets/images/about-us-main-section-webp.webp
 import Image, { StaticImageData } from "next/image";
 import founderimage from "@/public/assets/images/founderpic.webp";
 import cofounderimage from "@/public/assets/images/co-founder.webp";
+import Link from "next/link";
 /* ------------------------------------------------------------------ */
 /*  Data — content is unchanged from the original site, just re-shaped */
 /*  into typed structures so it's easy to edit later.                  */
@@ -166,15 +167,7 @@ export default function AboutUs() {
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    // TODO: wire this up to your API route / Express endpoint
-    console.log("Quote request:", form);
-    setStatus("sent");
-    setForm({ name: "", phone: "", email: "", message: "" });
-    setTimeout(() => setStatus("idle"), 4000);
-  }
-
+  
   return (
     <main className={styles.page}>
       {/* ---------------------------------------------------------- */}
@@ -202,15 +195,15 @@ export default function AboutUs() {
           </p>
 
           <div className={styles.heroActions}>
-            <a href="/dream-byte-solutions.pdf" download className={styles.btnGhost}>
+            <Link href="/dream-byte-solutions.pdf" download className={styles.btnGhost}>
               Download PDF
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-            </a>
-            <a href="#quote" className={styles.btnSolid}>
+            </Link>
+            <Link href="/contact" className={styles.btnSolid}>
               Contact Us
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -426,77 +419,7 @@ export default function AboutUs() {
 
       {/* ---------------------------------------------------------- */}
       {/* GET A FREE QUOTE                                            */}
-      {/* ---------------------------------------------------------- */}
-      <section className={styles.quoteSection} id="quote">
-       
-        <div className={styles.container}>
-          <div className={styles.quoteCard}>
-            <div className={styles.quoteHeader}>
-              <h2>Get a Free Quote</h2>
-              <p>Tell us about your business — we&rsquo;ll get back within one working day.</p>
-            </div>
-
-            <form className={styles.quoteForm} onSubmit={handleSubmit}>
-              <div className={styles.formRow}>
-                <div className={styles.formField}>
-                  <label htmlFor="name">Name</label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    placeholder="Your Name"
-                    value={form.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className={styles.formField}>
-                  <label htmlFor="phone">Phone No</label>
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    placeholder="Your Number"
-                    value={form.phone}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className={styles.formRow}>
-                <div className={styles.formField}>
-                  <label htmlFor="email">Email</label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="Your Email"
-                    value={form.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className={styles.formField}>
-                  <label htmlFor="message">Message</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    placeholder="Type here..."
-                    rows={4}
-                    value={form.message}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-
-              <button type="submit" className={styles.sendBtn}>
-                {status === "sent" ? "Sent ✓" : "Send"}
-              </button>
-            </form>
-          </div>
-        </div>
-      </section>
+      
     </main>
   );
 }

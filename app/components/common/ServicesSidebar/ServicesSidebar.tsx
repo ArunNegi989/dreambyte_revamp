@@ -27,13 +27,13 @@ interface ServicesSidebarProps {
 }
 
 const DEFAULT_SERVICES: SidebarService[] = [
-  { name: "Graphic Designing", href: "/services/graphic-designing" },
-  { name: "Web Development", href: "/services/web-development" },
-  { name: "Digital Marketing", href: "/services/digital-marketing" },
-  { name: "Performance Marketing", href: "/services/performance-marketing" },
-  { name: "Photography / Videography", href: "/services/photography-videography" },
-  { name: "Event Management", href: "/services/event-management" },
-  { name: "Influence Marketing", href: "/services/influence-marketing" },
+  { name: "Graphic Designing", href: "/best-graphic-design-service" },
+  { name: "Web Development", href: "/best-web-development-service" },
+  { name: "Digital Marketing", href: "/best-digital-marketing-service" },
+  { name: "Performance Marketing", href: "/best-performance-marketing-service" },
+  { name: "Photography / Videography", href: "/best-photography-service" },
+  { name: "Event Management", href: "/best-event-management-management-service" },
+  { name: "Influence Marketing", href: "/best-influence-marketing-service" },
 ];
 
 export default function ServicesSidebar({

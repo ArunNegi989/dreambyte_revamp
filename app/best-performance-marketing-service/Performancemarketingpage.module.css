@@ -54,7 +54,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 18px;
   font-weight: 600;
   color: #d8d9de;
 }
@@ -102,14 +102,14 @@
 /* ---------- Intro / description ---------- */
 
 .intro {
-  font-size: 15px;
+  font-size: 20px;
   line-height: 1.75;
   color: #9c9eaa;
   margin: 0 0 28px;
 }
 
 .sectionHeading {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 800;
   color: #f2f3f5;
   margin: 0 0 20px;
@@ -117,7 +117,7 @@
 }
 
 .paragraph {
-  font-size: 14.5px;
+  font-size: 20px;
   line-height: 1.8;
   color: #9c9eaa;
   margin: 0 0 16px;
@@ -130,7 +130,7 @@
 }
 
 .blockHeading {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 800;
   color: #f2f3f5;
   margin: 0 0 6px;
@@ -212,7 +212,7 @@
 
 .processNumber {
   display: block;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 800;
   color: #f6c744;
   margin-bottom: 10px;
@@ -221,7 +221,7 @@
 
 .processTitle {
   margin: 0 0 8px;
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 700;
   color: #eceef1;
   line-height: 1.35;
@@ -229,7 +229,7 @@
 
 .processDesc {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.65;
   color: #8b8d97;
 }
@@ -359,7 +359,7 @@
   cursor: pointer;
   text-align: left;
   padding: 20px 4px;
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 700;
   color: #eceef1;
   font-family: inherit;
@@ -399,7 +399,7 @@
 
 .faqAnswerIntro {
   margin: 0 0 12px;
-  font-size: 14px;
+  font-size: 20px;
   line-height: 1.75;
   color: #9c9eaa;
 }
@@ -413,7 +413,7 @@
 }
 
 .faqBulletItem {
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1.7;
   color: #9c9eaa;
 }
