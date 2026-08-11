@@ -157,7 +157,7 @@ export default function CareerListPage() {
                     <td>
                       <div className={styles.actionsCell}>
                         <Link
-                          href={`/admin/career/edit/${career._id}`}
+                          href={`/admin/career/${career._id}`}
                           className={styles.iconBtn}
                           title="Edit role"
                         >

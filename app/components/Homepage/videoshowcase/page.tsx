@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import type { StaticImageData } from "next/image";
 import styles from "./ReelsShowcase.module.css";
-
+import videothumbnail1 from "@/public/assets/videothumbnail/Screenshot 2026-08-11 152908.png";
+import videothumbnail2 from "@/public/assets/videothumbnail/Screenshot 2026-08-11 152945.png"
+import videothumbnail3 from "@/public/assets/videothumbnail/Screenshot 2026-08-11 153005.png"
+import videothumbnail4 from "@/public/assets/videothumbnail/Screenshot 2026-08-11 153029.png"
 export type Reel = {
   id: string;
   src: string;
-  poster?: string;
-  title?: string;
+ poster: StaticImageData;
   visitUrl?: string;
   visitLabel?: string;
 };
@@ -18,37 +21,30 @@ export type Reel = {
 const defaultReels: Reel[] = [
   {
     id: "1",
-    src: "/videos/studio_bts.mov",
-    poster:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
-    title: "Big Buck Bunny",
+    src: "/videos/studio_bts.webm",
+    poster: videothumbnail1,
+   
     visitUrl: "https://peach.blender.org/",
     visitLabel: "Visit",
   },
   {
     id: "2",
-    src: "/videos/trycone_foot_cream_shoot.mp4",
-    poster:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg",
-    title: "Elephants Dream",
+    src: "/videos/trycone_foot_cream_shoot.webm",
+    poster: videothumbnail2,
     visitUrl: "https://orange.blender.org/",
     visitLabel: "Visit",
   },
   {
     id: "3",
-    src: "/videos/UTTARAKHAND_WEDDING_AWARDS.mov",
-    poster:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg",
-    title: "For Bigger Blazes",
+    src: "/videos/UTTARAKHAND_WEDDING_AWARDS.webm",
+    poster: videothumbnail3,
     visitUrl: "https://www.google.com",
     visitLabel: "Visit",
   },
   {
     id: "4",
-    src: "/videos/ERIKA LUXE 4 AUG.mov",
-    poster:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerJoyrides.jpg",
-    title: "For Bigger Joyrides",
+    src: "/videos/ERIKA+LUXE+4+AUG.webm",
+    poster: videothumbnail4,
     visitUrl: "https://www.google.com",
     visitLabel: "Visit",
   },
@@ -124,7 +120,7 @@ const ReelsShowcase = ({ reels = defaultReels }: ReelsShowcaseProps) => {
             type="button"
             className={styles.card}
             onClick={() => openModal(reel)}
-            aria-label={reel.title ? `Play ${reel.title}` : "Play reel"}
+           
           >
             <video
               ref={(el) => {
@@ -132,7 +128,7 @@ const ReelsShowcase = ({ reels = defaultReels }: ReelsShowcaseProps) => {
               }}
               className={styles.cardVideo}
               src={reel.src}
-              poster={reel.poster}
+             poster={reel.poster.src}
               muted
               loop
               autoPlay
@@ -148,9 +144,7 @@ const ReelsShowcase = ({ reels = defaultReels }: ReelsShowcaseProps) => {
               </svg>
             </div>
 
-            {reel.title && (
-              <span className={styles.cardTitle}>{reel.title}</span>
-            )}
+           
           </button>
         ))}
       </div>
@@ -187,16 +181,14 @@ const ReelsShowcase = ({ reels = defaultReels }: ReelsShowcaseProps) => {
                 ref={modalVideoRef}
                 className={styles.modalVideo}
                 src={activeReel.src}
-                poster={activeReel.poster}
+                 poster={activeReel.poster.src}
                 loop
                 playsInline
                 controls
               />
             </div>
 
-            {activeReel.title && (
-              <p className={styles.modalTitle}>{activeReel.title}</p>
-            )}
+          
 
             {activeReel.visitUrl && (
               <a

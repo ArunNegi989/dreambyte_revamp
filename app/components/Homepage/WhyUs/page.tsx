@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import styles from "./WhyUs.module.css";
-import image1 from "@/public/assets/images/second-home.webp";
-import image2 from "@/public/assets/images/homegirlimage.webp"
+import image1 from "@/public/assets/images/homeboy.png";
+import image2 from "@/public/assets/images/homegirl.png"
 
 interface Section {
   badgeTitle: string;
@@ -49,7 +49,7 @@ function TrophyBadge({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <div className={styles.badgePill}>
       <span className={styles.badgeIcon}>
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <svg viewBox="0 0 24 24" width="35" height="35" fill="none">
           <path
             d="M8 4h8v3a4 4 0 0 1-8 0V4Z"
             stroke="#f2a13e"

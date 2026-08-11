@@ -12,14 +12,14 @@
 .headerRow {
   text-align: center;
   margin-bottom: 68px;
-  max-width: 760px;
+  max-width: 790px;
   margin-inline: auto;
 }
 
 .eyebrow {
   display: inline-block;
   color: #4ee6d0;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: 1.8px;
   text-transform: uppercase;
@@ -116,7 +116,7 @@
 
 .title {
   color: #ffffff;
-  font-size: 25px;
+  font-size: 28px;
   font-weight: 700;
   margin: 0 0 12px;
   white-space: nowrap;
@@ -128,7 +128,7 @@
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   white-space: normal;
-  font-size: 18px;
+  font-size: 20px;
   overflow: visible;
   text-overflow: clip;
   max-height: 280px;
@@ -136,7 +136,7 @@
 
 .description {
   color: #d3d4de;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.65;
   margin: 0;
   max-width: 420px;

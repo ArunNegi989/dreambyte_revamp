@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaQuoteLeft } from "react-icons/fa";
 import styles from "./Testimonialslider.module.css";
 
 export interface CardTestimonial {
@@ -13,7 +12,6 @@ export interface CardTestimonial {
   rating: number;
   content: string;
   date: string;
-  avatar: string;
 }
 
 interface TestimonialSliderProps {
@@ -22,36 +20,34 @@ interface TestimonialSliderProps {
 }
 
 const PEOPLE = [
-  { name: "Ava Reyes", photo: "1627161683077-e34782c24d81" },
-  { name: "Liam Carter", photo: "1560250097-0b93528c311a" },
-  { name: "Priya Nair", photo: "1573496359142-b8d87734a5a2" },
-  { name: "Noah Bennett", photo: "1629425733761-caae3b5f2e50" },
-  { name: "Sofia Marin", photo: "1573497019940-1c28c88b4f3e" },
-  { name: "Ethan Cole", photo: "1519085360753-af0119f7cbe7" },
-  { name: "Maya Fischer", photo: "1699899657680-421c2c2d5064" },
-  { name: "Owen Brooks", photo: "1500648767791-00dcc994a43e" },
-  { name: "Isla Thorne", photo: "1611432579699-484f7990b127" },
-  { name: "Leo Nakamura", photo: "1595211877493-41a4e5f236b3" },
-  { name: "Ruby Solano", photo: "1573496358961-3c82861ab8f4" },
-  { name: "Kai Sato", photo: "1507003211169-0a1dd7228f2d" },
+  "Rahul Mehra",
+  "Sakshi Bisht",
+  "Priya Nair",
+  "Nitin Sharma",
+  "Megha Rawat",
+  "Varun Kapoor",
+  "Ananya Josh",
+  "Mohit Negi",
+  "Ishita Verma",
+  "Deepak Bisht",
+  "Priya Arora",
+  "Kai Sato",
 ];
-
-
 
 const CONTENTS = [
-  "A story that lingers long after the last page. Not loud, but deeply impactful. story that lingers long after the last page. Not loud, but deeply impactful. story that lingers long after the last page. Not loud, but deeply impactful. story that lingers long after the last page. Not loud, but deeply impactful. story that lingers long after the last page. Not loud, but deeply impactful. story that lingers long after the last page. Not loud, but deeply impactful. story that lingers long after the last page. Not loud, but deeply impactful. story that lingers long after the last page. Not loud, but deeply impactful.",
-  "One of those books you keep thinking about. Worth the read.",
-  "A thoughtful and well-paced read that stays with you.",
-  "Couldn't put it down — finished it in a single weekend.",
-  "The kind of writing that makes you slow down on purpose.",
-  "Beautifully written, quietly devastating in the best way.",
-  "A slow burn that pays off completely by the final chapter.",
-  "Surprisingly funny for how much it made me think.",
+  "Dream Byte Solutions did an excellent job with our website. The team understood our requirements, suggested useful improvements, and delivered a clean and professional website. Everything from the design to the overall user experience was handled very well. Really happy with their work!",
+  "Working with Dream Byte Solutions has been a great experience. Their team is creative, responsive, and always ready to understand what the client actually needs. They helped us improve our online presence and made our brand look much more professional. Highly recommended!",
+  "Dream Byte Solutions helped us take our digital presence to the next level. Their SEO and digital marketing strategies brought better visibility and more enquiries for our business. The team regularly shared updates and explained everything clearly. Very professional and result-focused team.",
+  "I am really impressed with the team at Dream Byte Solutions. From website development to digital marketing, they handled everything smoothly and professionally. They were patient with our requirements and made sure every detail was properly taken care of. Definitely a reliable team for digital solutions.",
+  "We were looking for a team that could manage our website and online marketing together, and Dream Byte Solutions was the right choice. Their work has helped us build a stronger online presence and connect with more customers. The team is supportive, creative, and easy to work with. Great experience overall!",
+  "Our online presence improved significantly after working with Dream Byte Solutions. Their team helped us with social media, content, and digital marketing in a very organized way. The quality of the creatives and communication was impressive. I would definitely recommend them to businesses looking to grow online.",
+  "Dream Byte Solutions has done a great job with our SEO. They worked on our website step by step and helped improve our visibility on Google. We started getting more relevant visitors and enquiries after their work. A knowledgeable and dependable team!",
+  "The creativity and professionalism of Dream Byte Solutions really stood out to us. They understood our brand and created digital content that matched our vision perfectly. The team was always open to feedback and quick with revisions. Very satisfied with the overall experience.",
 ];
 
-const DEFAULT_TESTIMONIALS: CardTestimonial[] = PEOPLE.map((person, i) => ({
-  id: person.name.toLowerCase().replace(/\s+/g, "-"),
-  handle: `@${person.name.toLowerCase().replace(/\s+/g, "")}`,
+const DEFAULT_TESTIMONIALS: CardTestimonial[] = PEOPLE.map((name, i) => ({
+  id: name.toLowerCase().replace(/\s+/g, "-"),
+  handle: `${name.replace(/\s+/g, " ")}`,
   designation: "",
   rating: 5,
   content: CONTENTS[i % CONTENTS.length],
@@ -60,7 +56,6 @@ const DEFAULT_TESTIMONIALS: CardTestimonial[] = PEOPLE.map((person, i) => ({
     day: "numeric",
     year: "numeric",
   }),
-  avatar: `https://images.unsplash.com/photo-${person.photo}?auto=format&fit=crop&w=800&q=80`,
 }));
 
 function Stars({ rating }: { rating: number }) {
@@ -73,24 +68,24 @@ function Stars({ rating }: { rating: number }) {
   );
 }
 
-function getOffset(index: number, active: number, total: number) {
-  let diff = index - active;
-  if (diff > total / 2) diff -= total;
-  if (diff < -total / 2) diff += total;
-  return diff;
-}
-
 const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
   testimonials = DEFAULT_TESTIMONIALS,
   intervalMs = 5000,
 }) => {
   const [active, setActive] = useState(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
   const [isPaused, setIsPaused] = useState(false);
   const total = testimonials.length;
   const current = testimonials[active];
 
-  const goTo = (direction: 1 | -1) => {
-    setActive((prev) => (prev + direction + total) % total);
+  const goTo = (dir: 1 | -1) => {
+    setDirection(dir);
+    setActive((prev) => (prev + dir + total) % total);
+  };
+
+  const goToIndex = (index: number) => {
+    setDirection(index > active ? 1 : -1);
+    setActive(index);
   };
 
   const goToRef = useRef(goTo);
@@ -110,91 +105,90 @@ const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <div className={styles.grid}>
-        <div className={styles.imageStack}>
-          {testimonials.map((t, i) => {
-            const offset = getOffset(i, active, total);
-            if (Math.abs(offset) > 2) return null;
+      <div className={styles.glow} aria-hidden="true" />
 
-            const isActive = offset === 0;
-            const style: React.CSSProperties = {
-              zIndex: total - Math.abs(offset),
-              opacity: isActive ? 1 : 0.55,
-              transform: isActive
-                ? "translate(0%, 0%) rotateY(0deg) scale(1)"
-                : `translate(${offset > 0 ? "18%" : "-18%"}, -14%) rotateY(${
-                    offset > 0 ? -15 : 15
-                  }deg) scale(0.88)`,
-            };
+      <div className={styles.container}>
+        <p className={styles.eyebrow}>Client Testimonials</p>
+        <h2 className={styles.heading}>What our clients say</h2>
 
-            return (
-              <div key={t.id} className={styles.imageFrame} style={style}>
-                <Image
-                  src={t.avatar}
-                  alt={t.handle}
-                  fill
-                  sizes="(max-width: 768px) 60vw, 22rem"
-                  className={styles.image}
-                />
-              </div>
-            );
-          })}
+        <div className={styles.cardArea}>
+          <button
+            type="button"
+            aria-label="Previous testimonial"
+            className={`${styles.arrowButton} ${styles.arrowLeft}`}
+            onClick={() => goTo(-1)}
+          >
+            <FaChevronLeft size={14} />
+          </button>
+
+          <div className={styles.cardViewport}>
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={current.id}
+                className={styles.card}
+                custom={direction}
+                initial={{ opacity: 0, x: direction === 1 ? 40 : -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: direction === 1 ? -40 : 40 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+              >
+                <FaQuoteLeft className={styles.quoteIcon} aria-hidden="true" />
+
+                <p className={styles.quote}>
+                  {words.map((word, i) => (
+                    <motion.span
+                      key={`${current.id}-${i}`}
+                      className={styles.word}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25, delay: 0.06 + i * 0.012 }}
+                    >
+                      {word}&nbsp;
+                    </motion.span>
+                  ))}
+                </p>
+
+                <div className={styles.divider} />
+
+                <div className={styles.meta}>
+                  <div className={styles.avatarInitial} aria-hidden="true">
+                    {current.handle.replace("@", "").charAt(0).toUpperCase()}
+                  </div>
+                  <div className={styles.metaText}>
+                    <h3 className={styles.handle}>{current.handle}</h3>
+                    {current.designation && (
+                      <p className={styles.designation}>{current.designation}</p>
+                    )}
+                  </div>
+                  <div className={styles.metaRight}>
+                    <Stars rating={current.rating} />
+                    <span className={styles.date}>{current.date}</span>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <button
+            type="button"
+            aria-label="Next testimonial"
+            className={`${styles.arrowButton} ${styles.arrowRight}`}
+            onClick={() => goTo(1)}
+          >
+            <FaChevronRight size={14} />
+          </button>
         </div>
 
-        <div className={styles.content}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current.id}
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -14 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-            >
-              <div className={styles.meta}>
-                <div>
-                  <h3 className={styles.handle}>{current.handle}</h3>
-                  <p className={styles.designation}>{current.designation}</p>
-                </div>
-                <div className={styles.metaRight}>
-                  <Stars rating={current.rating} />
-                  <span className={styles.date}>{current.date}</span>
-                </div>
-              </div>
-
-              <p className={styles.quote}>
-                {words.map((word, i) => (
-                  <motion.span
-                    key={`${current.id}-${i}`}
-                    className={styles.word}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.25, delay: 0.08 + i * 0.02 }}
-                  >
-                    {word}&nbsp;
-                  </motion.span>
-                ))}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-
-          <div className={styles.arrowButtons}>
+        <div className={styles.dots}>
+          {testimonials.map((t, i) => (
             <button
+              key={t.id}
               type="button"
-              aria-label="Previous testimonial"
-              className={styles.arrowButton}
-              onClick={() => goTo(-1)}
-            >
-              <FaChevronLeft size={13} />
-            </button>
-            <button
-              type="button"
-              aria-label="Next testimonial"
-              className={styles.arrowButton}
-              onClick={() => goTo(1)}
-            >
-              <FaChevronRight size={13} />
-            </button>
-          </div>
+              aria-label={`Go to testimonial ${i + 1}`}
+              className={`${styles.dot} ${i === active ? styles.dotActive : ""}`}
+              onClick={() => goToIndex(i)}
+            />
+          ))}
         </div>
       </div>
     </section>

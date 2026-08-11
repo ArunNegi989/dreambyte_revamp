@@ -19,7 +19,7 @@
 .eyebrow {
   display: inline-block;
   color: #ff9d6b;
-  font-size: 11px;
+  font-size: 20px;
   font-weight: 600;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -28,7 +28,7 @@
 
 .heading {
   color: #ffffff;
-  font-size: 32px;
+  font-size: 34px;
   font-weight: 800;
   letter-spacing: -0.3px;
   margin: 0;
@@ -51,7 +51,7 @@
    ============================================================ */
 .grid {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
+  grid-template-columns: 2.2fr 1fr;
   grid-template-rows: auto auto;
   gap: 24px;
 }
@@ -221,7 +221,7 @@
 
 .title {
   color: #ffffff;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
   margin: 0 0 10px;
 }
@@ -235,7 +235,7 @@
   align-items: center;
   gap: 7px;
   color: #ffdd66;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.4px;
   text-transform: uppercase;

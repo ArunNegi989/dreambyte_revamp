@@ -3,7 +3,9 @@
 import { JSX, useState, type FormEvent } from "react";
 import styles from "./Aboutus.module.css";
 import aboutusimage from "@/public/assets/images/about-us-main-section-webp.webp"
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
+import founderimage from "@/public/assets/images/founderpic.webp";
+import cofounderimage from "@/public/assets/images/co-founder.webp";
 /* ------------------------------------------------------------------ */
 /*  Data — content is unchanged from the original site, just re-shaped */
 /*  into typed structures so it's easy to edit later.                  */
@@ -67,7 +69,7 @@ interface TeamMember {
   name: string;
   role: string;
   bio: string;
-  photo: string;
+  photo: StaticImageData;
 }
 
 const TEAM: TeamMember[] = [
@@ -76,14 +78,14 @@ const TEAM: TeamMember[] = [
     role: "Founder & CEO",
     bio: "A visionary leader with a true passion for technology, Lalit founded Dream Byte Solutions to transform complex tech challenges into straightforward, impactful solutions. With a wealth of expertise in digital innovation, he drives the company’s mission to achieve excellence and foster growth for every client.Under his leadership, Dream Byte Solutions continues to build innovative digital solutions that combine technology, creativity, and business strategy. Lalit believes in creating long-term value by understanding each client’s unique challenges and delivering solutions that are both effective and scalable.",
     photo:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=900&auto=format&fit=crop",
+      founderimage,
   },
   {
     name: "Pooja Sakta",
     role: "Co-Founder",
     bio: "Bringing a collaborative spirit and a sharp strategic mind, Pooja is instrumental in guiding the company’s vision. She ensures that every solution is not only technically robust but also perfectly aligned with client needs, establishing Dream Byte Solutions as a reliable partner for digital success.As a Co-Founder, Pooja plays a key role in shaping the company’s growth, strengthening client relationships, and ensuring seamless collaboration across teams. Her ability to combine strategic thinking with a deep understanding of business requirements helps turn ideas into practical and impactful digital solutions.",
     photo:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=900&auto=format&fit=crop",
+      cofounderimage,
   },
 ];
 
@@ -295,7 +297,7 @@ export default function AboutUs() {
               className={`${styles.teamRow} ${i % 2 === 1 ? styles.teamRowReverse : ""}`}
             >
               <div className={styles.teamPhotoWrap}>
-                <img src={member.photo} alt={member.name} className={styles.teamPhoto} />
+                <Image src={member.photo} alt={member.name} className={styles.teamPhoto} />
               </div>
               <div className={styles.teamInfo}>
                 <span className={styles.teamRole}>{member.role}</span>

@@ -1,13 +1,18 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import type { StaticImageData } from "next/image";
 import styles from "./WorkShowcase.module.css";
+import videothumbnail1 from "@/public/assets/videothumbnail/Screenshot 2026-08-11 152908.png";
+import videothumbnail2 from "@/public/assets/videothumbnail/Screenshot 2026-08-11 152945.png"
+import videothumbnail3 from "@/public/assets/videothumbnail/Screenshot 2026-08-11 153005.png"
+import videothumbnail4 from "@/public/assets/videothumbnail/Screenshot 2026-08-11 153029.png"
 
 
 interface ReelVideo {
   id: string;
   videoSrc: string;
-  poster: string;
+   poster: StaticImageData;
 }
 
 // Swap videoSrc with your own vertical (9:16) client reels.
@@ -15,26 +20,26 @@ const DEFAULT_REELS: ReelVideo[] = [
   {
     id: "r1",
     videoSrc:
-      "/videos/studio_bts.mov",
-    poster: "https://picsum.photos/seed/reel1/540/960",
+      "/videos/studio_bts.webm",
+    poster: videothumbnail1,
   },
   {
     id: "r2",
     videoSrc:
-      "/videos/trycone_foot_cream_shoot.mp4",
-    poster: "https://picsum.photos/seed/reel2/540/960",
+      "/videos/trycone_foot_cream_shoot.webm",
+    poster: videothumbnail2,
   },
   {
     id: "r3",
     videoSrc:
-      "/videos/UTTARAKHAND_WEDDING_AWARDS.mov",
-    poster: "https://picsum.photos/seed/reel3/540/960",
+      "/videos/UTTARAKHAND_WEDDING_AWARDS.webm",
+    poster: videothumbnail3,
   },
   {
     id: "r4",
     videoSrc:
-      "/videos/ERIKA LUXE 4 AUG.mov",
-    poster: "https://picsum.photos/seed/reel4/540/960",
+      "/videos/ERIKA+LUXE+4+AUG.webm",
+    poster: videothumbnail4,
   },
 ];
 
@@ -145,7 +150,7 @@ const ReelsShowcase: React.FC<ReelsShowcaseProps> = ({
                 }}
                 className={styles.previewVideo}
                 src={reel.videoSrc}
-                poster={reel.poster}
+                 poster={reel.poster.src}
                 muted
                 loop
                 autoPlay
@@ -201,7 +206,7 @@ const ReelsShowcase: React.FC<ReelsShowcaseProps> = ({
               controls
               autoPlay
               loop
-              poster={activeReel.poster}
+               poster={activeReel.poster.src}
             >
               <source src={activeReel.videoSrc} type="video/mp4" />
             </video>

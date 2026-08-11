@@ -38,7 +38,7 @@ const SERVICES: Service[] = [
     accent: "blue",
     shortDescription: "fast, custom-built sites",
     description:
-      "experience the best of web development in dehradun with dream byte solutions. we build custom web and app solutions that are functional and user-friendly, helping you build a powerful online presence in today's hyper-connected world.",
+      "Experience the best of web development in dehradun with dream byte solutions. we build custom web and app solutions that are functional and user-friendly, helping you build a powerful online presence in today's hyper-connected world.From e-commerce platforms and government portals to CRM systems and dynamic agency websites, our team specializes in turning ideas into scalable, high-performance digital products. Backed by modern technologies and a design-first approach, we ensure every project we deliver is fast, secure, and built to grow with your business — because in Dehradun's evolving digital landscape, staying ahead means building smarter, not just faster.",
     image:
       "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
   },
@@ -49,7 +49,7 @@ const SERVICES: Service[] = [
     accent: "orange",
     shortDescription: "seo, ppc and campaigns",
     description:
-      "as a leading lead generation and seo team, we run targeted campaigns and optimize websites to boost search rankings, cutting through the noise to turn visitors into loyal, long-term customers.",
+      "As a leading lead generation and seo team, we run targeted campaigns and optimize websites to boost search rankings, cutting through the noise to turn visitors into loyal, long-term customers.From keyword-driven content strategies to technical SEO audits and conversion-focused landing pages, we help brands rank higher, load faster, and convert better. Our data-backed approach means every campaign is measured, refined, and optimized for real ROI — because in Dehradun's competitive digital market, visibility isn't optional, it's essential.",
     image:
       "https://images.unsplash.com/photo-1557838923-2985c318be48?auto=format&fit=crop&w=1200&q=80",
   },
@@ -60,7 +60,7 @@ const SERVICES: Service[] = [
     accent: "pink",
     shortDescription: "brand visuals that stand out",
     description:
-      "our talented designers create stunning logos, branding, website visuals and marketing materials to make your business stand out, with designs built to enhance identity and drive real success.",
+      "Our talented designers create stunning logos, branding, website visuals and marketing materials to make your business stand out, with designs built to enhance identity and drive real success.From minimalist logo concepts to complete brand identity systems, our design process blends creativity with strategy — ensuring every visual element, from color palette to typography, tells your brand's story consistently across platforms. Because great design isn't just about looking good, it's about building trust the moment someone sees your brand.",
     image:
       "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&w=1200&q=80",
   },
@@ -71,7 +71,7 @@ const SERVICES: Service[] = [
     accent: "green",
     shortDescription: "data-driven roi",
     description:
-      "we unlock the power of data-driven performance marketing, continuously analyzing and optimizing campaigns across search, social and display so every rupee spent brings a measurable return.",
+      "We unlock the power of data-driven performance marketing, continuously analyzing and optimizing campaigns across search, social and display so every rupee spent brings a measurable return.From Google Ads and Meta campaigns to retargeting funnels and A/B tested creatives, we track every click, conversion, and rupee spent to refine strategy in real time. Because in performance marketing, guesswork isn't a strategy — data is, and we let the numbers guide every decision we make.",
     image:
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
   },
@@ -82,7 +82,7 @@ const SERVICES: Service[] = [
     accent: "purple",
     shortDescription: "stories worth sharing",
     description:
-      "using top-tier equipment, we capture moments with creativity and precision, crafting compelling visuals perfect for corporate events or personal projects that elevate your brand.",
+      "using top-tier equipment, we capture moments with creativity and precision, crafting compelling visuals perfect for corporate events or personal projects that elevate your brand.From product shoots and corporate events to cinematic brand videos and social media reels, our team blends technical precision with a creative eye to capture visuals that actually connect. Because in a world where attention spans are shrinking, powerful imagery isn't just nice to have — it's what makes people stop scrolling and start noticing you.",
     image:
       "https://images.unsplash.com/photo-1635360381874-edd74cbd57f3?auto=format&fit=crop&w=1200&q=80",
   },
@@ -93,7 +93,7 @@ const SERVICES: Service[] = [
     accent: "amber",
     shortDescription: "planned to perfection",
     description:
-      "as one of dehradun's top event management teams, we handle every stage from planning to execution with reliability, innovation and precision, ensuring an unforgettable experience.",
+      "As one of dehradun's top event management teams, we handle every stage from planning to execution with reliability, innovation and precision, ensuring an unforgettable experience.From corporate conferences and product launches to weddings and brand activations, we manage every detail — vendors, logistics, décor, and timing — so you don't have to worry about a thing. Because a truly great event isn't just organized, it's experienced, and that's the difference our team brings to every occasion.",
     image:
       "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1200&q=80",
   },
@@ -104,7 +104,7 @@ const SERVICES: Service[] = [
     accent: "teal",
     shortDescription: "genuine reach, real results",
     description:
-      "we help businesses boost brand promotion and visibility by connecting with trusted influencers, building genuine connections with your audience that translate into real, lasting results.",
+      "We help businesses boost brand promotion and visibility by connecting with trusted influencers, building genuine connections with your audience that translate into real, lasting results.From micro-influencers with niche, engaged audiences to established creators with wider reach, we match your brand with voices that align naturally with your values and target market. Because authentic recommendations from trusted creators build credibility that traditional ads simply can't — turning followers into customers and customers into advocates.",
     image:
       "https://images.unsplash.com/photo-1522204538344-922f76ecc041?auto=format&fit=crop&w=1200&q=80",
   },
