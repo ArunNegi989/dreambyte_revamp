@@ -107,7 +107,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: clamp(32px, 5vw, 56px);
-  max-width: 1180px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: clamp(40px, 7vw, 72px) clamp(20px, 6vw, 48px);
   align-items: start;

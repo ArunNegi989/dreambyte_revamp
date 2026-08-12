@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import styles from "./Contactpage.module.css";
 import { submitContactForm } from "@/lib/api/contact";
+import { subscribeNewsletter } from "@/lib/api/newsletter";
 
 interface ContactItem {
   icon: "phone" | "mail" | "pin";
@@ -88,9 +89,10 @@ const ContactPage: React.FC<ContactPageProps> = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [newsEmail, setNewsEmail] = useState("");
-  const [newsStatus, setNewsStatus] = useState<"idle" | "sending" | "sent">(
+  const [newsStatus, setNewsStatus] = useState<"idle" | "sending" | "sent" | "error">(
     "idle"
   );
+  const [newsErrorMsg, setNewsErrorMsg] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -132,17 +134,32 @@ const ContactPage: React.FC<ContactPageProps> = ({
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!newsEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newsEmail)) {
+      setNewsStatus("error");
+      setNewsErrorMsg("Please enter a valid email address.");
+      window.setTimeout(() => setNewsStatus("idle"), 4000);
       return;
     }
+
     setNewsStatus("sending");
+    setNewsErrorMsg("");
+
     try {
-      await onNewsletterSubmit?.(newsEmail);
+      if (onNewsletterSubmit) {
+        await onNewsletterSubmit(newsEmail);
+      } else {
+        await subscribeNewsletter(newsEmail);
+      }
       setNewsStatus("sent");
       setNewsEmail("");
       window.setTimeout(() => setNewsStatus("idle"), 4000);
-    } catch {
-      setNewsStatus("idle");
+    } catch (err) {
+      setNewsStatus("error");
+      setNewsErrorMsg(
+        err instanceof Error ? err.message : "Failed to subscribe. Please try again."
+      );
+      window.setTimeout(() => setNewsStatus("idle"), 4000);
     }
   };
 
@@ -352,26 +369,34 @@ const ContactPage: React.FC<ContactPageProps> = ({
               <p>{newsletterSub}</p>
             </div>
 
-            <form
-              className={styles.newsletterForm}
-              onSubmit={handleNewsletterSubmit}
-              noValidate
-            >
-              <input
-                type="email"
-                placeholder="Your email address"
-                value={newsEmail}
-                onChange={(e) => setNewsEmail(e.target.value)}
-                aria-label="Email address"
-              />
-              <button type="submit" disabled={newsStatus === "sending"}>
-                {newsStatus === "sending"
-                  ? "..."
-                  : newsStatus === "sent"
-                  ? "Subscribed ✓"
-                  : "Submit"}
-              </button>
-            </form>
+            <div className={styles.newsletterFormWrap}>
+              <form
+                className={styles.newsletterForm}
+                onSubmit={handleNewsletterSubmit}
+                noValidate
+              >
+                <input
+                  type="email"
+                  placeholder="Your email address"
+                  value={newsEmail}
+                  onChange={(e) => setNewsEmail(e.target.value)}
+                  aria-label="Email address"
+                  aria-invalid={newsStatus === "error"}
+                />
+                <button type="submit" disabled={newsStatus === "sending"}>
+                  {newsStatus === "sending"
+                    ? "..."
+                    : newsStatus === "sent"
+                    ? "Subscribed ✓"
+                    : "Submit"}
+                </button>
+              </form>
+              {newsStatus === "error" && (
+                <span className={styles.newsletterError} role="alert">
+                  {newsErrorMsg}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </section>
