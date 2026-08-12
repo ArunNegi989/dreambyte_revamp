@@ -112,7 +112,7 @@ const EXPERTISE: ExpertiseItem[] = [
   {
     title: "Web Development",
     desc: "Fast, scalable sites and web apps built to convert visitors into clients.",
-    href: "/services/web-development",
+    href: "/best-web-development-service",
     icon: (
       <svg {...ICON_PROPS}>
         <path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 5l-2 14" />
@@ -122,7 +122,7 @@ const EXPERTISE: ExpertiseItem[] = [
   {
     title: "Graphic Designing",
     desc: "Visual identity, print, and social creatives that make brands stick.",
-    href: "/services/graphic-designing",
+    href: "/best-graphic-design-service",
     icon: (
       <svg {...ICON_PROPS}>
         <path d="M12 2l1.6 4.9L18.5 8l-4 3.1L15.8 16 12 13l-3.8 3 1.3-4.9-4-3.1 4.9-1.1z" />
@@ -132,7 +132,7 @@ const EXPERTISE: ExpertiseItem[] = [
   {
     title: "Digital Marketing",
     desc: "Data-led campaigns across search, social, and influencer channels.",
-    href: "/services/digital-marketing",
+    href: "/best-digital-marketing-service",
     icon: (
       <svg {...ICON_PROPS}>
         <path d="M3 17l6-6 4 4 8-8M21 4h-5v5" />
@@ -142,7 +142,7 @@ const EXPERTISE: ExpertiseItem[] = [
   {
     title: "Branding",
     desc: "Strategy, voice, and visuals unified into one lasting brand story.",
-    href: "/services/branding",
+    href: "/best-influence-marketing-service",
     icon: (
       <svg {...ICON_PROPS}>
         <path d="M20.59 13.41L11 3.83A2 2 0 009.59 3.2L3.2 9.59A2 2 0 003.83 11l9.58 9.59a2 2 0 002.82 0l4.36-4.36a2 2 0 000-2.82z" />
@@ -356,12 +356,12 @@ export default function AboutUs() {
                   <span className={styles.expertiseIcon}>{item.icon}</span>
                   <h3>{item.title}</h3>
                   <p>{item.desc}</p>
-                  <a href={item.href} className={styles.expertiseLink}>
+                  <Link href={item.href} className={styles.expertiseLink}>
                     View More Details
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                  </a>
+                  </Link>
                 </div>
               ))}
             </div>
