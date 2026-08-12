@@ -92,6 +92,8 @@ export default function CareerPage() {
     document.getElementById('open-roles')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  
+
   return (
     <div className={styles.page}>
       {/* ---------------- HERO ---------------- */}
@@ -104,7 +106,7 @@ export default function CareerPage() {
         <div className={styles.heroContent}>
           <Reveal><p className={styles.eyebrow}>Dream Byte Solutions · Careers</p></Reveal>
           <Reveal delay={80}>
-            <h1 className={styles.heroTitle}>Your imagination. <span className={styles.heroAccent}>Our innovation.</span></h1>
+            <h1 className={styles.heroTitle}>Your imagination. <br /> <span className={styles.heroAccent}>Our innovation.</span></h1>
           </Reveal>
           <Reveal delay={140}>
             <p className={styles.heroSub}>

@@ -34,6 +34,15 @@
   box-sizing: border-box;
 }
 
+.roleTagline {
+  /* existing properties jo already hain unke sath ye add karo */
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.6em; /* 2 lines ka fixed space, taaki sab cards same height rahein */
+}
 /* ------------------------------------------------------------------ */
 /* Scroll reveal                                                       */
 /* ------------------------------------------------------------------ */
@@ -177,18 +186,6 @@
   color: transparent;
 }
 
-.heroAccent::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -0.06em;
-  height: 3px;
-  width: 100%;
-  border-radius: 2px;
-  background: linear-gradient(100deg, var(--blue), var(--violet) 70%);
-  transform-origin: left;
-  animation: growLine 1s 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
 
 @keyframes growLine {
   from { transform: scaleX(0); }
